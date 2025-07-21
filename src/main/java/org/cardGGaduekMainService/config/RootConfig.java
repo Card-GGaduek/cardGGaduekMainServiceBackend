@@ -21,10 +21,10 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @PropertySource({"classpath:/application.properties"})
-@MapperScan(basePackages = {
-})
-@ComponentScan(basePackages = {
-})
+//@MapperScan(basePackages = {
+//})
+//@ComponentScan(basePackages = {
+//})
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;
     @Value("${jdbc.url}") String url;

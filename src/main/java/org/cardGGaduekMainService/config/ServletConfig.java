@@ -14,7 +14,7 @@ import org.springframework.web.servlet.view.JstlView;
 
 // DispatcherServler (FrontController), WebMvc 관련 설정
 @EnableWebMvc
-@ComponentScan(basePackages = {"org.cardGGaduekMainService.controller", "org.cardGGaduekMainService.exception",})
+@ComponentScan(basePackages = { "org.cardGGaduekMainService.exception" })
 public class ServletConfig implements WebMvcConfigurer {
 
     @Override
