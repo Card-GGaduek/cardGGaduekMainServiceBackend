@@ -20,12 +20,15 @@ import javax.sql.DataSource;
 // 일반 설정
 @Configuration
 @EnableTransactionManagement
-@PropertySource({"classpath:/application.properties"})
-//@MapperScan(basePackages = {
-//})
-//@ComponentScan(basePackages = {
-//})
+@PropertySource("classpath:/application.properties")
+@MapperScan(basePackages = {
+        "org.cardGGaduekMainService.cardbenefit.mapper"
+})
+@ComponentScan(basePackages = {
+        "org.cardGGaduekMainService.cardbenefit.service"
+})
 public class RootConfig {
+
     @Value("${jdbc.driver}") String driver;
     @Value("${jdbc.url}") String url;
     @Value("${jdbc.username}") String username;
@@ -37,30 +40,25 @@ public class RootConfig {
     @Bean
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
-
         config.setDriverClassName(driver);
         config.setJdbcUrl(url);
         config.setUsername(username);
         config.setPassword(password);
-
-        HikariDataSource dataSource = new HikariDataSource(config);
-        return dataSource;
+        return new HikariDataSource(config);
     }
 
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
         sqlSessionFactory.setConfigLocation(applicationContext.getResource("classpath:/mybatis-config.xml"));
-        sqlSessionFactory.setDataSource(dataSource());
-
-        return (SqlSessionFactory) sqlSessionFactory.getObject();
+        sqlSessionFactory.setDataSource(dataSource()) ;
+    sqlSessionFactory.setMapperLocations(applicationContext.getResources("classpath:/mapper/*.xml"));
+        return sqlSessionFactory.getObject();
     }
 
     @Bean
-    public DataSourceTransactionManager transactionManager(){
-        DataSourceTransactionManager manager = new DataSourceTransactionManager(dataSource());
-
-        return manager;
+    public DataSourceTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(dataSource());
     }
-
 }
+

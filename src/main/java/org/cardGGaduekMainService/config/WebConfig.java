@@ -1,12 +1,18 @@
 package org.cardGGaduekMainService.config;
 
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CharacterEncodingFilter;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
 import javax.servlet.Filter;
 import javax.servlet.MultipartConfigElement;
 import javax.servlet.ServletRegistration;
 
+@Configuration
+@EnableWebMvc
+@ComponentScan(basePackages = "org.cardGGaduekMainService")
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
     // 업로드 디렉토리 (Windows 예시: "C:/upload" , mac : "/User/seongbochoi/upload")
     private static final String LOCATION = "C:/upload";
