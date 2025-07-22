@@ -47,13 +47,14 @@ public class RootConfig {
         return new HikariDataSource(config);
     }
 
+
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
         sqlSessionFactory.setConfigLocation(applicationContext.getResource("classpath:/mybatis-config.xml"));
         sqlSessionFactory.setDataSource(dataSource()) ;
-    sqlSessionFactory.setMapperLocations(applicationContext.getResources("classpath:/mapper/*.xml"));
-        return sqlSessionFactory.getObject();
+//    sqlSessionFactory.setMapperLocations(applicationContext.getResources("classpath:/mapper/*.xml"));
+        return (SqlSessionFactory) sqlSessionFactory.getObject();
     }
 
     @Bean

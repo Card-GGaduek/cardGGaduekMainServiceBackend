@@ -9,7 +9,7 @@
         SELECT * FROM merchant;
     </select>
 
-    <select id="findById" parameterType="long" resultType="org.cardGGaduekMainService.cardbenefit.domain.Merchant">
+    <select id="findById" resultType="org.cardGGaduekMainService.cardbenefit.domain.Merchant">
         SELECT * FROM merchant WHERE merchant.id = #{id};
     </select>
 </mapper>

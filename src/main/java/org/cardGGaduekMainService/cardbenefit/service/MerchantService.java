@@ -13,7 +13,6 @@ public class MerchantService {
 
     private final MerchantMapper merchantMapper;
 
-
     public List<Merchant> getAllMerchants() {
         return merchantMapper.findAll();
     }
