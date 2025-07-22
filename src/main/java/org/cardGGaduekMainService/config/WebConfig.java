@@ -1,5 +1,7 @@
 package org.cardGGaduekMainService.config;
 
+import org.cardGGaduekMainService.security.config.EncryptConfig;
+import org.cardGGaduekMainService.security.config.SecurityConfig;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
@@ -16,7 +18,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] { RootConfig.class }; // DB, MyBatis 설정
+        return new Class[] { RootConfig.class, SecurityConfig.class, EncryptConfig.class }; // DB, MyBatis 설정
     }
 
     @Override

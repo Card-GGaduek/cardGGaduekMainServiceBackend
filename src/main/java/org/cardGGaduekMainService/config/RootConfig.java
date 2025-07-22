@@ -21,10 +21,14 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @PropertySource({"classpath:/application.properties"})
-//@MapperScan(basePackages = {
-//})
-//@ComponentScan(basePackages = {
-//})
+@MapperScan(basePackages = {
+        "org.cardGGaduekMainService.member.mapper",
+})
+@ComponentScan(basePackages = {
+        "org.cardGGaduekMainService.member.service",
+        "org.cardGGaduekMainService.common.util",
+        "org.cardGGaduekMainService.auth"
+})
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;
     @Value("${jdbc.url}") String url;
