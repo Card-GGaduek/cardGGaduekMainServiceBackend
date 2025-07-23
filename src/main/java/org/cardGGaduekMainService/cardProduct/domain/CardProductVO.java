@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 
 @Data
@@ -17,6 +18,6 @@ public class CardProductVO {
     private Long bankId;                    // 은행ID
     private String cardProductName;         // 카드상품이름
     private Long annualFee;                 // 연회비
-    private Date issuedDate;                // 상품생성일
+    private LocalDateTime issuedDate;                // 상품생성일
     private Long requiredMonthlySpending;   // 기준실적
 }
