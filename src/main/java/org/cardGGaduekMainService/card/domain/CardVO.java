@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -18,7 +19,7 @@ public class CardVO {
     private Long cardProductId;
     private String cardNumber;
     private String cvc;
-    private Date cardIssuedDate;
-    private Date cardExpiredDate;
+    private LocalDate cardIssuedDate;
+    private LocalDate cardExpiredDate;
     private String cardPassword;
 }
