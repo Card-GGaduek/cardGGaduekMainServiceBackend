@@ -1,8 +1,17 @@
 package org.cardGGaduekMainService.card.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class CardPerformanceVO {
     private Long id;
     private Long cardId;
@@ -12,6 +21,4 @@ public class CardPerformanceVO {
     private BigDecimal actualAmount;
     private BigDecimal goalAmount;
     private String status;
-
-    // Getter, Setter, toString() 등 Lombok 사용 시 @Data 가능
 }

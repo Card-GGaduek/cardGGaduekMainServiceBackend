@@ -1,7 +1,16 @@
 package org.cardGGaduekMainService.card.domain;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.util.Date;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class CardVO {
     private int id;
     private int customerId;
@@ -12,5 +21,4 @@ public class CardVO {
     private Date cardIssuedDate;
     private Date cardExpiredDate;
     private String cardPassword;
-
 }
