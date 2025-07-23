@@ -9,10 +9,10 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class BenefitVO {
+public class CardBenefitVO {
     private Long id;
     private Long card_product_id;
-    private String conditions;
+    private String store_name;
     private Double discount_rate;
     private String description;
 

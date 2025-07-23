@@ -1,8 +1,7 @@
 package org.cardGGaduekMainService.store.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Param;
-import org.cardGGaduekMainService.card.benefit.domain.BenefitVO;
+import org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO;
 import org.cardGGaduekMainService.store.domain.StoreVO;
 
 import java.util.List;
@@ -14,7 +13,7 @@ public interface StoreMapper {
     List<StoreVO> getStores(String keyword);
 
     // 가맹점 및 카드 혜택 확인
-    List<BenefitVO> getBenefitsByCategory();
+    List<CardBenefitVO> getBenefitsByCategory();
 
     // 혜택 카드 목록 조회
     List<CardVO> getCardsByStore();
