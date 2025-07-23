@@ -23,11 +23,11 @@ public class CouponProductServiceImpl implements CouponProductService {
 
     @Override
     public CouponProductVO findCouponProductById(int id){
-        return couponProductMapper.selectCouponProductById(id);
+        return couponProductMapper.getCouponProductById(id);
     }
 
     @Override
     public List<CouponProductVO> findAllCouponProducts() {
-        return couponProductMapper.selectAllCouponProducts();
+        return couponProductMapper.getAllCouponProducts();
     }
 }
