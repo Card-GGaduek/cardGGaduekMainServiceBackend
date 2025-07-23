@@ -13,9 +13,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Builder
 public class MemberCouponVO {
-    private int id;
-    private int member_id;
-    private int coupon_product_id;
+    private Long id;
+    private Long member_id;
+    private Long coupon_product_id;
     private BigDecimal discount_value;
     private String description;
     private String coupon_category;

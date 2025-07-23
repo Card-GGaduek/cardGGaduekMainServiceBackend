@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Builder
 public class CouponProductVO {
-    private int id;
+    private Long id;
     private LocalDateTime issued_at;
     private LocalDateTime expired_at;
     private String coupon_name;
