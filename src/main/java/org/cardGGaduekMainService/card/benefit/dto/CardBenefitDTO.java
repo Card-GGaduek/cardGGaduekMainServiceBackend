@@ -1,4 +1,4 @@
-package org.cardGGaduekMainService.card.benefit.domain;
+package org.cardGGaduekMainService.card.benefit.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +9,12 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CardBenefitVO {
-    private Long id;
-    private Long card_product_id;
-    private Long benefit_category_id;
-    private String store_name;
+public class CardBenefitDTO {
+
+//    private Long id;
+//    private Long card_product_id;
+//    private String store_name;
+    private String cardName;
     private Double discount_rate;
     private String description;
-
 }
