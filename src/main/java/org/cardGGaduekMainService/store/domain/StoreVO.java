@@ -20,8 +20,6 @@ public class StoreVO {
     private Double longitude;
     private Date open_time;
     private Date close_time;
-    private enum store_category {
-        CONVENIENCE,RESTAURANT,CAFE,GAS_STATION
-    }
+
 
 }

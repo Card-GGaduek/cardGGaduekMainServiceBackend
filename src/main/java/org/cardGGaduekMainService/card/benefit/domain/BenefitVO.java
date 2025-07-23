@@ -15,7 +15,5 @@ public class BenefitVO {
     private String conditions;
     private Double discount_rate;
     private String description;
-    private enum benefit_category {
-        CONVENIENCE,MOVIE,CAFE,GAS_STATION,
-    }
+
 }
