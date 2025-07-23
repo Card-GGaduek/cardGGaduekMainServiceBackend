@@ -14,19 +14,19 @@ public interface StoreMapper {
     List<StoreVO> getStores(String keyword);
 
     // 가맹점 및 카드 혜택 확인
-    List<BenefitVO> findBenefitsByCategory();
+    List<BenefitVO> getBenefitsByCategory();
 
     // 혜택 카드 목록 조회
-    List<CardVO> findCardsByStore();
+    List<CardVO> getCardsByStore();
 
     // 혜택 카드 상세 조회
     CardVO getCardInfo();
 
     // 결제 카드 연동 (추후 논의 후 결정)
-    int linkCardToPayment();
+    int getLinkCardToPayment();
 
     //내 카드 혜택 적용 가능한 가맹점 찾기 (추후 논의 후 결정)
-    List<StoreVO> findStoresByMyCard();
+    List<StoreVO> getStoresByMyCard();
 
 
 
