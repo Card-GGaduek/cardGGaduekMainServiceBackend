@@ -12,10 +12,10 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class CardVO {
-    private int id;
-    private int customerId;
-    private int accountId;
-    private int cardProductId;
+    private Long id;
+    private Long customerId;
+    private Long accountId;
+    private Long cardProductId;
     private String cardNumber;
     private String cvc;
     private Date cardIssuedDate;

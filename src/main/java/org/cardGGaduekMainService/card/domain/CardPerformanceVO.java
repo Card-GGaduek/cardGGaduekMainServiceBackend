@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -17,7 +18,7 @@ public class CardPerformanceVO {
     private Long cardId;
     private Long memberId;
     private Long cardProductId;
-    private Date month;
+    private LocalDate month;
     private BigDecimal actualAmount;
     private BigDecimal goalAmount;
     private String status;
