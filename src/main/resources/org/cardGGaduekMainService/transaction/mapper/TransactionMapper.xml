@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cardGGaduekMainService.transaction.mapper.TransactionMapper">
+    <insert id="insertTransaction" parameterType="org.cardGGaduekMainService.transaction.domain.TransactionVO">
+        INSERT INTO Transaction (
+            member_id, card_id, store_id, product_id, coupon_id,
+            amount, transaction_category_code, transaction_status, payment_method,
+            date, approval_code, memo
+        ) VALUES (
+                     #{memberId}, #{cardId}, #{storeId}, #{productId}, #{couponId},
+                     #{amount}, #{transactionCategory.name}, #{transactionStatus.name}, #{transactionMethod.name},
+                     #{date}, #{approvalCode}, #{memo}
+                 )
+    </insert>
+
+</mapper>

@@ -22,12 +22,14 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @PropertySource({"classpath:/application.properties"})
 @MapperScan(basePackages = {
-        "org.cardGGaduekMainService.member.mapper",
+        "org.cardGGaduekMainService.member.mapper", "org.cardGGaduekMainService.lab.mapper", "org.cardGGaduekMainService.transaction.mapper"
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
         "org.cardGGaduekMainService.common.util",
-        "org.cardGGaduekMainService.auth"
+        "org.cardGGaduekMainService.auth",
+        "org.cardGGaduekMainService.lab.service",
+        "org.cardGGaduekMainService.transaction.service",
 })
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;

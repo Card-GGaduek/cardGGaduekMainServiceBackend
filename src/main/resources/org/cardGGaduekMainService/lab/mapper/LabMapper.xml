@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cardGGaduekMainService.lab.mapper.LabMapper">
+
+    <!-- 1. 미션 진행 목록 -->
+    <select id="selectMissionProgressByMemberId" parameterType="long" resultType="org.cardGGaduekMainService.lab.domain.MissionProgressVO">
+        SELECT
+            mp.mission_id AS missionId,
+            m.title AS missionTitle,
+            m.description,
+            m.reward,
+            m.start_at AS startAt,
+            m.end_at AS endAt,
+            mp.progress_value AS progressValue,
+            mp.goal_value AS goalValue,
+            sc.display_name AS progressStatus
+        FROM MissionProgress mp
+                 JOIN Mission m ON mp.mission_id = m.mission_id
+                 JOIN MissionStatusCode sc ON mp.mission_status_code_id = sc.status_code_id
+        WHERE mp.member_id = #{memberId}
+    </select>
+
+    <!-- 2. 오늘의 소비 운세 -->
+    <select id="selectTodayFortuneByMemberId" parameterType="long" resultType="org.cardGGaduekMainService.lab.domain.FortuneVO">
+        SELECT
+            f.fortune_index,
+            li.item_name AS luckyItem,
+            li.file_name AS luckyItemImageUrl,
+            f.created_at,
+            TRUE AS isTodayPicked
+        FROM Fortune f
+                 JOIN LuckyItem li ON f.lucky_item_id = li.item_id
+        WHERE f.member_id = #{memberId}
+          AND DATE(f.created_at) = CURRENT_DATE
+        LIMIT 1
+    </select>
+
+    <!-- 랜덤으로 행운 아이템 만들기 -->
+    <select id="selectRandomLuckyItem" resultType="org.cardGGaduekMainService.lab.domain.LuckyItemVO">
+        SELECT *
+        FROM LuckyItem
+        ORDER BY RAND()
+        LIMIT 1
+    </select>
+
+    <!-- 행운 넣기 -->
+    <insert id="insertFortune">
+        INSERT INTO Fortune (member_id, fortune_index, lucky_item_id, created_at)
+        VALUES (#{memberId}, #{fortuneIndex}, #{itemId}, NOW())
+    </insert>
+
+
+
+    <!-- 3. 소비 성향 분석 -->
+    <select id="selectSpendingAnalysisResultByMemberId" parameterType="long" resultType="org.cardGGaduekMainService.lab.domain.SpendingAnalysisResultVO">
+        SELECT
+            analysis_category AS category,
+            analysis_month AS analysisMonth,
+            updated_at AS updatedAt
+        FROM SpendingAnalysisResult
+        WHERE member_id = #{memberId}
+          AND analysis_month = DATE_FORMAT(NOW(), '%Y-%m')
+        LIMIT 1
+    </select>
+
+    <!-- 4. 소비가 가장 많은 카테고리 구하기 -->
+    <select id="selectMostSpentCategory" parameterType="long" resultType="string">
+        SELECT transaction_category_code
+        FROM Transaction
+        WHERE member_id = #{memberId}
+          AND transaction_status = 'APPROVED'
+          AND DATE_FORMAT(date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
+        GROUP BY transaction_category_code
+        ORDER BY SUM(amount) DESC
+        LIMIT 1
+    </select>
+
+    <update id="updateSpendingAnalysisResult">
+        UPDATE SpendingAnalysisResult
+        SET analysis_category = #{category}, updated_at = NOW()
+        WHERE member_id = #{memberId}
+          AND analysis_month = DATE_FORMAT(NOW(), '%Y-%m')
+    </update>
+
+    <insert id="insertSpendingAnalysisResult">
+        INSERT INTO SpendingAnalysisResult (member_id, analysis_category, analysis_month)
+        VALUES (#{memberId}, #{category}, DATE_FORMAT(NOW(), '%Y-%m'))
+    </insert>
+
+</mapper>
