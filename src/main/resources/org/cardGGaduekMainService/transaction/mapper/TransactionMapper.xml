@@ -4,6 +4,18 @@
 
 <mapper namespace="org.cardGGaduekMainService.transaction.mapper.TransactionMapper">
 
+    <insert id="insertTransaction" parameterType="org.cardGGaduekMainService.transaction.domain.TransactionVO">
+        INSERT INTO Transaction (
+            member_id, card_id, store_id, product_id, coupon_id,
+            amount, transaction_category_code, transaction_status, payment_method,
+            date, approval_code, memo
+        ) VALUES (
+                     #{memberId}, #{cardId}, #{storeId}, #{productId}, #{couponId},
+                     #{amount}, #{transactionCategory.name}, #{transactionStatus.name}, #{transactionMethod.name},
+                     #{date}, #{approvalCode}, #{memo}
+                 )
+    </insert>
+
     <resultMap id="TransactionMap" type="org.cardGGaduekMainService.transaction.dto.TransactionDTO">
         <id     property="id"         column="id" />
         <result property="cardId"     column="card_id" />
@@ -29,3 +41,4 @@
     </select>
 
 </mapper>
+
