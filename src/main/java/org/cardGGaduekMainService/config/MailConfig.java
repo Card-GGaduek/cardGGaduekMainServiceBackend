@@ -54,7 +54,7 @@ public class MailConfig {
         mailSender.setPort(port);
         mailSender.setUsername(username);
         mailSender.setPassword(password);
-        mailSender.setDefaultEncoding(encoding);
+//        mailSender.setDefaultEncoding(encoding);
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", smtpAuth);
