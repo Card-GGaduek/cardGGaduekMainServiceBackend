@@ -21,7 +21,7 @@ public class StoreController {
     private final StoreService storeService;
 
     /**
-     * 가맹점 검색 API
+     * 가맹점 리스트 검색 API
      * 엔드포인트 : /api/stores/search
      * 예시 : /api/stores/search?keyword=스타벅스&categoryId=2
      *
@@ -34,6 +34,16 @@ public class StoreController {
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.STORE_SEARCH_SUCCESS, stores));
     }
 
+
+    /**
+     * 가맹점 상세조회 API
+     * 엔드포인트 : /api/stores/{id}
+     * 예시 : /api/stores/110
+     *
+     * @param id 가맹점 고유 ID
+     * @return 가맹점 상세 정보
+     *
+     * */
     @GetMapping("/{id}")
     public ResponseEntity<ApiResponse<StoreSearchResponseDTO>> getStoreDetail(@PathVariable Long id){
         StoreSearchResponseDTO store = storeService.getStoreDetail(id);
