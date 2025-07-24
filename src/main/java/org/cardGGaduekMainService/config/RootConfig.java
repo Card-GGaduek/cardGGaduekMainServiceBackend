@@ -23,15 +23,11 @@ import javax.sql.DataSource;
 @PropertySource({"classpath:/application.properties"})
 @MapperScan(basePackages = {
         "org.cardGGaduekMainService.member.mapper",
-        "org.cardGGaduekMainService.coupon.memberCoupon.mapper",
-        "org.cardGGaduekMainService.coupon.couponProduct.mapper"
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
         "org.cardGGaduekMainService.common.util",
-        "org.cardGGaduekMainService.auth",
-        "org.cardGGaduekMainService.coupon.memberCoupon.service",
-        "org.cardGGaduekMainService.coupon.couponProduct.service"
+        "org.cardGGaduekMainService.auth"
 })
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;

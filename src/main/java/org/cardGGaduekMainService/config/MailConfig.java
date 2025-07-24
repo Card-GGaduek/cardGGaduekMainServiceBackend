@@ -11,6 +11,7 @@ import java.util.Properties;
 
 @Configuration
 @PropertySource("classpath:application.properties")
+@PropertySource("classpath:application-secret.properties")
 public class MailConfig {
 
     @Value("${spring.mail.host}")
@@ -54,7 +55,7 @@ public class MailConfig {
         mailSender.setPort(port);
         mailSender.setUsername(username);
         mailSender.setPassword(password);
-        mailSender.setDefaultEncoding(encoding);
+//        mailSender.setDefaultEncoding(encoding);
 
         Properties props = new Properties();
         props.put("mail.smtp.auth", smtpAuth);
