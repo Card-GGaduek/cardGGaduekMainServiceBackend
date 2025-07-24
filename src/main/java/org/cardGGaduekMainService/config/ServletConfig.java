@@ -18,6 +18,7 @@ import org.springframework.web.servlet.view.JstlView;
         "org.cardGGaduekMainService.exception",
         "org.cardGGaduekMainService.member.controller",
         "org.cardGGaduekMainService.auth.controller",
+        "org.cardGGaduekMainService.common.mail.controller"
 })
 public class ServletConfig implements WebMvcConfigurer {
 

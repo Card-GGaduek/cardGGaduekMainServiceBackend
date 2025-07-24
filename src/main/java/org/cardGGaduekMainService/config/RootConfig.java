@@ -27,7 +27,8 @@ import javax.sql.DataSource;
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
         "org.cardGGaduekMainService.common.util",
-        "org.cardGGaduekMainService.auth"
+        "org.cardGGaduekMainService.auth",
+        "org.cardGGaduekMainService.common.mail.service"
 })
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;

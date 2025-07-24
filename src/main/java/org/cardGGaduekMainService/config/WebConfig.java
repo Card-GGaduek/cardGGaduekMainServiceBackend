@@ -18,7 +18,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] { RootConfig.class, SecurityConfig.class, EncryptConfig.class }; // DB, MyBatis 설정
+        return new Class[] { RootConfig.class, SecurityConfig.class, EncryptConfig.class, MailConfig.class, RedisConfig.class }; // DB, MyBatis 설정
     }
 
     @Override
