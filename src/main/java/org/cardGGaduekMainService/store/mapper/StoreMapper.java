@@ -3,6 +3,7 @@ package org.cardGGaduekMainService.store.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 import org.cardGGaduekMainService.card.benefit.domain.BenefitVO;
+import org.cardGGaduekMainService.card.domain.CardVO;
 import org.cardGGaduekMainService.store.domain.StoreVO;
 
 import java.util.List;
