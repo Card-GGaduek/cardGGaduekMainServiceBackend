@@ -35,6 +35,14 @@ dependencies {
     implementation 'org.aspectj:aspectjrt:1.9.20'
     implementation 'org.aspectj:aspectjweaver:1.9.20'
 
+    // Redis
+    implementation 'org.springframework.data:spring-data-redis:2.6.4'
+    implementation 'io.lettuce:lettuce-core:6.1.9.RELEASE'
+
+    // 메일
+    implementation 'com.sun.mail:javax.mail:1.6.2'
+    implementation 'org.springframework:spring-context-support:5.3.34'
+
     // JSP, SERVLET, JSTL
     compileOnly('javax.servlet:javax.servlet-api:4.0.1')
 
@@ -90,10 +98,12 @@ dependencies {
 //    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
 //    implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
 
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4'
 
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testImplementation "org.springframework:spring-test:${springVersion}"
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
 }
 
 test {

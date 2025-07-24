@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cardGGaduekMainService.coupon.memberCoupon.mapper.MemberCouponMapper">
+
+    <!-- MemberCouponVO + CouponProductVO 매핑 -->
+    <resultMap id="memberCouponWithProductResult" type="org.cardGGaduekMainService.coupon.memberCoupon.domain.MemberCouponVO">
+        <id property="id" column="mc_id"/>
+        <result property="member_id" column="member_id"/>
+        <result property="coupon_product_id" column="coupon_product_id"/>
+        <result property="status_code_id" column="status_code_id"/>
+        <result property="issued_at" column="mc_issued_at"/>
+
+        <association property="couponProduct" javaType="org.cardGGaduekMainService.coupon.couponProduct.domain.CouponProductVO">
+            <id property="id" column="cp_id"/>
+            <result property="coupon_name" column="coupon_name"/>
+            <result property="description" column="description"/>
+            <result property="expired_at" column="expired_at"/>
+            <result property="discount_value" column="discount_value"/>
+        </association>
+    </resultMap>
+
+    <!-- MemberVO + List<MemberCouponVO> 매핑 -->
+    <resultMap id="memberWithCouponsResult" type="org.cardGGaduekMainService.member.dto.MemberCouponDTO">
+        <id property="id" column="member_id"/>
+        <collection property="memberCoupons" resultMap="memberCouponWithProductResult"/>
+    </resultMap>
+
+    <!-- 쿠폰 목록 (MemberCouponVO 기준) -->
+    <select id="getCouponsWithProductInfo" resultMap="memberCouponWithProductResult">
+        SELECT
+            mc.id as mc_id,
+            mc.member_id,
+            mc.coupon_product_id,
+            mc.status_code_id,
+            mc.issued_at as mc_issued_at,
+            cp.id as cp_id,
+            cp.coupon_name,
+            cp.description,
+            cp.expired_at,
+            cp.discount_value
+        FROM
+            member_coupon mc
+                JOIN coupon_product cp ON mc.coupon_product_id = cp.id
+        WHERE mc.member_id = #{memberId}
+    </select>
+
+    <!-- 회원 기준으로 쿠폰 전체 묶기 -->
+    <select id="getMemberWithCouponsByMemberId" resultMap="memberWithCouponsResult">
+        SELECT
+            m.id as member_id,
+            m.name as member_name,
+            mc.id as mc_id,
+            mc.coupon_product_id,
+            mc.status_code_id,
+            mc.issued_at as mc_issued_at,
+            cp.id as cp_id,
+            cp.coupon_name,
+            cp.description,
+            cp.expired_at,
+            cp.discount_value
+        FROM
+            member m
+                LEFT JOIN member_coupon mc ON m.id = mc.member_id
+                LEFT JOIN coupon_product cp ON mc.coupon_product_id = cp.id
+        WHERE m.id = #{memberId}
+    </select>
+</mapper>

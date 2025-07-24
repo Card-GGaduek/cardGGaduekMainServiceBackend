@@ -7,15 +7,17 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @RequiredArgsConstructor
 @Component
+@PropertySource("classpath:application-secret.properties")
 public class MemberAuthProvider {
 
-    @Value("jwt.secretKey")
+    @Value("${spring.security.jwt.secretKey}")
     private String secretKey;
 
     private final MemberService memberService;
