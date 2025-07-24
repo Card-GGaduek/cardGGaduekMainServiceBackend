@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @AllArgsConstructor
@@ -14,14 +13,15 @@ import java.util.Date;
 @Builder
 public class CardVO {
     private Long id;
-    private Long customerId;
-    private Long accountId;
+    private Long memberId;
     private Long cardProductId;
     private String cardName;
     private String company;
     private String cardNumber;
+    private LocalDate expirationDate;
     private String cvc;
-    private LocalDate cardIssuedDate;
-    private LocalDate cardExpiredDate;
-    private String cardPassword;
+    private LocalDate createdAt;
+    private String cardImageUrl;
+    private String cardCategory;
+    private String customImageUrl;
 }
