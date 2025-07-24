@@ -1,25 +1,22 @@
-package org.cardGGaduekMainService.store.domain;
+package org.cardGGaduekMainService.store.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.cardGGaduekMainService.card.benefit.dto.CardBenefitDTO;
 
-import java.util.Date;
+import java.util.List;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StoreVO {
-
+public class StoreBenefitDTO {
     private Long id;
     private String name;
     private String address;
     private Double latitude;
     private Double longitude;
-    private Date openTime;
-    private Date closeTime;
-
-
+    List<CardBenefitDTO> benefits;
 }
