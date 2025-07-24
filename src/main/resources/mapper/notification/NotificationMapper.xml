@@ -11,5 +11,7 @@
         WHERE member_id = #{memberId}
         ORDER BY created_at DESC
     </select>
+    <select id="getNotificationsByMemberId"
+            resultType="org.cardGGaduekMainService.notification.domain.NotificationVO"></select>
 
 </mapper>
