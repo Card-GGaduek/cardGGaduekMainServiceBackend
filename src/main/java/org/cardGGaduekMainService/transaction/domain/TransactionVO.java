@@ -24,9 +24,9 @@ public class TransactionVO {
     private Long productId;
     private Long couponId;
     private BigDecimal  amount;
-    private TransactionCategory transactionCategory;
-    private TransactionCategory transactionStatus;
-    private TransactionCategory transactionMethod;
+//    private TransactionCategory transactionCategory;
+//    private TransactionCategory transactionStatus;
+//    private TransactionCategory transactionMethod;
     private LocalDateTime date;
     private String approvalCode;
     private String memo;
