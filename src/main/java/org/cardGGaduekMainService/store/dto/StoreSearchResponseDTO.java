@@ -22,21 +22,18 @@ public class StoreSearchResponseDTO {
     private Double longitude;
     private String openTime;
     private String closeTime;
+    private Long storeCategoryId;
 
     public static StoreSearchResponseDTO from(StoreVO store) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        String openTimeStr = store.getOpenTime()
-                .toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalTime()
-                .format(formatter);
+        String openTimeStr = (store.getOpenTime() != null)
+                ? store.getOpenTime().toLocalTime().format(formatter)
+                : null;
 
-        String closeTimeStr = store.getCloseTime()
-                .toInstant()
-                .atZone(ZoneId.systemDefault())
-                .toLocalTime()
-                .format(formatter);
+        String closeTimeStr = (store.getCloseTime() != null)
+                ? store.getCloseTime().toLocalTime().format(formatter)
+                : null;
 
         return StoreSearchResponseDTO.builder()
                 .id(store.getId())
@@ -46,6 +43,7 @@ public class StoreSearchResponseDTO {
                 .longitude(store.getLongitude())
                 .openTime(openTimeStr)
                 .closeTime(closeTimeStr)
+                .storeCategoryId(store.getStoreCategoryId())
                 .build();
     }
 
