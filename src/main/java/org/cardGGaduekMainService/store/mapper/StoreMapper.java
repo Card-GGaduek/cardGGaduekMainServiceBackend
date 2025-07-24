@@ -6,6 +6,9 @@ import org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO;
 
 import org.cardGGaduekMainService.card.domain.CardVO;
 import org.cardGGaduekMainService.store.domain.StoreVO;
+import org.cardGGaduekMainService.store.dto.StoreSearchConditionDTO;
+import org.cardGGaduekMainService.store.dto.StoreSearchResponseDTO;
+
 
 import java.util.List;
 
@@ -30,7 +33,10 @@ public interface StoreMapper {
     //내 카드 혜택 적용 가능한 가맹점 찾기 (추후 논의 후 결정)
     List<StoreVO> getStoresByMyCard();
 
+    // DB 매장 리스트 가져오기
+    List<StoreVO> getStores(StoreSearchConditionDTO conditionDTO);
 
 
-
+    // DB 매장 정보 가져오기
+    StoreVO getStoreById(Long id);
 }

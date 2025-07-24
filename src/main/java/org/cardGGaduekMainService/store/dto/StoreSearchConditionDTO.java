@@ -1,8 +1,14 @@
 package org.cardGGaduekMainService.store.dto;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class StoreSearchConditionDTO {
     private String keyword;             // 매장명 검색 키워드
     private Long storeCategoryId;     // 카테고리 ID

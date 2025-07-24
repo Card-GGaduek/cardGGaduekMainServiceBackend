@@ -5,7 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.sql.Time;
+
 
 @Data
 @NoArgsConstructor
@@ -18,8 +19,9 @@ public class StoreVO {
     private String address;
     private Double latitude;
     private Double longitude;
-    private Date openTime;
-    private Date closeTime;
+    private Time openTime;
+    private Time closeTime;
+    private Long storeCategoryId;
 
 
 }
