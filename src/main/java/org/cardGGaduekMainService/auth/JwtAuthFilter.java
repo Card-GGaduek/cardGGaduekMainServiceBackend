@@ -50,7 +50,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
 //                        .authority(member.getAuthority())
 //                        .build();
 
-
                 LoginMember loginMember = LoginMember.builder()
                         .id(memberById.getId())
                         .email(memberById.getEmail())
@@ -58,7 +57,9 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         .build();
 
 
+
                 List<GrantedAuthority> authorities = Collections.emptyList();
+                authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
 
                 // Spring Security에서 현재 요청을 인증한 사용자의 정보를 담는 인증 객체(Authentication 객체)
                 // JWT 인증에서는 credential 매개변수는 null
