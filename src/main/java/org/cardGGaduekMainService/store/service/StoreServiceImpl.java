@@ -24,7 +24,7 @@ public class StoreServiceImpl implements StoreService {
     @Override
     public List<StoreSearchResponseDTO> findStores(StoreSearchConditionDTO conditionDTO) {
         List<StoreVO> stores = storeMapper.getStores(conditionDTO);
-        return stores.stream()
+        stores.stream()
                 .map(store -> StoreSearchResponseDTO.builder()
                         .id(store.getId())
                         .name(store.getName())
@@ -35,6 +35,18 @@ public class StoreServiceImpl implements StoreService {
                         .closeTime(store.getCloseTime().toString())
                         .build())
                 .collect(Collectors.toList());
+        return stores.stream()
+                .map(StoreSearchResponseDTO::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public StoreSearchResponseDTO getStoreDetail(Long id) {
+        StoreVO store = storeMapper.getStoreById(id);
+        if(store == null){
+            throw new IllegalArgumentException("해당 가맹점이 존재하지 않습니다");
+        }
+        return StoreSearchResponseDTO.from(store);
     }
 
     @Override

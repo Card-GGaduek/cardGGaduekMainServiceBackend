@@ -10,15 +10,16 @@
         <result column="longitude" property="longitude"/>
         <result column="open_time" property="openTime"/>
         <result column="close_time" property="closeTime"/>
+        <result column="category_id" property="storeCategoryId"/>
     </resultMap>
     <select id="getStores" resultType="org.cardGGaduekMainService.store.domain.StoreVO">
-        SELECT id, name, address, latitude, longitude, open_time, close_time
+        SELECT *
         FROM store
         WHERE 1=1
         <if test="keyword != null and keyword !=''">
             AND name LIKE CONCAT('%',#{keyword}, '%')
         </if>
-        <if test="categoryId != null">
+        <if test="storeCategoryId != null">
             AND category_id = #{categoryId}
         </if>
 <!--        <if test="latitude != null and longitude != null and radius != null">-->
@@ -29,4 +30,10 @@
 <!--        Having distance <-->
         ORDER BY name ASC
     </select>
+    <select id="getStoreById" resultType="org.cardGGaduekMainService.store.domain.StoreVO">
+    SELECT *
+    FROM store
+    WHERE id = #{id}
+    </select>
+
 </mapper>
