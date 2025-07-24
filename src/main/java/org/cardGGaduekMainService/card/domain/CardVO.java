@@ -17,6 +17,8 @@ public class CardVO {
     private Long customerId;
     private Long accountId;
     private Long cardProductId;
+    private String cardName;
+    private String company;
     private String cardNumber;
     private String cvc;
     private LocalDate cardIssuedDate;
