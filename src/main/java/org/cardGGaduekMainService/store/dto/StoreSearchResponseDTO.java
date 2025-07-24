@@ -43,6 +43,7 @@ public class StoreSearchResponseDTO {
                 .longitude(store.getLongitude())
                 .openTime(openTimeStr)
                 .closeTime(closeTimeStr)
+                .storeCategoryId(store.getStoreCategoryId())
                 .build();
     }
 

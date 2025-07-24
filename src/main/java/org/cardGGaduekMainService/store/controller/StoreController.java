@@ -2,14 +2,13 @@ package org.cardGGaduekMainService.store.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.cardGGaduekMainService.response.ApiResponse;
+import org.cardGGaduekMainService.response.SuccessCode;
 import org.cardGGaduekMainService.store.dto.StoreSearchConditionDTO;
 import org.cardGGaduekMainService.store.dto.StoreSearchResponseDTO;
 import org.cardGGaduekMainService.store.service.StoreService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -21,7 +20,6 @@ public class StoreController {
 
     private final StoreService storeService;
 
-
     /**
      * 가맹점 검색 API
      * 엔드포인트 : /api/stores/search
@@ -31,14 +29,14 @@ public class StoreController {
      * @return 검색된 가맹점 목록
      * */
     @GetMapping("/search")
-    public ResponseEntity<List<StoreSearchResponseDTO>> searchStores(StoreSearchConditionDTO conditionDTO){
+    public ResponseEntity<ApiResponse<List<StoreSearchResponseDTO>>> searchStores(StoreSearchConditionDTO conditionDTO){
         List<StoreSearchResponseDTO> stores = storeService.findStores(conditionDTO);
-        return ResponseEntity.ok(stores);
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.STORE_SEARCH_SUCCESS, stores));
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<StoreSearchResponseDTO> getStoreDetail(@PathVariable Long id){
+    public ResponseEntity<ApiResponse<StoreSearchResponseDTO>> getStoreDetail(@PathVariable Long id){
         StoreSearchResponseDTO store = storeService.getStoreDetail(id);
-        return ResponseEntity.ok(store);
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.STORE_GET_SUCCESS, store));
     }
 }

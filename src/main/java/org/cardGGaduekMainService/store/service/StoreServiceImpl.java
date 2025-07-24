@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.card.benefit.dto.CardBenefitDTO;
 import org.cardGGaduekMainService.card.domain.CardVO;
+import org.cardGGaduekMainService.exception.CustomException;
+import org.cardGGaduekMainService.exception.ErrorCode;
 import org.cardGGaduekMainService.store.domain.StoreVO;
 import org.cardGGaduekMainService.store.dto.StoreSearchConditionDTO;
 import org.cardGGaduekMainService.store.dto.StoreSearchResponseDTO;
@@ -20,10 +22,12 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreMapper storeMapper;
 
+
     // 지도에서 매장 검색
     @Override
     public List<StoreSearchResponseDTO> findStores(StoreSearchConditionDTO conditionDTO) {
         List<StoreVO> stores = storeMapper.getStores(conditionDTO);
+        if (stores.isEmpty()) throw new CustomException(ErrorCode.STORE_NOT_FOUND);
         stores.stream()
                 .map(store -> StoreSearchResponseDTO.builder()
                         .id(store.getId())
@@ -73,4 +77,11 @@ public class StoreServiceImpl implements StoreService {
     public List<StoreVO> getStoresByMyCard() {
         return List.of();
     }
+
+
+
+
+
+
+
 }
