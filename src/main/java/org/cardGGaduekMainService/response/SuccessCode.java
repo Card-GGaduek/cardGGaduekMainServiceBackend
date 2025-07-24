@@ -8,6 +8,7 @@ import lombok.Getter;
 public enum SuccessCode {
 
     LOGIN_SUCCESS(301, "로그인 성공"),
+    MEMBER_TRANSACTION_FETCH_SUCCESS(401, "회원 거래내역 조회 성공"),
     MEMBER_CREATE_SUCCESS(101, "회원 가입 성공");
 
     private final int code;

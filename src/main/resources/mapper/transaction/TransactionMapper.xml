@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cardGGaduekMainService.transaction.mapper.TransactionMapper">
+
+    <resultMap id="TransactionMap" type="org.cardGGaduekMainService.transaction.dto.TransactionDTO">
+        <id     property="id"         column="id" />
+        <result property="cardId"     column="card_id" />
+        <result property="amount"     column="amount" />
+        <result property="transDate"  column="date" />
+        <result property="cardName" column="cardName" />
+
+    </resultMap>
+
+    <select id="selectTransactionsWithCardInfoByMemberId"
+            resultMap="TransactionMap">
+        SELECT
+            t.id,
+            t.card_id,
+            t.amount,
+            t.date,
+            cp.card_product_name as cardName
+        FROM transaction t
+                 JOIN card c ON t.card_id = c.id
+                 JOIN card_product cp ON c.card_product_id = cp.id
+        WHERE c.member_id = #{memberId}
+        ORDER BY t.card_id, t.date DESC
+    </select>
+
+</mapper>

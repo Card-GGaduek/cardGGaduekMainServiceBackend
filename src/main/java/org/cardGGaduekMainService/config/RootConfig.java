@@ -23,11 +23,14 @@ import javax.sql.DataSource;
 @PropertySource({"classpath:/application.properties"})
 @MapperScan(basePackages = {
         "org.cardGGaduekMainService.member.mapper",
+        "org.cardGGaduekMainService.transaction.mapper",
+
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
         "org.cardGGaduekMainService.common.util",
-        "org.cardGGaduekMainService.auth"
+        "org.cardGGaduekMainService.auth",
+        "org.cardGGaduekMainService.transaction.service",
 })
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;
@@ -55,8 +58,8 @@ public class RootConfig {
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
         sqlSessionFactory.setConfigLocation(applicationContext.getResource("classpath:/mybatis-config.xml"));
+        sqlSessionFactory.setMapperLocations(applicationContext.getResources("classpath:/mapper/**/*.xml"));
         sqlSessionFactory.setDataSource(dataSource());
-
         return (SqlSessionFactory) sqlSessionFactory.getObject();
     }
 
