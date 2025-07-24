@@ -5,7 +5,7 @@
 
 <mapper namespace="org.cardGGaduekMainService.notification.mapper.NotificationMapper">
 
-    <select id="getNotificationsByMemberId" parameterType="long" resultType="org.cardGGaduekMainService.notification.domain.NotificationVO">
+    <select id="getNotificationByMemberId" parameterType="long" resultType="org.cardGGaduekMainService.notification.domain.NotificationVO">
         SELECT *
         FROM notification
         WHERE member_id = #{memberId}
