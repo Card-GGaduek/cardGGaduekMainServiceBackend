@@ -28,7 +28,6 @@ import javax.sql.DataSource;
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
-        "org.cardGGaduekMainService.notification.service",
         "org.cardGGaduekMainService.common.util",
         "org.cardGGaduekMainService.auth",
         "org.cardGGaduekMainService.store.service",
