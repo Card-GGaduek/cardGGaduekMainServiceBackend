@@ -4,5 +4,5 @@ import org.cardGGaduekMainService.notification.domain.NotificationVO;
 import java.util.List;
 
 public interface NotificationService {
-    List<NotificationVO> getUserNotifications(Long memberId);
+    List<NotificationVO> getUserNotification(Long memberId);
 }
