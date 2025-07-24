@@ -4,8 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.cglib.core.Local;
 
+import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
@@ -14,9 +14,10 @@ import java.time.LocalDateTime;
 @Builder
 public class CouponProductVO {
     private Long id;
-    private LocalDateTime issued_at;
-    private LocalDateTime expired_at;
     private String coupon_name;
     private int coupon_quantity;
     private String description;
+    private LocalDateTime issued_at;
+    private LocalDateTime expired_at;
+    private BigDecimal discount_value;
 }

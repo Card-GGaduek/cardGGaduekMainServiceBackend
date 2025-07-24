@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.cardGGaduekMainService.coupon.couponProduct.domain.CouponProductVO;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,4 +22,6 @@ public class MemberCouponVO {
     private String coupon_category;
     private boolean status_code_id;
     private LocalDateTime issued_at;
+
+    private CouponProductVO couponProduct;
 }
