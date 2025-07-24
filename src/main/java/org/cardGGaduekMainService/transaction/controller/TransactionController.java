@@ -1,8 +1,10 @@
 package org.cardGGaduekMainService.transaction.controller;
 
 
+import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.response.ApiResponse;
 import org.cardGGaduekMainService.response.SuccessCode;
+import org.cardGGaduekMainService.transaction.domain.TransactionVO;
 import org.cardGGaduekMainService.transaction.dto.CardTransactionsDTO;
 import org.cardGGaduekMainService.transaction.service.TransactionService;
 import org.springframework.beans.factory.annotation.Autowired;
