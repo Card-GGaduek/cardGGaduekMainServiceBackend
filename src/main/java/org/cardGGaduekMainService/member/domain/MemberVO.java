@@ -17,10 +17,10 @@ public class MemberVO {
     private String password;
     private String name;
     private String phone;
-    private boolean is_active;
-    private LocalDateTime created_at;
-    private LocalDateTime updated_at;
-    private LocalDateTime deleted_at;
+    private boolean isActive;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+    private LocalDateTime deletedAt;
     private Long loginTypeCodeId;
     private Long socialId;
 }

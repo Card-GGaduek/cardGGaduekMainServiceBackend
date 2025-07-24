@@ -6,15 +6,15 @@
 <mapper namespace="org.cardGGaduekMainService.member.mapper.MemberMapper">
 
     <insert id="createMember">
-        INSERT INTO Member (email, password, name, phone)
+        INSERT INTO member (email, password, name, phone)
         VALUES (#{email}, #{password}, #{name}, #{phone})
     </insert>
     <select id="getMemberByEmail" resultType="org.cardGGaduekMainService.member.domain.MemberVO">
-        SELECT * FROM Member
-        WHERE Member.email = #{email}
+        SELECT * FROM member
+        WHERE member.email = #{email}
     </select>
     <select id="getMemberById" resultType="org.cardGGaduekMainService.member.domain.MemberVO">
-        SELECT * FROM Member
-        WHERE Member.id = #{id}
+        SELECT * FROM member
+        WHERE member.id = #{id}
     </select>
 </mapper>
