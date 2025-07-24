@@ -64,10 +64,10 @@ public class MemberServiceImpl implements MemberService {
                     .name(memberByEmail.get().getName())
                     .phone(decryptedPhone)
                     .email(decryptedEmail)
-                    .created_at(memberByEmail.get().getCreated_at())
-                    .updated_at(memberByEmail.get().getUpdated_at())
-                    .deleted_at(memberByEmail.get().getDeleted_at())
-                    .is_active(memberByEmail.get().is_active())
+                    .createdAt(memberByEmail.get().getCreatedAt())
+                    .updatedAt(memberByEmail.get().getUpdatedAt())
+                    .deletedAt(memberByEmail.get().getDeletedAt())
+                    .isActive(memberByEmail.get().isActive())
                     .build();
 
             return memberFind;
@@ -90,10 +90,10 @@ public class MemberServiceImpl implements MemberService {
                     .name(memberById.get().getName())
                     .phone(decryptedPhone)
                     .email(decryptedEmail)
-                    .created_at(memberById.get().getCreated_at())
-                    .updated_at(memberById.get().getUpdated_at())
-                    .deleted_at(memberById.get().getDeleted_at())
-                    .is_active(memberById.get().is_active())
+                    .createdAt(memberById.get().getCreatedAt())
+                    .updatedAt(memberById.get().getUpdatedAt())
+                    .deletedAt(memberById.get().getDeletedAt())
+                    .isActive(memberById.get().isActive())
                     .build();
 
             return memberFind;
