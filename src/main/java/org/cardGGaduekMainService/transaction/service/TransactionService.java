@@ -11,6 +11,7 @@ public interface TransactionService {
 
     List<CardTransactionsDTO> getTransactionsGroupedByCard(Long memberId);
     void insertTransaction(TransactionVO transactionVO);
+    void createTransaction(TransactionDTO transactionDTO);
 
 
 }

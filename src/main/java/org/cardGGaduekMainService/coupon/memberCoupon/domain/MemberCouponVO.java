@@ -15,13 +15,8 @@ import java.time.LocalDateTime;
 @Builder
 public class MemberCouponVO {
     private Long id;
-    private Long member_id;
-    private Long coupon_product_id;
-    private BigDecimal discount_value;
-    private String description;
-    private String coupon_category;
-    private boolean status_code_id;
-    private LocalDateTime issued_at;
-
+    private Long memberId;
+    private Long couponProductId;
+    private boolean statusCodeId;     // 사용 여부
     private CouponProductVO couponProduct;
 }

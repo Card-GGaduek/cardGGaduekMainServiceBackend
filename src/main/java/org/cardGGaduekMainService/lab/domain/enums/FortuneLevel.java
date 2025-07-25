@@ -27,14 +27,10 @@ public enum FortuneLevel {
 
     // index로 enum 가져오기
     public static FortuneLevel fromIndex(int index) {
-        if (index % 10 != 0 || index < 10 || index > 100) {
-            throw new IllegalArgumentException("Invalid fortune index: " + index);
-        }
-
         return Arrays.stream(FortuneLevel.values())
                 .filter(level -> level.index == index)
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("No matching fortune level for index: " + index));
+                .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 운세 index입니다: " + index));
     }
 
     public static FortuneLevel getRandom() {
