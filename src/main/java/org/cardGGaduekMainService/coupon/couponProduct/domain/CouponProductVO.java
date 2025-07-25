@@ -1,5 +1,6 @@
 package org.cardGGaduekMainService.coupon.couponProduct.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,7 +18,7 @@ public class CouponProductVO {
     private String coupon_name;
     private int coupon_quantity;
     private String description;
-    private LocalDateTime issued_at;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime expired_at;
     private BigDecimal discount_value;
 }

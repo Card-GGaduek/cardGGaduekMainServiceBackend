@@ -22,8 +22,8 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @PropertySource({"classpath:/application.properties"})
 @MapperScan(basePackages = {
-        "org.cardGGaduekMainService.member.mapper", 
-        "org.cardGGaduekMainService.lab.mapper", 
+        "org.cardGGaduekMainService.member.mapper",
+        "org.cardGGaduekMainService.lab.mapper",
         "org.cardGGaduekMainService.transaction.mapper",
         "org.cardGGaduekMainService.store.mapper",
         "org.cardGGaduekMainService.notification.mapper",
@@ -39,7 +39,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.store.service",
         "org.cardGGaduekMainService.common.mail.service",
         "org.cardGGaduekMainService.coupon.memberCoupon.service",
-        "org.cardGGaduekMainService.notification.service",
+        "org.cardGGaduekMainService.notification.service"
 })
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;
@@ -67,7 +67,7 @@ public class RootConfig {
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
         sqlSessionFactory.setConfigLocation(applicationContext.getResource("classpath:/mybatis-config.xml"));
-//        sqlSessionFactory.setMapperLocations(applicationContext.getResources("classpath:/mapper/**/*.xml"));
+        sqlSessionFactory.setMapperLocations(applicationContext.getResources("classpath:/mapper/**/*.xml"));
         sqlSessionFactory.setDataSource(dataSource());
         return (SqlSessionFactory) sqlSessionFactory.getObject();
     }
