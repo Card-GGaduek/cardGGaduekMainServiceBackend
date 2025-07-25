@@ -93,6 +93,11 @@ dependencies {
     implementation("org.springframework.security:spring-security-core:${springSecurityVersion}")
     implementation("org.springframework.security:spring-security-taglibs:${springSecurityVersion}")
 
+
+    // QR 코드 생성
+    implementation 'com.google.zxing:core:3.5.2'
+    implementation 'com.google.zxing:javase:3.5.2'
+
     // JWT
     implementation 'com.auth0:java-jwt:4.3.0'
 //    implementation("io.jsonwebtoken:jjwt-api:0.11.5")

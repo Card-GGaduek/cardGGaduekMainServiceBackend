@@ -29,8 +29,10 @@ public enum SuccessCode {
     STORE_GET_SUCCESS(402,"매장 조회 성공"),
     NOTIFICATION_FETCH_SUCCESS(201, "알림 조회 성공"),
     VERIFICATION_MAIL_SENT(102, "인증 메일을 발송 성공"),
-    VERIFIED_CODE(103, "인증 성공");
-  
+    VERIFIED_CODE(103, "인증 성공"),
+
+    QR_CREATE_SUCCESS(601, "QR 코드 생성 성공");
+
 
     private final int code;
     private final String message;
