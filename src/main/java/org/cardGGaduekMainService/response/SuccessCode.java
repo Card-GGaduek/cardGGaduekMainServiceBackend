@@ -20,16 +20,22 @@ public enum SuccessCode {
     IMAGE_ANALYSIS_SENT(702, "소비 성향 분석 이미지 전송 성공"),
 
 //     TRANSACTION
-    TRANSACTION_INSERT_SUCCESS(201, "거래 내역 등록 성공"),
+    TRANSACTION_CREATE_SUCCESS(201, "거래 내역 등록 성공"),
     MEMBER_TRANSACTION_FETCH_SUCCESS(401, "회원 거래내역 조회 성공"),
+    CARD_PERFORMANCE_FETCH_SUCCESS(402, "회원 카드실적 조회 성공"),
+    CARD_SUMMARY_FETCH_SUCCESS(403, "회원 카드 요약 조회 성공"),
 
     COUPON_FETCH_SUCCESS(501, "쿠폰 조회 성공"),
     STORE_SEARCH_SUCCESS (401, "매장 검색 성공"),
     STORE_GET_SUCCESS(402,"매장 조회 성공"),
+    STORE_MY_CARD_SUCCESS(403,"내 카드 매장 조회 성공"),
+
     NOTIFICATION_FETCH_SUCCESS(201, "알림 조회 성공"),
     VERIFICATION_MAIL_SENT(102, "인증 메일을 발송 성공"),
-    VERIFIED_CODE(103, "인증 성공");
-  
+    VERIFIED_CODE(103, "인증 성공"),
+
+    QR_CREATE_SUCCESS(601, "QR 코드 생성 성공");
+
 
     private final int code;
     private final String message;
