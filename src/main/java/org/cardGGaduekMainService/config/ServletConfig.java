@@ -23,7 +23,9 @@ import org.springframework.web.servlet.view.JstlView;
         "org.cardGGaduekMainService.store.controller",
         "org.cardGGaduekMainService.notification.controller",
         "org.cardGGaduekMainService.common.mail.controller",
-        "org.cardGGaduekMainService.coupon.memberCoupon.controller"
+        "org.cardGGaduekMainService.coupon.memberCoupon.controller",
+        "org.cardGGaduekMainService.cardPerformance.controller",
+
 })
 public class ServletConfig implements WebMvcConfigurer {
 

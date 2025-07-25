@@ -22,6 +22,7 @@ public enum SuccessCode {
 //     TRANSACTION
     TRANSACTION_INSERT_SUCCESS(201, "거래 내역 등록 성공"),
     MEMBER_TRANSACTION_FETCH_SUCCESS(401, "회원 거래내역 조회 성공"),
+    CARD_PERFORMANCE_FETCH_SUCCESS(402, "회원 카드실적 조회 성공"),
 
     COUPON_FETCH_SUCCESS(501, "쿠폰 조회 성공"),
     STORE_SEARCH_SUCCESS (401, "매장 검색 성공"),
