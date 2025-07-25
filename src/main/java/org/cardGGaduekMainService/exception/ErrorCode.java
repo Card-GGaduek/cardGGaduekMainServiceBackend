@@ -12,6 +12,7 @@ public enum ErrorCode {
     INVALID_TOKEN(4001, "유효하지 않은 토큰", HttpStatus.UNAUTHORIZED),
     INVALID_PASSWORD(4003, "올바르지 않은 비밀번호", HttpStatus.UNAUTHORIZED),
     STORE_NOT_FOUND(2001, "매장을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    NO_STORES_FOR_MEMBER(2002, "회원의 카드 혜택으로 이용 가능한 매장이 없습니다.", HttpStatus.NOT_FOUND),
     NOTIFICATION_NOT_FOUND(2001, "알림을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     INVALID_MAIL(4003, "유효하지 않은 이메일", HttpStatus.NOT_FOUND),
     INVALID_CODE(4004, "인증 번호가 일치하지 않습니다.", HttpStatus.CONFLICT);
