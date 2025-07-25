@@ -17,15 +17,8 @@ import java.time.LocalDateTime;
 @Builder
 public class MemberCouponVO {
     private Long id;
-    private Long member_id;
-    private String coupon_name;
-    private Long coupon_product_id;
-    private BigDecimal discount_value;
-    private int coupon_quantity;
-    private Long coupon_category;
-    private boolean status_code_id;
-    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime issued_at;
-
+    private Long memberId;
+    private Long couponProductId;
+    private boolean statusCodeId;     // 사용 여부
     private CouponProductVO couponProduct;
 }

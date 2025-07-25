@@ -13,10 +13,10 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class StoreBenefitDTO {
-    private Long id;
-    private String name;
-    private String address;
-    private Double latitude;
-    private Double longitude;
-    List<CardBenefitDTO> benefits;
+    private Long id;                    // 가맹점 고유 ID
+    private String name;                // 가맹점 이름
+    private String address;             // 가맹점 주소
+    private Double latitude;            // 가맹점 위도
+    private Double longitude;           // 가맹점 경도
+    List<CardBenefitDTO> benefits;      // 가맹점 혜택 리스트
 }

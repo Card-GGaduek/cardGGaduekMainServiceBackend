@@ -12,7 +12,17 @@ import java.util.List;
 
 @Mapper
 public interface LabMapper {
+    List<MissionProgressVO> selectAllMissionsWithProgress(Long memberId);
     List<MissionProgressVO> selectMissionProgressByMemberId(Long memberId);
+    List<Long> selectMissionIdsInProgressByMember(@Param("memberId") Long memberId);
+    List<Long> selectCurrentMissionIds();
+    void insertMissionProgress(@Param("memberId") Long memberId,
+                               @Param("missionId") Long missionId,
+                               @Param("statusCodeId") Integer statusCodeId,
+                               @Param("progressValue") Integer progressValue);
+    int incrementProgressByCategoryIfMatched(@Param("memberId") Long memberId,
+                                             @Param("category") String category);
+    List<String> selectTransactionCategoriesThisMonth(Long memberId);
     FortuneVO selectTodayFortuneByMemberId(Long memberId);
     SpendingAnalysisResultVO selectSpendingAnalysisResultByMemberId(Long memberId);
     LuckyItemVO selectRandomLuckyItem();
@@ -22,4 +32,6 @@ public interface LabMapper {
     String selectMostSpentCategory(Long memberId);
     int updateSpendingAnalysisResult(@Param("memberId") Long memberId, @Param("category") String category);
     void insertSpendingAnalysisResult(@Param("memberId") Long memberId, @Param("category") String category);
+    List<Long> selectAllMemberIds();
+    boolean existsTransactionThisMonth(Long memberId);
 }

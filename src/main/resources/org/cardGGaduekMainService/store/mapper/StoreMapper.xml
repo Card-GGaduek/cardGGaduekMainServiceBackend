@@ -40,5 +40,43 @@
     FROM store
     WHERE store_id = #{id}
     </select>
+<!--  회원-카드 혜택 결과 매핑  -->
+    <resultMap id="storeBenefitMap" type="org.cardGGaduekMainService.store.dto.StoreBenefitRawDTO">
+        <result column="storeId" property="storeId"/>
+        <result column="storeName" property="storeName"/>
+        <result column="address" property="address"/>
+        <result column="latitude" property="latitude"/>
+        <result column="longitude" property="longitude"/>
+        <result column="openTime" property="openTime"/>
+        <result column="storeCategoryId" property="storeCategoryId"/>
+        <result column="cardName" property="cardName"/>
+        <result column="benefitDescription" property="benefitDescription"/>
+    </resultMap>
+
+    <select id="getStoresByMemberCards" parameterType="long" resultMap="storeBenefitMap">
+        SELECT
+            s.store_id AS storeId,
+            s.name AS storeName,
+            s.address,
+            s.latitude,
+            s.longitude,
+            s.open_time AS openTime,
+            s.close_time AS closeTime,
+            s.store_category_id AS storeCategoryId,
+            c.card_name AS cardName,
+            cb.description AS benefitDescription
+        FROM member_card mc
+                 JOIN card c ON mc.card_id = c.id
+                 JOIN card_product cp ON c.card_product_id = cp.id
+                 JOIN card_benefit cb ON cb.card_product_id = cp.id
+                 JOIN store s ON (
+            (cb.benefit_category = '편의점' AND s.store_category_id = 1) OR
+            (cb.benefit_category = '카페' AND s.store_category_id = 2) OR
+            (cb.benefit_category = '영화관' AND s.store_category_id = 3) OR
+            (cb.benefit_category = '주유소' AND s.store_category_id = 4)
+            )
+        WHERE mc.member_id = #{memberId}
+        ORDER BY s.store_category_id, s.name;
+    </select>
 
 </mapper>

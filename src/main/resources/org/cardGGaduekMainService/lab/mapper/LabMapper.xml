@@ -5,22 +5,92 @@
 <mapper namespace="org.cardGGaduekMainService.lab.mapper.LabMapper">
 
     <!-- 1. 미션 진행 목록 -->
+
+    <select id="selectAllMissionsWithProgress" parameterType="long" resultType="org.cardGGaduekMainService.lab.domain.MissionProgressVO">
+        SELECT
+        m.id AS missionId,
+        m.title AS missionTitle,
+        m.description,
+        m.reward,
+        m.start_at AS startAt,
+        m.end_at AS endAt,
+        m.category AS category,
+        COALESCE(mp.progress_value, 0) AS progressValue,
+        m.goal_value AS goalValue
+        FROM mission m
+        LEFT JOIN mission_progress mp
+        ON m.id = mp.mission_id AND mp.member_id = #{memberId}
+        WHERE m.start_at &lt;= NOW() AND m.end_at &gt;= NOW()
+    </select>
+
+
     <select id="selectMissionProgressByMemberId" parameterType="long" resultType="org.cardGGaduekMainService.lab.domain.MissionProgressVO">
         SELECT
             mp.mission_id AS missionId,
             m.title AS missionTitle,
             m.description,
             m.reward,
+            m.category AS category,
             m.start_at AS startAt,
             m.end_at AS endAt,
             mp.progress_value AS progressValue,
-            mp.goal_value AS goalValue,
+            m.goal_value AS goalValue,
             sc.display_name AS progressStatus
         FROM mission_progress mp
                  JOIN mission m ON mp.mission_id = m.id
                  JOIN mission_status_code sc ON mp.mission_status_code_id = sc.id
         WHERE mp.member_id = #{memberId}
     </select>
+
+<!-- 미션 카테고리의 거래내역 발생시 진행률 증가 -->
+    <update id="incrementProgressByCategoryIfMatched">
+        UPDATE mission_progress mp
+            JOIN mission m ON mp.mission_id = m.id
+        SET mp.progress_value = mp.progress_value + 1
+        WHERE mp.member_id = #{memberId}
+          AND m.category = #{category}
+          AND mp.progress_value &lt; m.goal_value
+    </update>
+
+    <!-- 거래 내역에서 카테고리 추출 -->
+    <select id="selectTransactionCategoriesThisMonth" parameterType="long" resultType="string">
+        SELECT DISTINCT transaction_category_code
+        FROM transaction
+        WHERE member_id = #{memberId}
+          AND transaction_status = 'APPROVED'
+          AND DATE_FORMAT(date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
+    </select>
+
+    <!-- 현재 진행 중인 미션 ID -->
+    <select id="selectCurrentMissionIds" resultType="long">
+        SELECT id
+        FROM mission
+        WHERE start_at &lt;= NOW() AND end_at &gt;= NOW()
+    </select>
+
+    <!-- 해당 회원의 미션 진행 중인 항목 -->
+    <select id="selectMissionIdsInProgressByMember" resultType="long" parameterType="long">
+        SELECT mission_id
+        FROM mission_progress
+        WHERE member_id = #{memberId}
+    </select>
+
+    <!-- 미션 진행 현황 삽입 -->
+    <insert id="insertMissionProgress">
+        INSERT INTO mission_progress (member_id, mission_id, mission_status_code_id, progress_value, goal_value)
+        SELECT
+            #{memberId},
+            #{missionId},
+            #{statusCodeId},
+            #{progressValue},
+            m.goal_value
+        FROM mission m
+        WHERE m.id = #{missionId}
+    </insert>
+
+
+
+
 
     <!-- 2. 오늘의 소비 운세 -->
     <select id="selectTodayFortuneByMemberId" parameterType="long" resultType="org.cardGGaduekMainService.lab.domain.FortuneVO">
@@ -88,5 +158,22 @@
         INSERT INTO spending_analysis_result (member_id, analysis_category, analysis_month)
         VALUES (#{memberId}, #{category}, DATE_FORMAT(NOW(), '%Y-%m'))
     </insert>
+
+    <!-- 전체 회원 조회 -->
+    <select id="selectAllMemberIds" resultType="long">
+        SELECT id FROM member
+    </select>
+
+    <!-- 해당 월 거래 유무 확인 -->
+    <select id="existsTransactionThisMonth" parameterType="long" resultType="boolean">
+        SELECT EXISTS (
+            SELECT 1
+            FROM transaction
+            WHERE member_id = #{memberId}
+              AND transaction_status = 'APPROVED'
+              AND DATE_FORMAT(date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
+            LIMIT 1
+        )
+    </select>
 
 </mapper>
