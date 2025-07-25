@@ -24,6 +24,8 @@ public class StoreSearchResponseDTO {
     private String closeTime;
     private Long storeCategoryId;
 
+
+    // 오픈시간 - 마감시간 time 테이블 포맷 변경 (ex : 08:00 , 23:00)
     public static StoreSearchResponseDTO from(StoreVO store) {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
