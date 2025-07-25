@@ -1,4 +1,4 @@
-package org.cardGGaduekMainService.auth;
+package org.cardGGaduekMainService.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,8 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class LoginMember {
-    private Long id;
-    private String email;
-    private String name;
+public class NaverAuthRequest {
+    private String code;
+    private String state;
 }
