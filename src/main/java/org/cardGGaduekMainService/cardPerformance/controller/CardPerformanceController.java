@@ -5,7 +5,6 @@ import org.cardGGaduekMainService.cardPerformance.dto.CardPerformanceDTO;
 import org.cardGGaduekMainService.cardPerformance.service.CardPerformanceService;
 import org.cardGGaduekMainService.response.ApiResponse;
 import org.cardGGaduekMainService.response.SuccessCode;
-import org.cardGGaduekMainService.transaction.dto.CardTransactionsDTO;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
