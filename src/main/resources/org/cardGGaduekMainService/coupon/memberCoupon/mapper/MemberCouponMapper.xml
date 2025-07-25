@@ -11,13 +11,17 @@
         <result property="member_id" column="member_id"/>
         <result property="coupon_product_id" column="coupon_product_id"/>
         <result property="status_code_id" column="status_code_id"/>
+        <result property="coupon_name" column="coupon_name"/>
         <result property="issued_at" column="mc_issued_at"/>
-
+        <result property="coupon_category" column="coupon_category"/>
+        <result property="coupon_quantity" column="coupon_quantity"/>
+        <result property="discount_value" column="discount_value"/>
         <association property="couponProduct" javaType="org.cardGGaduekMainService.coupon.couponProduct.domain.CouponProductVO">
             <id property="id" column="cp_id"/>
             <result property="coupon_name" column="coupon_name"/>
             <result property="description" column="description"/>
             <result property="expired_at" column="expired_at"/>
+            <result property="coupon_quantity" column="coupon_quantity"/>
             <result property="discount_value" column="discount_value"/>
         </association>
     </resultMap>
@@ -28,24 +32,27 @@
         <collection property="memberCoupons" resultMap="memberCouponWithProductResult"/>
     </resultMap>
 
-    <!-- 쿠폰 목록 (MemberCouponVO 기준) -->
-    <select id="getCouponsWithProductInfo" resultMap="memberCouponWithProductResult">
-        SELECT
-            mc.id as mc_id,
-            mc.member_id,
-            mc.coupon_product_id,
-            mc.status_code_id,
-            mc.issued_at as mc_issued_at,
-            cp.id as cp_id,
-            cp.coupon_name,
-            cp.description,
-            cp.expired_at,
-            cp.discount_value
-        FROM
-            member_coupon mc
-                JOIN coupon_product cp ON mc.coupon_product_id = cp.id
-        WHERE mc.member_id = #{memberId}
-    </select>
+<!--    &lt;!&ndash; 쿠폰 목록 (MemberCouponVO 기준) &ndash;&gt;-->
+<!--    <select id="getCouponsWithProductInfo" resultMap="memberCouponWithProductResult">-->
+<!--        SELECT-->
+<!--            mc.id as mc_id,-->
+<!--            mc.member_id,-->
+<!--            mc.coupon_product_id,-->
+<!--            mc.status_code_id,-->
+<!--            mc.description,-->
+<!--            mc.expired_at,-->
+<!--            mc.issued_at as mc_issued_at,-->
+<!--            cp.id as cp_id,-->
+<!--            cp.coupon_name,-->
+<!--            cp.description,-->
+<!--            cp.issued_at,-->
+<!--            cp.expired_at,-->
+<!--            cp.discount_value-->
+<!--        FROM-->
+<!--            member_coupon mc-->
+<!--                JOIN coupon_product cp ON mc.coupon_product_id = cp.id-->
+<!--        WHERE mc.member_id = #{memberId}-->
+<!--    </select>-->
 
     <!-- 회원 기준으로 쿠폰 전체 묶기 -->
     <select id="getMemberWithCouponsByMemberId" resultMap="memberWithCouponsResult">
@@ -55,8 +62,12 @@
             mc.id as mc_id,
             mc.coupon_product_id,
             mc.status_code_id,
+            mc.coupon_category,
+            mc.coupon_quantity,
+            mc.discount_value,
             mc.issued_at as mc_issued_at,
             cp.id as cp_id,
+            cp.coupon_quantity,
             cp.coupon_name,
             cp.description,
             cp.expired_at,
