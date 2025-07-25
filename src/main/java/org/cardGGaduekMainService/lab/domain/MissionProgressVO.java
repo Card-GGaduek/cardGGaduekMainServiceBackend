@@ -15,6 +15,7 @@ public class MissionProgressVO {
     private Long missionId;         // 미션ID
     private String missionTitle;    // 미션명
     private String description;     // 미션 설명
+    private String category;        // 미션 카테고리 (FOOD, SHOPPING, MEDICAL, CULTURE, TRANSPORT)
     private String reward;          // 미션 보상
     private LocalDateTime startAt;  // 미션 시작일
     private LocalDateTime endAt;    // 미션 종료일
