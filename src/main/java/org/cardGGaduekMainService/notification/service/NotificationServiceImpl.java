@@ -20,6 +20,7 @@
 
 package org.cardGGaduekMainService.notification.service;
 
+import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.exception.CustomException;
 import org.cardGGaduekMainService.exception.ErrorCode;
 import org.cardGGaduekMainService.notification.domain.NotificationVO;
@@ -30,10 +31,10 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class NotificationServiceImpl implements NotificationService {
 
-    @Autowired
-    private NotificationMapper notificationMapper;
+    private final NotificationMapper notificationMapper;
 
     @Override
     public List<NotificationVO> getUserNotification(Long memberId) {

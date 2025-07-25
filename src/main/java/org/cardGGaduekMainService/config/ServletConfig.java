@@ -18,9 +18,13 @@ import org.springframework.web.servlet.view.JstlView;
         "org.cardGGaduekMainService.exception",
         "org.cardGGaduekMainService.member.controller",
         "org.cardGGaduekMainService.auth.controller",
+        "org.cardGGaduekMainService.lab.controller",
+        "org.cardGGaduekMainService.transaction.controller",
+        "org.cardGGaduekMainService.store.controller",
         "org.cardGGaduekMainService.payment.controller",
         "org.cardGGaduekMainService.notification.controller",
-        "org.cardGGaduekMainService.common.mail.controller"
+        "org.cardGGaduekMainService.common.mail.controller",
+        "org.cardGGaduekMainService.coupon.memberCoupon.controller"
 })
 public class ServletConfig implements WebMvcConfigurer {
 
@@ -32,16 +36,16 @@ public class ServletConfig implements WebMvcConfigurer {
     }
 
     // jsp view resolver 설정
-    @Override
-    public void configureViewResolvers(ViewResolverRegistry registry) {
-        InternalResourceViewResolver bean = new InternalResourceViewResolver(); // 템플릿 언어로 JSP엔진 사용하겟다
-
-        bean.setViewClass(JstlView.class);  // 템플릿 언어로 JSP엔진 사용하겟다
-        bean.setPrefix("/WEB-INF/views/");
-        bean.setSuffix(".jsp");
-
-        registry.viewResolver(bean);
-    }
+//    @Override
+//    public void configureViewResolvers(ViewResolverRegistry registry) {
+//        InternalResourceViewResolver bean = new InternalResourceViewResolver(); // 템플릿 언어로 JSP엔진 사용하겟다
+//
+//        bean.setViewClass(JstlView.class);  // 템플릿 언어로 JSP엔진 사용하겟다
+//        bean.setPrefix("/WEB-INF/views/");
+//        bean.setSuffix(".jsp");
+//
+//        registry.viewResolver(bean);
+//    }
 
     // /Users/seongbochoi/IdeaProjects/KB/08_spring/upload
     @Bean

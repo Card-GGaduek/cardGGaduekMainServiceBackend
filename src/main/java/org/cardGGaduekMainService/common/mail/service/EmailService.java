@@ -58,7 +58,7 @@ public class EmailService {
 
         message.setFrom(configEmail);
 
-        redisUtil.setDataWithTTL(email, authCode, 60 * 30L);
+        redisUtil.setDataWithTTL(email, authCode, 60 * 3L);
 
         return message;
 

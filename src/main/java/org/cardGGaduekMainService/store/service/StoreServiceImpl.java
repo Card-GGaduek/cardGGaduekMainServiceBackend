@@ -4,6 +4,8 @@ import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.card.benefit.dto.CardBenefitDTO;
 import org.cardGGaduekMainService.card.domain.CardVO;
+import org.cardGGaduekMainService.exception.CustomException;
+import org.cardGGaduekMainService.exception.ErrorCode;
 import org.cardGGaduekMainService.store.domain.StoreVO;
 import org.cardGGaduekMainService.store.dto.StoreSearchConditionDTO;
 import org.cardGGaduekMainService.store.dto.StoreSearchResponseDTO;
@@ -20,11 +22,13 @@ public class StoreServiceImpl implements StoreService {
 
     private final StoreMapper storeMapper;
 
+
     // 지도에서 매장 검색
     @Override
     public List<StoreSearchResponseDTO> findStores(StoreSearchConditionDTO conditionDTO) {
         List<StoreVO> stores = storeMapper.getStores(conditionDTO);
-        return stores.stream()
+        if (stores.isEmpty()) throw new CustomException(ErrorCode.STORE_NOT_FOUND);
+        stores.stream()
                 .map(store -> StoreSearchResponseDTO.builder()
                         .id(store.getId())
                         .name(store.getName())
@@ -35,6 +39,18 @@ public class StoreServiceImpl implements StoreService {
                         .closeTime(store.getCloseTime().toString())
                         .build())
                 .collect(Collectors.toList());
+        return stores.stream()
+                .map(StoreSearchResponseDTO::from)
+                .collect(Collectors.toList());
+    }
+
+    @Override
+    public StoreSearchResponseDTO getStoreDetail(Long id) {
+        StoreVO store = storeMapper.getStoreById(id);
+        if(store == null){
+            throw new IllegalArgumentException("해당 가맹점이 존재하지 않습니다");
+        }
+        return StoreSearchResponseDTO.from(store);
     }
 
     @Override
@@ -61,4 +77,12 @@ public class StoreServiceImpl implements StoreService {
     public List<StoreVO> getStoresByMyCard() {
         return List.of();
     }
+
+
+
+
+
+
+
 }
+

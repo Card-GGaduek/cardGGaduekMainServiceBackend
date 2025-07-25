@@ -17,6 +17,9 @@ public interface StoreService {
     // 지도에서 매장 검색
     List<StoreSearchResponseDTO> findStores(StoreSearchConditionDTO conditionDTO);
 
+    // 매장 상세정보 조회
+    StoreSearchResponseDTO getStoreDetail(Long id);
+
     // 지도 카테고리 가맹점 목록 및 카드 혜택 간략 확인
     List<CardBenefitDTO> findBenefitsByStoreCategory();
 

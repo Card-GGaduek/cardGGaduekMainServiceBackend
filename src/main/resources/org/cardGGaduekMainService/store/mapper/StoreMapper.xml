@@ -3,23 +3,25 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.cardGGaduekMainService.store.mapper.StoreMapper">
     <resultMap id="storeMap" type="org.cardGGaduekMainService.store.domain.StoreVO">
-        <result column="id" property="id"/>
+        <result column="store_id" property="id"/>
         <result column="name" property="name"/>
         <result column="address" property="address"/>
         <result column="latitude" property="latitude"/>
         <result column="longitude" property="longitude"/>
         <result column="open_time" property="openTime"/>
         <result column="close_time" property="closeTime"/>
+        <result column="store_category_id" property="storeCategoryId"/>
     </resultMap>
-    <select id="getStores" resultType="org.cardGGaduekMainService.store.domain.StoreVO">
-        SELECT id, name, address, latitude, longitude, open_time, close_time
+    <select id="getStores" resultMap="storeMap">
+        SELECT *
         FROM store
         WHERE 1=1
-        <if test="keyword != null and keyword !=''">
-            AND name LIKE CONCAT('%',#{keyword}, '%')
+        <if test="keyword != null and keyword != ''">
+            AND (name LIKE CONCAT('%', #{keyword}, '%')
+            OR address LIKE CONCAT('%', #{keyword}, '%'))
         </if>
-        <if test="categoryId != null">
-            AND category_id = #{categoryId}
+        <if test="storeCategoryId != null">
+            AND store.store_category_id = #{storeCategoryId}
         </if>
 <!--        <if test="latitude != null and longitude != null and radius != null">-->
 <!--            AND (6371 * ACOS(COS(RADIANS(#{latitude})) * COS(RADIANS(latitude)) *-->
@@ -27,6 +29,16 @@
 <!--            SIN(RADIANS(#{latitude})) * SIN(RADIANS(latitude)))-->
 <!--        </if>-->
 <!--        Having distance <-->
-        ORDER BY name ASC
+        ORDER BY
+        CASE WHEN name = #{keyword} THEN 1
+        WHEN name LIKE CONCAT(#{keyword}, '%') THEN 2
+        ELSE 3 END,
+        name ASC
     </select>
+    <select id="getStoreById" resultMap="storeMap">
+    SELECT *
+    FROM store
+    WHERE store_id = #{id}
+    </select>
+
 </mapper>
