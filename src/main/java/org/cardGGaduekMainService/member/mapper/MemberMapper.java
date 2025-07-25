@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface MemberMapper {
 
     void createMember(MemberVO memberVO);
+    void createNaverMember(MemberVO memberVO);
     MemberVO getMemberByEmail(String email);
     MemberVO getMemberById(Long id);
+    MemberVO getMemberByNaverId(String naverId);
 }
