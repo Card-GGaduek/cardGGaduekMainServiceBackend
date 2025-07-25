@@ -22,6 +22,7 @@ public interface MemberCouponService {
      * @return 조회된 회원 쿠폰 목록
      */
 
+
     List<MemberCouponVO> findCouponsByMember(Long memberId);
 
     MemberCouponDTO findMemberWithCoupons(Long memberId);
