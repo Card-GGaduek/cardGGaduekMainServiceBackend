@@ -16,9 +16,9 @@
             mp.progress_value AS progressValue,
             mp.goal_value AS goalValue,
             sc.display_name AS progressStatus
-        FROM MissionProgress mp
-                 JOIN Mission m ON mp.mission_id = m.mission_id
-                 JOIN MissionStatusCode sc ON mp.mission_status_code_id = sc.status_code_id
+        FROM mission_progress mp
+                 JOIN mission m ON mp.mission_id = m.id
+                 JOIN mission_status_code sc ON mp.mission_status_code_id = sc.id
         WHERE mp.member_id = #{memberId}
     </select>
 
@@ -30,8 +30,8 @@
             li.file_name AS luckyItemImageUrl,
             f.created_at,
             TRUE AS isTodayPicked
-        FROM Fortune f
-                 JOIN LuckyItem li ON f.lucky_item_id = li.item_id
+        FROM fortune f
+                 JOIN lucky_item li ON f.lucky_item_id = li.id
         WHERE f.member_id = #{memberId}
           AND DATE(f.created_at) = CURRENT_DATE
         LIMIT 1
@@ -40,14 +40,14 @@
     <!-- 랜덤으로 행운 아이템 만들기 -->
     <select id="selectRandomLuckyItem" resultType="org.cardGGaduekMainService.lab.domain.LuckyItemVO">
         SELECT *
-        FROM LuckyItem
+        FROM lucky_item
         ORDER BY RAND()
         LIMIT 1
     </select>
 
     <!-- 행운 넣기 -->
     <insert id="insertFortune">
-        INSERT INTO Fortune (member_id, fortune_index, lucky_item_id, created_at)
+        INSERT INTO fortune (member_id, fortune_index, lucky_item_id, created_at)
         VALUES (#{memberId}, #{fortuneIndex}, #{itemId}, NOW())
     </insert>
 
@@ -59,7 +59,7 @@
             analysis_category AS category,
             analysis_month AS analysisMonth,
             updated_at AS updatedAt
-        FROM SpendingAnalysisResult
+        FROM spending_analysis_result
         WHERE member_id = #{memberId}
           AND analysis_month = DATE_FORMAT(NOW(), '%Y-%m')
         LIMIT 1
@@ -68,7 +68,7 @@
     <!-- 4. 소비가 가장 많은 카테고리 구하기 -->
     <select id="selectMostSpentCategory" parameterType="long" resultType="string">
         SELECT transaction_category_code
-        FROM Transaction
+        FROM transaction
         WHERE member_id = #{memberId}
           AND transaction_status = 'APPROVED'
           AND DATE_FORMAT(date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
@@ -78,14 +78,14 @@
     </select>
 
     <update id="updateSpendingAnalysisResult">
-        UPDATE SpendingAnalysisResult
+        UPDATE spending_analysis_result
         SET analysis_category = #{category}, updated_at = NOW()
         WHERE member_id = #{memberId}
           AND analysis_month = DATE_FORMAT(NOW(), '%Y-%m')
     </update>
 
     <insert id="insertSpendingAnalysisResult">
-        INSERT INTO SpendingAnalysisResult (member_id, analysis_category, analysis_month)
+        INSERT INTO spending_analysis_result (member_id, analysis_category, analysis_month)
         VALUES (#{memberId}, #{category}, DATE_FORMAT(NOW(), '%Y-%m'))
     </insert>
 
