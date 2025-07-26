@@ -1,6 +1,8 @@
 package org.cardGGaduekMainService.lab.service;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.cardGGaduekMainService.coupon.couponProduct.service.CouponProductService;
 import org.cardGGaduekMainService.lab.domain.FortuneVO;
 import org.cardGGaduekMainService.lab.domain.LuckyItemVO;
 import org.cardGGaduekMainService.lab.domain.MissionProgressVO;
@@ -12,14 +14,19 @@ import org.cardGGaduekMainService.lab.dto.MissionProgressDTO;
 import org.cardGGaduekMainService.lab.dto.SpendingAnalysisResultDTO;
 import org.cardGGaduekMainService.lab.mapper.LabMapper;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Log4j2
 @Service
 @RequiredArgsConstructor
 public class LabServiceImpl implements LabService {
     private final LabMapper labMapper;
+    private final CouponProductService couponProductService;
     private int generateRandomFortuneIndex() {
         int[] validIndexes = {10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
         return validIndexes[(int) (Math.random() * validIndexes.length)];
@@ -51,12 +58,22 @@ public class LabServiceImpl implements LabService {
     }
 
     @Override
+    @Transactional // 🔥 트랜잭션 추가 필요
     public void updateMissionProgressByTransactions(Long memberId, List<SpendingCategory> transactionCategories) {
         // 🔹 미션 진행 현황이 없으면 자동 생성
         ensureMissionProgressExists(memberId);
 
         for (SpendingCategory category : transactionCategories) {
+            // 🔥 업데이트 전 현재 진행 상황 조회
+            List<MissionProgressVO> beforeUpdate = labMapper.selectAllMissionsWithProgress(memberId);
+
+            // 진행률 증가
             labMapper.incrementProgressByCategoryIfMatched(memberId, category.name());
+
+            // 🔥 업데이트 후 진행 상황 조회 및 미션 성공 체크
+            List<MissionProgressVO> afterUpdate = labMapper.selectAllMissionsWithProgress(memberId);
+
+            checkAndIssueCouponsForCompletedMissions(memberId, beforeUpdate, afterUpdate);
         }
     }
 
@@ -94,6 +111,8 @@ public class LabServiceImpl implements LabService {
     public FortuneResponseDTO getTodayFortune(Long memberId) {
         // 1. 오늘자 운세 조회
         FortuneVO fortune = labMapper.selectTodayFortuneByMemberId(memberId);
+        LocalDate todayKST = LocalDate.now(ZoneId.of("Asia/Seoul"));
+
         if (fortune != null) return FortuneResponseDTO.from(fortune);
 
 
@@ -152,6 +171,33 @@ public class LabServiceImpl implements LabService {
                 labMapper.updateSpendingAnalysisResult(memberId, category.name());
             } else {
                 labMapper.insertSpendingAnalysisResult(memberId, category.name());
+            }
+        }
+    }
+
+    // 🔥 새로 추가할 메서드
+    private void checkAndIssueCouponsForCompletedMissions(Long memberId,
+                                                          List<MissionProgressVO> beforeUpdate,
+                                                          List<MissionProgressVO> afterUpdate) {
+
+        for (int i = 0; i < beforeUpdate.size() && i < afterUpdate.size(); i++) {
+            MissionProgressVO before = beforeUpdate.get(i);
+            MissionProgressVO after = afterUpdate.get(i);
+
+            // 미션 성공 조건: 업데이트 전에는 미완료, 업데이트 후에는 완료
+            boolean wasIncomplete = before.getProgressValue() < before.getGoalValue();
+            boolean isNowComplete = after.getProgressValue() >= after.getGoalValue();
+
+            if (wasIncomplete && isNowComplete) {
+                // 🎉 미션 성공! 쿠폰 발급
+                try {
+                    couponProductService.issueCouponByMissionReward(memberId, after.getReward());
+                    log.info("미션 성공 쿠폰 발급 완료 - memberId: {}, mission: {}, reward: {}",
+                            memberId, after.getMissionTitle(), after.getReward());
+                } catch (Exception e) {
+                    log.error("미션 성공 쿠폰 발급 실패 - memberId: {}, mission: {}",
+                            memberId, after.getMissionTitle(), e);
+                }
             }
         }
     }

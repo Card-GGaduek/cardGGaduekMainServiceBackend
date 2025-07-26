@@ -9,4 +9,48 @@
     <select id="getAllCouponProducts" resultType="org.cardGGaduekMainService.coupon.couponProduct.domain.CouponProductVO">
         SELECT * FROM coupon_product ORDER BY id DESC
     </select>
+
+    <!--    -->
+    <!-- 쿠폰 상품명으로 ID 조회 -->
+    <select id="selectCouponProductIdByName" parameterType="string" resultType="long">
+        SELECT id
+        FROM coupon_product
+        WHERE coupon_name = #{couponName}
+          AND expired_at > NOW()
+        LIMIT 1
+    </select>
+
+    <!-- 쿠폰 발급 (스냅샷 방식) -->
+    <insert id="issueCouponFromProduct">
+        INSERT INTO member_coupon (
+            member_id,
+            coupon_product_id,
+            coupon_name,
+            coupon_category,
+            discount_value,
+            coupon_status,
+            expired_at
+        )
+        SELECT
+            #{memberId},
+            cp.id,
+            cp.coupon_name,
+            cp.coupon_category,
+            cp.discount_value,
+            '사용 가능',
+            cp.expired_at
+        FROM coupon_product cp
+        WHERE cp.id = #{couponProductId}
+          AND cp.expired_at > NOW()
+    </insert>
+
+    <!-- 중복 발급 확인 (선택사항) -->
+    <select id="existsCouponByMemberIdAndMissionId" resultType="int">
+        SELECT COUNT(*)
+        FROM member_coupon mc
+                 JOIN coupon_product cp ON mc.coupon_product_id = cp.id
+                 JOIN mission m ON m.reward = cp.coupon_name
+        WHERE mc.member_id = #{memberId}
+          AND m.id = #{missionId}
+    </select>
 </mapper>
