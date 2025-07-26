@@ -29,4 +29,20 @@
         SELECT * FROM member
         WHERE member.naver_user_id = #{naverId}
     </select>
+
+    <update id="updateMember" parameterType="org.cardGGaduekMainService.member.dto.MemberUpdateDTO">
+        UPDATE
+            member
+        <set>
+            <if test="email != null and email != ''">
+                email = #{email},
+            </if>
+            <if test="phone != null and phone != ''">
+                phone = #{phone},
+            </if>
+            updated_at = NOW()
+        </set>
+        WHERE
+            id = #{id}
+    </update>
 </mapper>
