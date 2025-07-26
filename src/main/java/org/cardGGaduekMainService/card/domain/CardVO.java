@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -15,13 +16,11 @@ public class CardVO {
     private Long id;
     private Long memberId;
     private Long cardProductId;
-    private String cardName;
-    private String company;
     private String cardNumber;
-    private LocalDate expirationDate;
     private String cvc;
-    private LocalDate createdAt;
-    private String cardImageUrl;
-    private String cardCategory;
+    private String cardPassword;
+    private LocalDateTime expirationDate;
+    private LocalDateTime createdAt;
     private String customImageUrl;
+    private int isValid; // 0: 사용 불가능, 1: 사용 가능 상태를 나타냄
 }

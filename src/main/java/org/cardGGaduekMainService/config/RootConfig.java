@@ -28,7 +28,8 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.store.mapper",
         "org.cardGGaduekMainService.notification.mapper",
         "org.cardGGaduekMainService.coupon.memberCoupon.mapper",
-        "org.cardGGaduekMainService.coupon.couponProduct.mapper"
+        "org.cardGGaduekMainService.coupon.couponProduct.mapper",
+        "org.cardGGaduekMainService.card.mapper"
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
@@ -41,6 +42,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.coupon.couponProduct.service",
         "org.cardGGaduekMainService.coupon.memberCoupon.service",
         "org.cardGGaduekMainService.notification.service",
+        "org.cardGGaduekMainService.card.service"
 })
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;
