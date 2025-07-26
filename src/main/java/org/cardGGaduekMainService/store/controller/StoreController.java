@@ -58,9 +58,9 @@ public class StoreController {
      *
      * */
     @GetMapping("/my-cards")
-    public ResponseEntity<ApiResponse<Map<Integer,List<StoreWithBenefitDTO>>>> getStoresByMemberCards(@RequestParam Long memberId){
+    public ResponseEntity<ApiResponse<Map<String,List<StoreWithBenefitDTO>>>> getStoresByMemberCards(@RequestParam Long memberId){
 
-        Map<Integer,List<StoreWithBenefitDTO>> result = storeService.findStoresByMemberCards(memberId);
+        Map<String,List<StoreWithBenefitDTO>> result = storeService.findStoresByMemberCards(memberId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.STORE_GET_SUCCESS, result));
     }
 }

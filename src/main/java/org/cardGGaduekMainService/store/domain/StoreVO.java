@@ -21,7 +21,7 @@ public class StoreVO {
     private Double longitude;
     private Time openTime;
     private Time closeTime;
-    private Long storeCategoryId;
+    private String storeCategory;
 
 
 }
