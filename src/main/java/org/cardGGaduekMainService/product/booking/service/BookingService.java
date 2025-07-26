@@ -11,7 +11,7 @@ import java.util.List;
 
 @Service
 public interface BookingService {
-    Long createBooking(BookingRequestDTO bookingRequest);
+    void createBooking(BookingRequestDTO bookingRequest);
 
     List<BookingDetailDTO> findBookingsByMemberId(Long memberId);
 }

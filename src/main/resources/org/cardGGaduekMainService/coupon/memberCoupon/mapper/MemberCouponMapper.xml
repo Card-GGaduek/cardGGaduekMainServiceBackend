@@ -8,21 +8,14 @@
     <!-- MemberCouponVO + CouponProductVO 매핑 -->
     <resultMap id="memberCouponWithProductResult" type="org.cardGGaduekMainService.coupon.memberCoupon.domain.MemberCouponVO">
         <id property="id" column="mc_id"/>
-        <result property="member_id" column="member_id"/>
-        <result property="coupon_product_id" column="coupon_product_id"/>
-        <result property="status_code_id" column="status_code_id"/>
-        <result property="coupon_name" column="coupon_name"/>
-        <result property="issued_at" column="mc_issued_at"/>
-        <result property="coupon_category" column="coupon_category"/>
-        <result property="coupon_quantity" column="coupon_quantity"/>
-        <result property="discount_value" column="discount_value"/>
+        <result property="memberId" column="member_id"/>
+        <result property="couponProductId" column="coupon_product_id"/>
+        <result property="statusCodeId" column="status_code_id"/>
         <association property="couponProduct" javaType="org.cardGGaduekMainService.coupon.couponProduct.domain.CouponProductVO">
             <id property="id" column="cp_id"/>
-            <result property="coupon_name" column="coupon_name"/>
-            <result property="description" column="description"/>
-            <result property="expired_at" column="expired_at"/>
-            <result property="coupon_quantity" column="coupon_quantity"/>
-            <result property="discount_value" column="discount_value"/>
+            <result property="couponName" column="coupon_name"/>
+            <result property="expiredAt" column="expired_at"/>
+            <result property="discountValue" column="discount_value"/>
         </association>
     </resultMap>
 
@@ -58,18 +51,11 @@
     <select id="getMemberWithCouponsByMemberId" resultMap="memberWithCouponsResult">
         SELECT
             m.id as member_id,
-            m.name as member_name,
             mc.id as mc_id,
             mc.coupon_product_id,
-            mc.status_code_id,
-            mc.coupon_category,
-            mc.coupon_quantity,
-            mc.discount_value,
-            mc.issued_at as mc_issued_at,
+            mc.status,
             cp.id as cp_id,
-            cp.coupon_quantity,
             cp.coupon_name,
-            cp.description,
             cp.expired_at,
             cp.discount_value
         FROM
