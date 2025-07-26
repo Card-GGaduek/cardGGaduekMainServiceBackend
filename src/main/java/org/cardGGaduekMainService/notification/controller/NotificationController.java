@@ -21,6 +21,7 @@
 
 package org.cardGGaduekMainService.notification.controller;
 
+import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.notification.domain.NotificationVO;
 import org.cardGGaduekMainService.notification.service.NotificationService;
 import org.cardGGaduekMainService.response.ApiResponse;
@@ -33,10 +34,11 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/api/notification")
+@RequiredArgsConstructor
 public class NotificationController {
 
-    @Autowired
-    private NotificationService notificationService;
+
+    private final NotificationService notificationService;
 
     @GetMapping("/{memberId}")
     public ResponseEntity<ApiResponse<List<NotificationVO>>> getNotification(@PathVariable Long memberId) {
