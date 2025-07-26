@@ -20,6 +20,6 @@ public class StoreWithBenefitDTO {
     private Double longitude;
     private String openTime;
     private String closeTime;
-    private Integer storeCategoryId;
+    private String storeCategory;
     private List<CardBenefitDTO> benefits;
 }

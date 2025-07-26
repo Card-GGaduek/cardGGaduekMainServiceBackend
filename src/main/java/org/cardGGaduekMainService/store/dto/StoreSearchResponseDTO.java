@@ -22,7 +22,7 @@ public class StoreSearchResponseDTO {
     private Double longitude;
     private String openTime;
     private String closeTime;
-    private Long storeCategoryId;
+    private String storeCategory;
 
 
     // 오픈시간 - 마감시간 time 테이블 포맷 변경 (ex : 08:00 , 23:00)
@@ -45,7 +45,7 @@ public class StoreSearchResponseDTO {
                 .longitude(store.getLongitude())
                 .openTime(openTimeStr)
                 .closeTime(closeTimeStr)
-                .storeCategoryId(store.getStoreCategoryId())
+                .storeCategory(store.getStoreCategory())
                 .build();
     }
 

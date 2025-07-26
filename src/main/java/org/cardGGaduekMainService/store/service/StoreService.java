@@ -28,7 +28,7 @@ public interface StoreService {
      * @param memberId 회원 ID
      * @return 카테고리별 매장 목록 (매장별 카드 혜택 포함)
      * */
-    Map<Integer, List<StoreWithBenefitDTO>> findStoresByMemberCards(Long memberId);
+    Map<String, List<StoreWithBenefitDTO>> findStoresByMemberCards(Long memberId);
 
     // 가맹점 제휴 카드 목록 조회
     List<CardVO> getCardsByStore();
