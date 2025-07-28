@@ -29,9 +29,10 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.notification.mapper",
         "org.cardGGaduekMainService.coupon.memberCoupon.mapper",
         "org.cardGGaduekMainService.coupon.couponProduct.mapper",
-        "org.cardGGaduekMainService.product.booking.mapper"
+        "org.cardGGaduekMainService.product.booking.mapper",
         "org.cardGGaduekMainService.cardPerformance.mapper",
         "org.cardGGaduekMainService.cardSummary.mapper",
+        "org.cardGGaduekMainService.product.rooms.mapper",
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
@@ -45,7 +46,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.common.mail.service",
         "org.cardGGaduekMainService.coupon.memberCoupon.service",
         "org.cardGGaduekMainService.notification.service",
-        "org.cardGGaduekMainService.product.booking.service"
+        "org.cardGGaduekMainService.product.booking.service",
         "org.cardGGaduekMainService.cardPerformance.service",
         "org.cardGGaduekMainService.cardSummary.service",
 })

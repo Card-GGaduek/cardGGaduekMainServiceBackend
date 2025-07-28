@@ -19,6 +19,10 @@ public class MemberCouponVO {
     private Long id;
     private Long memberId;
     private Long couponProductId;
-    private boolean statusCodeId;     // 사용 여부
+    private String couponName;
+    private String couponCategory;
+    private LocalDateTime expiredAt;
+    private String couponStatus;
+    private BigDecimal discountValue;
     private CouponProductVO couponProduct;
 }
