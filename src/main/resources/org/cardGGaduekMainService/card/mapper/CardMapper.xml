@@ -5,15 +5,16 @@
 
 <mapper namespace="org.cardGGaduekMainService.card.mapper.CardMapper">
 
-    <select id="getCardsByMemberId" resultType="org.cardGGaduekMainService.card.dto.CardResponseDTO">
+    <select id="getCardFrontInfo" resultType="org.cardGGaduekMainService.card.dto.CardFrontDTO">
         SELECT
-            c.id AS cardId,
-            cp.card_image_url AS cardImageUrl,
+            IFNULL(c.custom_image_url, cp.card_image_url) AS cardImageUrl,
             cp.card_product_name AS cardProductName,
-            b.bank_name AS bankName
+            b.bank_name AS bankName,
+            m.name AS memberName
         FROM card c
                  JOIN card_product cp ON c.card_product_id = cp.id
                  JOIN bank b ON cp.bank_id = b.id
+                 JOIN member m ON c.member_id = m.id
         WHERE c.member_id = #{memberId}
           AND c.is_valid = 1
     </select>

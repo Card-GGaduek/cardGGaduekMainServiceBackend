@@ -1,8 +1,8 @@
 package org.cardGGaduekMainService.card.service;
 
-import org.cardGGaduekMainService.card.dto.CardResponseDTO;
+import org.cardGGaduekMainService.card.dto.CardFrontDTO;
 import java.util.List;
 
 public interface CardService {
-    List<CardResponseDTO> getCardsByMemberId(Long memberId);
+    List<CardFrontDTO> getCardFrontInfo(Long memberId);
 }

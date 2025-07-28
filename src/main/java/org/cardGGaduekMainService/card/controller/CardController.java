@@ -1,6 +1,6 @@
 package org.cardGGaduekMainService.card.controller;
 
-import org.cardGGaduekMainService.card.dto.CardResponseDTO;
+import org.cardGGaduekMainService.card.dto.CardFrontDTO;
 import org.cardGGaduekMainService.card.service.CardService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,9 +15,10 @@ public class CardController {
     @Autowired
     private CardService cardService;
 
-    @GetMapping("/{memberId}")
-    public ResponseEntity<List<CardResponseDTO>> getUserCards(@PathVariable Long memberId) {
-        List<CardResponseDTO> cards = cardService.getCardsByMemberId(memberId);
+    // 회원이 가진 카드 앞면 정보 리스트 API
+    @GetMapping("/front/{memberId}")
+    public ResponseEntity<List<CardFrontDTO>> getCardFrontInfo(@PathVariable Long memberId) {
+        List<CardFrontDTO> cards = cardService.getCardFrontInfo(memberId);
         return ResponseEntity.ok(cards);
     }
 }
