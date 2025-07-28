@@ -19,7 +19,10 @@ public enum SuccessCode {
     IMAGE_LUCKY_ITEM_SENT(701, "행운의 아이템 이미지 전송 성공"),
     IMAGE_ANALYSIS_SENT(702, "소비 성향 분석 이미지 전송 성공"),
 
-//     TRANSACTION
+    // CARDIMAGE
+    CARD_IMAGE_UPDATE(703, "카드 이미지 변경 성공"),
+
+    //TRANSACTION
     TRANSACTION_CREATE_SUCCESS(201, "거래 내역 등록 성공"),
     MEMBER_TRANSACTION_FETCH_SUCCESS(401, "회원 거래내역 조회 성공"),
 
@@ -29,6 +32,7 @@ public enum SuccessCode {
     NOTIFICATION_FETCH_SUCCESS(201, "알림 조회 성공"),
     VERIFICATION_MAIL_SENT(102, "인증 메일을 발송 성공"),
     VERIFIED_CODE(103, "인증 성공");
+
   
 
     private final int code;
