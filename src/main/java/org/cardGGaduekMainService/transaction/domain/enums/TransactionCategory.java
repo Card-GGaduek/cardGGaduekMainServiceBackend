@@ -1,5 +1,6 @@
 package org.cardGGaduekMainService.transaction.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -25,6 +26,7 @@ public enum TransactionCategory {
                 .orElseThrow(() -> new IllegalArgumentException("Unknown category: " + name));
     }
 
+    @JsonCreator
     public static TransactionCategory fromName(String name) {
         return Arrays.stream(values())
                 .filter(c -> c.name().equalsIgnoreCase(name))

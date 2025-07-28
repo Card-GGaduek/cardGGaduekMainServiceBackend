@@ -23,8 +23,8 @@ public class LabController {
 
     // 1. 미션 진행 현황
     @GetMapping("/missions")
-    public ResponseEntity<ApiResponse<List<MissionProgressDTO>>> getMissionProgress(@RequestParam Long memberId) {
-        List<MissionProgressDTO> missions = labService.getMissionProgress(memberId);
+    public ResponseEntity<ApiResponse<List<MissionProgressDTO>>> getAllMissionsWithProgress(@RequestParam Long memberId) {
+        List<MissionProgressDTO> missions = labService.getAllMissionsWithProgress(memberId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.MISSION_PROGRESS_FETCH_SUCCESS, missions));
     }
 

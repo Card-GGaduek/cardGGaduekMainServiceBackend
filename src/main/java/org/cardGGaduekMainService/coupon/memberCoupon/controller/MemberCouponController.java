@@ -31,7 +31,7 @@ public class MemberCouponController {
     @ResponseBody
     public ResponseEntity<ApiResponse<MemberCouponDTO>> getMyCouponsWithDetails(HttpSession session) { // 메소드 이름과 파라미터는 편의에 맞게 수정 가능
 
-        Long memberId = 3L; // 실제로는 세션에서 가져오는 로직이 필요합니다.1
+        Long memberId = 6L; // 실제로는 세션에서 가져오는 로직이 필요합니다.1
             log.info("조회 요청 회원 ID: " + memberId);
 
             // 1. 서비스 호출 변경: 새로 만든 메소드를 호출합니다.
