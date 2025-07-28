@@ -16,23 +16,28 @@
         SELECT *
         FROM store
         WHERE 1=1
+        <if test="latitude != null and longitude != null and radius != null">
+            AND (6371 * ACOS(COS(RADIANS(#{latitude})) * COS(RADIANS(latitude)) *
+            COS(RADIANS(longitude) - RADIANS(#{longitude})) +
+            SIN(RADIANS(#{latitude})) * SIN(RADIANS(latitude)))) &lt; #{radius}
+        </if>
         <if test="keyword != null and keyword != ''">
             AND (name LIKE CONCAT('%', #{keyword}, '%')
             OR address LIKE CONCAT('%', #{keyword}, '%'))
         </if>
-        <if test="storeCategoryId != null">
-            AND store.store_category_id = #{storeCategoryId}
+        <if test="storeCategory != null and storeCategory != ''">
+            AND store.store_category = #{storeCategory}
         </if>
+<!--        <!- 반경 필터링 -->
 <!--        <if test="latitude != null and longitude != null and radius != null">-->
-<!--            AND (6371 * ACOS(COS(RADIANS(#{latitude})) * COS(RADIANS(latitude)) *-->
-<!--            COS(RADIANS(longitude) - RADIANS(#{longitude})) +-->
-<!--            SIN(RADIANS(#{latitude})) * SIN(RADIANS(latitude)))-->
+<!--            HAVING distance &lt;= #{radius}-->
 <!--        </if>-->
-<!--        Having distance <-->
         ORDER BY
-        CASE WHEN name = #{keyword} THEN 1
-        WHEN name LIKE CONCAT(#{keyword}, '%') THEN 2
-        ELSE 3 END
+        CASE
+            WHEN name = #{keyword} THEN 1
+            WHEN name LIKE CONCAT(#{keyword}, '%') THEN 2
+            ELSE 3
+        END
     </select>
     <select id="getStoreById" resultMap="storeMap">
     SELECT *
@@ -47,7 +52,7 @@
         <result column="latitude" property="latitude"/>
         <result column="longitude" property="longitude"/>
         <result column="openTime" property="openTime"/>
-        <result column="storeCategoryId" property="storeCategoryId"/>
+        <result column="storeCategory" property="storeCategory"/>
         <result column="cardName" property="cardName"/>
         <result column="benefitDescription" property="benefitDescription"/>
     </resultMap>

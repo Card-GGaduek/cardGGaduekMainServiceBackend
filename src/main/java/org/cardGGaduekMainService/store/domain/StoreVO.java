@@ -23,5 +23,4 @@ public class StoreVO {
     private Time closeTime;
     private String storeCategory;
 
-
 }

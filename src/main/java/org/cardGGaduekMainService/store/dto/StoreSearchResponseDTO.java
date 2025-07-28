@@ -23,6 +23,7 @@ public class StoreSearchResponseDTO {
     private String openTime;
     private String closeTime;
     private String storeCategory;
+    private boolean hasBenefit;
 
 
     // 오픈시간 - 마감시간 time 테이블 포맷 변경 (ex : 08:00 , 23:00)

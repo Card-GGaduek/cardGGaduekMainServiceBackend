@@ -31,19 +31,11 @@ public class StoreServiceImpl implements StoreService {
     // 지도에서 매장 검색
     @Override
     public List<StoreSearchResponseDTO> findStores(StoreSearchConditionDTO conditionDTO) {
+
         List<StoreVO> stores = storeMapper.getStores(conditionDTO);
+
         if (stores.isEmpty()) throw new CustomException(ErrorCode.STORE_NOT_FOUND);
-        stores.stream()
-                .map(store -> StoreSearchResponseDTO.builder()
-                        .id(store.getId())
-                        .name(store.getName())
-                        .address(store.getAddress())
-                        .latitude(store.getLatitude())
-                        .longitude(store.getLongitude())
-                        .openTime(store.getOpenTime().toString())
-                        .closeTime(store.getCloseTime().toString())
-                        .build())
-                .collect(Collectors.toList());
+
         return stores.stream()
                 .map(StoreSearchResponseDTO::from)
                 .collect(Collectors.toList());

@@ -2,6 +2,8 @@ package org.cardGGaduekMainService.store.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.cardGGaduekMainService.response.ApiResponse;
 import org.cardGGaduekMainService.response.SuccessCode;
 import org.cardGGaduekMainService.store.dto.StoreSearchConditionDTO;
@@ -20,19 +22,35 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class StoreController {
 
+    private static final Logger log = LogManager.getLogger(StoreController.class);
     private final StoreService storeService;
 
     /**
      * 가맹점 리스트 검색 API
      * 엔드포인트 : /api/stores/search
-     * 예시 : /api/stores/search?keyword=스타벅스&categoryId=2
+     * 예시 : /api/stores/search?lat=37.4979&lng=127.0276&keyword=카페&benefit=true
      *
      * @param conditionDTO 검색 조건 ( 키워드, 카테고리, 위치 좌표)
      * @return 검색된 가맹점 목록
      * */
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<StoreSearchResponseDTO>>> searchStores(StoreSearchConditionDTO conditionDTO){
+    public ResponseEntity<ApiResponse<List<StoreSearchResponseDTO>>> searchStores(@ModelAttribute StoreSearchConditionDTO conditionDTO){
         List<StoreSearchResponseDTO> stores = storeService.findStores(conditionDTO);
+        log.info("검색 요청={}",conditionDTO);
+        System.out.println("====== [매장 검색 요청] ======");
+        System.out.println("keyword = " + conditionDTO.getKeyword());
+        System.out.println("category = " + conditionDTO.getStoreCategory());
+        System.out.println("latitude = " + conditionDTO.getLatitude());
+        System.out.println("longitude = " + conditionDTO.getLongitude());
+        System.out.println("radius = " + conditionDTO.getRadius());
+
+        log.info("🔁 응답 DTO 목록 (StoreSearchResponseDTO):");
+        stores.forEach(store -> log.info("  ➤ ID={}, Name={}, Lat={}, Lng={}",
+                store.getId(),
+                store.getName(),
+                store.getLatitude(),
+                store.getLongitude()
+        ));
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.STORE_SEARCH_SUCCESS, stores));
     }
 
