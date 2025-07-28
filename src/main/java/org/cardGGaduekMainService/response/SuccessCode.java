@@ -30,9 +30,11 @@ public enum SuccessCode {
     VERIFICATION_MAIL_SENT(102, "인증 메일을 발송 성공"),
     VERIFIED_CODE(103, "인증 성공"),
 
-    QR_CREATE_SUCCESS(601, "QR 코드 생성 성공");
+    QR_CREATE_SUCCESS(601, "QR 코드 생성 성공"),
 
 
+    CARD_FRONT_FETCH_SUCCESS(801, "보유 카드 리스트 조회 성공"),
+    CARD_BACK_FETCH_SUCCESS(802, "카드 상세 정보 조회 성공");
     private final int code;
     private final String message;
 
