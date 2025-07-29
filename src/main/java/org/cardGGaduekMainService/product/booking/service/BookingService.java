@@ -13,11 +13,11 @@ import java.util.List;
 
 @Service
 public interface BookingService {
+    Long createBooking(BookingRequestDTO bookingRequest)
+            ;
     BigDecimal calculateOriginalPrice(Long roomId, LocalDate checkInDate, LocalDate checkOutDate);
-
-    Long createBooking(BookingRequestDTO bookingRequest);
 
     List<BookingDetailDTO> findBookingsByMemberId(Long memberId);
 
-//    void completePayment(Long bookingId);
+    //    void completePayment(Long bookingId);
 }
