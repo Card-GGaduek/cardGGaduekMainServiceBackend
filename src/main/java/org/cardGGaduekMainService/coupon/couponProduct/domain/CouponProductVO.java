@@ -1,5 +1,6 @@
 package org.cardGGaduekMainService.coupon.couponProduct.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,4 +19,5 @@ public class CouponProductVO {
     private LocalDateTime expiredAt;    // 쿠폰 만료일
     private Long discountValue;         // 쿠폰 할인금액
     private String couponCategory;      // 쿠폰 카테고리 (FOOD, SHOPPING, MEDICAL, CULTURE, TRANSPORT)
+
 }

@@ -22,19 +22,24 @@ import javax.sql.DataSource;
 @EnableTransactionManagement
 @PropertySource({"classpath:/application.properties"})
 @MapperScan(basePackages = {
-        "org.cardGGaduekMainService.member.mapper", 
-        "org.cardGGaduekMainService.lab.mapper", 
+        "org.cardGGaduekMainService.member.mapper",
+        "org.cardGGaduekMainService.lab.mapper",
         "org.cardGGaduekMainService.transaction.mapper",
         "org.cardGGaduekMainService.store.mapper",
         "org.cardGGaduekMainService.notification.mapper",
         "org.cardGGaduekMainService.coupon.memberCoupon.mapper",
         "org.cardGGaduekMainService.coupon.couponProduct.mapper",
-        "org.cardGGaduekMainService.card.mapper"
+        "org.cardGGaduekMainService.card.mapper",
+        "org.cardGGaduekMainService.product.booking.mapper"
+        "org.cardGGaduekMainService.cardPerformance.mapper",
+        "org.cardGGaduekMainService.cardSummary.mapper",
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
         "org.cardGGaduekMainService.common.util",
         "org.cardGGaduekMainService.auth",
+        "org.cardGGaduekMainService.payment.service",
+        "org.cardGGaduekMainService.common.mail.service",
         "org.cardGGaduekMainService.lab.service",
         "org.cardGGaduekMainService.transaction.service",
         "org.cardGGaduekMainService.store.service",
@@ -42,7 +47,10 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.coupon.couponProduct.service",
         "org.cardGGaduekMainService.coupon.memberCoupon.service",
         "org.cardGGaduekMainService.notification.service",
-        "org.cardGGaduekMainService.card.service"
+        "org.cardGGaduekMainService.card.service",
+        "org.cardGGaduekMainService.product.booking.service",
+        "org.cardGGaduekMainService.cardPerformance.service",
+        "org.cardGGaduekMainService.cardSummary.service",
 })
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;
@@ -70,8 +78,8 @@ public class RootConfig {
     public SqlSessionFactory sqlSessionFactory() throws Exception {
         SqlSessionFactoryBean sqlSessionFactory = new SqlSessionFactoryBean();
         sqlSessionFactory.setConfigLocation(applicationContext.getResource("classpath:/mybatis-config.xml"));
-//        sqlSessionFactory.setMapperLocations(applicationContext.getResources("classpath:/mapper/**/*.xml"));
         sqlSessionFactory.setDataSource(dataSource());
+      
         return (SqlSessionFactory) sqlSessionFactory.getObject();
     }
 

@@ -9,6 +9,14 @@
         INSERT INTO member (email, password, name, phone)
         VALUES (#{email}, #{password}, #{name}, #{phone})
     </insert>
+    <insert id="createNaverMember">
+        INSERT INTO member (naver_user_id, email, name, phone)
+        VALUES (#{naverUserId}, #{email}, #{name}, #{phone})
+
+        <selectKey resultType="Long" keyProperty="id" keyColumn="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
     <select id="getMemberByEmail" resultType="org.cardGGaduekMainService.member.domain.MemberVO">
         SELECT * FROM member
         WHERE member.email = #{email}
@@ -16,5 +24,9 @@
     <select id="getMemberById" resultType="org.cardGGaduekMainService.member.domain.MemberVO">
         SELECT * FROM member
         WHERE member.id = #{id}
+    </select>
+    <select id="getMemberByNaverId" resultType="org.cardGGaduekMainService.member.domain.MemberVO">
+        SELECT * FROM member
+        WHERE member.naver_user_id = #{naverId}
     </select>
 </mapper>
