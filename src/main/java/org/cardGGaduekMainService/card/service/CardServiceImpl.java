@@ -13,4 +13,9 @@ public class CardServiceImpl implements CardService {
     public void deleteCard(Long cardId) {
         cardMapper.softDeleteCard(cardId);
     }
+
+    @Override
+    public void updateCardImage(Long cardId, String imageUrl) {
+        cardMapper.updateCustomImageUrl(cardId, imageUrl);
+    }
 }
