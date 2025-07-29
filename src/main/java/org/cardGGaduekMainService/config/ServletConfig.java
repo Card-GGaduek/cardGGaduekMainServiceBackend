@@ -26,7 +26,7 @@ import org.springframework.web.servlet.view.JstlView;
         "org.cardGGaduekMainService.common.mail.controller",
         "org.cardGGaduekMainService.coupon.memberCoupon.controller",
         "org.cardGGaduekMainService.card.controller",
-        "org.cardGGaduekMainService.product.booking.controller"
+        "org.cardGGaduekMainService.product.booking.controller",
         "org.cardGGaduekMainService.cardPerformance.controller",
         "org.cardGGaduekMainService.cardSummary.controller",
 })

@@ -30,7 +30,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.coupon.memberCoupon.mapper",
         "org.cardGGaduekMainService.coupon.couponProduct.mapper",
         "org.cardGGaduekMainService.card.mapper",
-        "org.cardGGaduekMainService.product.booking.mapper"
+        "org.cardGGaduekMainService.product.booking.mapper",
         "org.cardGGaduekMainService.cardPerformance.mapper",
         "org.cardGGaduekMainService.cardSummary.mapper",
 })
