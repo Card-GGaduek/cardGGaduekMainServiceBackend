@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO;
 import org.cardGGaduekMainService.card.benefit.mapper.CardBenefitMapper;
 import org.cardGGaduekMainService.card.mapper.CardMapper;
+import org.cardGGaduekMainService.product.categoryPageContent.mapper.CategoryPageContentMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,12 +16,14 @@ import java.math.BigDecimal;
 public class CardBenefitServiceImpl implements CardBenefitService{
     private final CardMapper cardMapper;
     private final CardBenefitMapper cardBenefitMapper;
+    private final CategoryPageContentMapper categoryPageContentMapper;
 
     @Autowired
     public CardBenefitServiceImpl(CardMapper cardMapper,
-                                  CardBenefitMapper cardBenefitMapper) {
+                                  CardBenefitMapper cardBenefitMapper, CategoryPageContentMapper categoryPageContentMapper) {
         this.cardMapper = cardMapper;
         this.cardBenefitMapper = cardBenefitMapper;
+        this.categoryPageContentMapper = categoryPageContentMapper;
     }
 
     @Override

@@ -32,4 +32,34 @@
         ORDER BY benefitCount DESC, cp.issued_date DESC
     </select>
 
+    <select id="findAllCardProducts" resultType="org.cardGGaduekMainService.cardProduct.dto.CardProductDTO">
+        SELECT
+            id,
+            card_product_name,
+            card_image_url
+        FROM
+            card_product
+    </select>
+    <select id="findCardProductDetail" parameterType="long" resultType="org.cardGGaduekMainService.cardProduct.domain.CardProductVO">
+        SELECT
+            cp.id,
+            cp.card_type AS cardType,
+            cp.bank_id AS bankId,
+            cp.card_product_name AS cardProductName,
+            cp.card_image_url AS cardImageUrl,
+            cp.annual_fee AS annualFee,
+            cp.issued_date AS issuedDate,
+            cp.required_monthly_spending AS requiredMonthlySpending,
+            COUNT(cb.id) AS benefitCount
+        FROM
+            card_product cp
+                LEFT JOIN
+            card_benefit cb ON cp.id = cb.card_product_id
+        WHERE
+            cp.id = #{productId} -- 조회할 카드 상품의 ID를 지정
+        GROUP BY
+            cp.id; -- 기본 키로 그룹화
+    </select>
+
+
 </mapper>

@@ -23,4 +23,6 @@ public interface CardMapper {
     void updateCustomImageUrl(@Param("cardId") Long cardId,
                               @Param("imageUrl") String imageUrl);
     Long findCardProductIdByCardId(Long userCardId);
+
+    List<Long> findAllCardProductIdsByMemberId(Long memberId);
 }

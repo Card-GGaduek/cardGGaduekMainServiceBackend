@@ -34,6 +34,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.card.benefit.mapper",
         "org.cardGGaduekMainService.product.booking.mapper",
         "org.cardGGaduekMainService.product.rooms.mapper",
+        "org.cardGGaduekMainService.product.categoryPageContent.mapper",
         "org.cardGGaduekMainService.cardPerformance.mapper",
         "org.cardGGaduekMainService.cardSummary.mapper",
 })
@@ -53,6 +54,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.card.service",
         "org.cardGGaduekMainService.card.benefit.service",
         "org.cardGGaduekMainService.product.booking.service",
+        "org.cardGGaduekMainService.product.categoryPageContent.service",
         "org.cardGGaduekMainService.cardPerformance.service",
         "org.cardGGaduekMainService.cardSummary.service",
         "org.cardGGaduekMainService.cardProduct.service",

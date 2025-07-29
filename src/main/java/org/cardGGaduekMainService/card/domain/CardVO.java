@@ -1,5 +1,6 @@
 package org.cardGGaduekMainService.card.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,6 +17,7 @@ public class CardVO {
     private LocalDateTime expirationDate;
     private String cvc;
     private String cardPassword;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh-mm" )
     private LocalDateTime createdAt;
     private String customImageUrl;
     private Long cardProductId;
