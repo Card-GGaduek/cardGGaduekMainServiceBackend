@@ -20,7 +20,7 @@ public class StoreBenefitRawDTO {
     private Double longitude;
     private String openTime;
     private String closeTime;
-    private Integer storeCategoryId;
+    private String storeCategory;
     private String cardName;
     private String benefitDescription;
 }
