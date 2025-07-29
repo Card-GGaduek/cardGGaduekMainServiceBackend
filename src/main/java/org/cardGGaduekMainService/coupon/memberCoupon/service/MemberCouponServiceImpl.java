@@ -39,12 +39,12 @@ public class MemberCouponServiceImpl implements MemberCouponService {
             throw new IllegalArgumentException("소유하지 않았거나 유효하지 않은 쿠폰입니다.");
         }
 
-        if (!"사용가능".equals(memberCoupon.getCouponStatus())) {
+        if (!"사용 가능".equals(memberCoupon.getCouponStatus())) {
             throw new IllegalArgumentException("이미 사용했거나 만료된 쿠폰입니다.");
         }
 
-        if(!"호텔".equals(memberCoupon.getCouponCategory())){
-            throw new IllegalArgumentException("이미 사용했거나 만료된 쿠폰입니다.");
+        if(!"TRAVEL".equals(memberCoupon.getCouponCategory())){
+            throw new IllegalArgumentException("카테고리에 맞지 않는 쿠폰입니다.");
         }
         return memberCoupon;
     }

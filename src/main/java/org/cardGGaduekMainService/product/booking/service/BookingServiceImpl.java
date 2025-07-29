@@ -1,5 +1,6 @@
 package org.cardGGaduekMainService.product.booking.service;
 
+import org.cardGGaduekMainService.card.benefit.service.CardBenefitService;
 import org.cardGGaduekMainService.coupon.memberCoupon.domain.MemberCouponVO;
 import org.cardGGaduekMainService.coupon.memberCoupon.service.MemberCouponService;
 import org.cardGGaduekMainService.product.booking.dto.BookingDetailDTO;
@@ -22,12 +23,14 @@ public class BookingServiceImpl implements BookingService{
     private final BookingMapper bookingMapper;
     private final MemberCouponService memberCouponService;
     private final RoomsMapper roomsMapper;
+    private final CardBenefitService cardBenefitService;
 
     @Autowired
-    public BookingServiceImpl(BookingMapper bookingMapper, MemberCouponService memberCouponService, RoomsMapper roomsMapper){
+    public BookingServiceImpl(BookingMapper bookingMapper, MemberCouponService memberCouponService, RoomsMapper roomsMapper, CardBenefitService cardBenefitService){
         this.bookingMapper = bookingMapper;
         this.memberCouponService = memberCouponService;
         this.roomsMapper = roomsMapper;
+        this.cardBenefitService = cardBenefitService;
     }
 
     @Override
@@ -42,7 +45,7 @@ public class BookingServiceImpl implements BookingService{
     public Long createBooking(BookingRequestDTO bookingRequest){
 
         BigDecimal originalPrice = calculateOriginalPrice(bookingRequest.getRoomId(), bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate());
-        BigDecimal finalPrice = originalPrice;
+        BigDecimal priceAfterCoupon = originalPrice;
 
         if(bookingRequest.getCouponProductId() != null && bookingRequest.getCouponProductId() > 0L) {
             MemberCouponVO memberCouponVO = memberCouponService.validateMemberCoupon(
@@ -52,7 +55,20 @@ public class BookingServiceImpl implements BookingService{
 
             BigDecimal discountAmount = memberCouponService.getDiscountAmount(memberCouponVO);
 
-            finalPrice = originalPrice.subtract(discountAmount);
+            priceAfterCoupon = originalPrice.subtract(discountAmount);
+        }
+
+        BigDecimal finalPrice = priceAfterCoupon;
+        BigDecimal cardDiscountAmount = BigDecimal.ZERO;
+        if(bookingRequest.getCardId() != null){
+            String category = "호텔";
+
+            cardDiscountAmount = cardBenefitService.getCardDiscountAmount(
+                    bookingRequest.getCardId(),
+                    priceAfterCoupon,
+                    category
+            );
+            finalPrice = priceAfterCoupon.subtract(cardDiscountAmount);
         }
 
         bookingRequest.setTotalPrice(finalPrice);

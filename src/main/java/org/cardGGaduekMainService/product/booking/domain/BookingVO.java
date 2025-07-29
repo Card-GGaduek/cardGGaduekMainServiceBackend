@@ -27,4 +27,5 @@ public class BookingVO {
     private String status;
     private LocalDateTime bookedAt;
     private Long couponProductId;
+    private Long cardId;
 }

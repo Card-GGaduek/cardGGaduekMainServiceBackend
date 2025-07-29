@@ -37,18 +37,6 @@ public class BookingController {
         // 서비스 계층을 호출하여 예약 내역을 조회합니다.
         List<BookingDetailDTO> bookings = bookingService.findBookingsByMemberId(memberId);
 
-        // ApiResponse 유틸리티 클래스를 사용하여 표준화된 성공 응답을 생성합니다.
-        // .ok()는 HTTP 200 상태 코드를 의미합니다.
-        // 이 코드가 작동하려면 ApiResponse 와 SuccessCode 클래스/Enum이 필요합니다.
-        // return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_FETCH_SUCCESS, bookings));
-
-        // ApiResponse 클래스가 없으므로, 기존 Map 방식과 유사하게 성공 응답을 구성합니다.
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_FETCH_SUCCESS, bookings));
-        // ApiResponse 유틸리티 클래스를 사용하여 표준화된 성공 응답을 생성합니다.
-        // .ok()는 HTTP 200 상태 코드를 의미합니다.
-        // 이 코드가 작동하려면 ApiResponse 와 SuccessCode 클래스/Enum이 필요합니다.
-        // return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_FETCH_SUCCESS, bookings));
-
-        // ApiResponse 클래스가 없으므로, 기존 Map 방식과 유사하게 성공 응답을 구성합니다.
     }
 }

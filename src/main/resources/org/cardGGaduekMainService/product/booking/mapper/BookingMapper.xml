@@ -35,7 +35,8 @@
             check_out_date,
             number_of_guests,
             total_price,
-            status
+            status,
+            card_id
         ) VALUES (
                      #{memberId},
                      #{roomId},
@@ -47,7 +48,8 @@
                      #{checkOutDate},
                      #{numberOfGuests},
                      #{totalPrice},
-                     #{status}
+                     #{status},
+                     #{cardId}
                  )
     </insert>
 

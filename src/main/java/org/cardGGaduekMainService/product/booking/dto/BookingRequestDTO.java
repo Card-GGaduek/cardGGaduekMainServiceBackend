@@ -27,4 +27,5 @@ public class BookingRequestDTO {
     private BigDecimal totalPrice;
     private String status;
     private Long couponProductId;
+    private Long cardId;
 }
