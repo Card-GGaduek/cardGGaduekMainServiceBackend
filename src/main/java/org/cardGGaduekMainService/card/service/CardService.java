@@ -6,7 +6,8 @@ import java.util.List;
 
 public interface CardService {
     List<CardFrontDTO> getCardFrontInfo(Long memberId);
-
     CardBackDTO getCardDetail(Long cardId);
+    void deleteCard(Long cardId);
+    void updateCardImage(Long cardId, String imageUrl);
 
 }

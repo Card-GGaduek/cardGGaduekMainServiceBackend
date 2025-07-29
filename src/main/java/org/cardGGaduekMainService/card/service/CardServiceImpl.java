@@ -38,4 +38,16 @@ public class CardServiceImpl implements CardService {
 
         return cardDetail;
     }
+
+    @Override
+    public void deleteCard(Long cardId) {
+        cardMapper.softDeleteCard(cardId);
+    }
+
+    @Override
+    public void updateCardImage(Long cardId, String imageUrl) {
+        cardMapper.updateCustomImageUrl(cardId, imageUrl);
+    }
+
+
 }

@@ -41,4 +41,18 @@
         )
     </select>
 
+    <!-- 카드 유효성 false (삭제 처리) -->
+    <update id="softDeleteCard">
+        UPDATE card
+        SET is_valid = 0
+        WHERE id = #{cardId}
+    </update>
+
+    <!-- 카드 이미지 변경 -->
+    <update id="updateCustomImageUrl">
+        UPDATE card
+        SET custom_image_url = #{imageUrl}
+        WHERE id = #{cardId}
+    </update>
+
 </mapper>
