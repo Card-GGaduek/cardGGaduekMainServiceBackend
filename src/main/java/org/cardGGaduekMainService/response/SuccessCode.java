@@ -37,7 +37,9 @@ public enum SuccessCode {
     VERIFIED_CODE(103, "인증 성공"),
 
 
-    QR_CREATE_SUCCESS(601, "QR 코드 생성 성공");
+    QR_CREATE_SUCCESS(601, "QR 코드 생성 성공"),
+
+    PLACE_FETCH_SUCCESS(503, "장소 조회 성공"),
 
 
     //BOOKING
