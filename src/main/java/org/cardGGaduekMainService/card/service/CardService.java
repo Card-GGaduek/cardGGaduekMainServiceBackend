@@ -8,4 +8,5 @@ public interface CardService {
     List<CardFrontDTO> getCardFrontInfo(Long memberId);
 
     CardBackDTO getCardDetail(Long cardId);
+
 }

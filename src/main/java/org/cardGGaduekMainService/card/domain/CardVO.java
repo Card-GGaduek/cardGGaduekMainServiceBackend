@@ -22,3 +22,4 @@ public class CardVO {
     private Long memberId;
     private boolean isValid;
 }
+

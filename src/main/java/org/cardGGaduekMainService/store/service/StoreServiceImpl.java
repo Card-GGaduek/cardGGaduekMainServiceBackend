@@ -31,19 +31,11 @@ public class StoreServiceImpl implements StoreService {
     // 지도에서 매장 검색
     @Override
     public List<StoreSearchResponseDTO> findStores(StoreSearchConditionDTO conditionDTO) {
+
         List<StoreVO> stores = storeMapper.getStores(conditionDTO);
+
         if (stores.isEmpty()) throw new CustomException(ErrorCode.STORE_NOT_FOUND);
-        stores.stream()
-                .map(store -> StoreSearchResponseDTO.builder()
-                        .id(store.getId())
-                        .name(store.getName())
-                        .address(store.getAddress())
-                        .latitude(store.getLatitude())
-                        .longitude(store.getLongitude())
-                        .openTime(store.getOpenTime().toString())
-                        .closeTime(store.getCloseTime().toString())
-                        .build())
-                .collect(Collectors.toList());
+
         return stores.stream()
                 .map(StoreSearchResponseDTO::from)
                 .collect(Collectors.toList());
@@ -62,7 +54,9 @@ public class StoreServiceImpl implements StoreService {
      *
      * */
     @Override
-    public Map<Integer, List<StoreWithBenefitDTO>> findStoresByMemberCards(Long memberId) {
+    public Map<String, List<StoreWithBenefitDTO>> findStoresByMemberCards(Long memberId) {
+
+
         // 1) Mapper 호출 → Raw DTO 리스트 가져오기
         List<StoreBenefitRawDTO> rawData = storeMapper.getStoresByMemberCards(memberId);
 
@@ -70,14 +64,14 @@ public class StoreServiceImpl implements StoreService {
         if (rawData.isEmpty()) throw new CustomException(ErrorCode.NO_STORES_FOR_MEMBER);
 
         // 3) 카테고리별 → 매장별 → 혜택 리스트 구조로 그룹화
-        Map<Integer, Map<Long, StoreWithBenefitDTO>> grouped = new LinkedHashMap<>();
+        Map<String, Map<Long, StoreWithBenefitDTO>> grouped = new LinkedHashMap<>();
 
         for (StoreBenefitRawDTO raw : rawData) {
-            Integer categoryId = raw.getStoreCategoryId();
+            String storeCategory = (raw.getStoreCategory() != null) ? raw.getStoreCategory() : "기타";
             Long storeId = raw.getStoreId();
 
-            grouped.putIfAbsent(categoryId, new LinkedHashMap<>());
-            Map<Long, StoreWithBenefitDTO> storeMap = grouped.get(categoryId);
+            grouped.putIfAbsent(storeCategory, new LinkedHashMap<>());
+            Map<Long, StoreWithBenefitDTO> storeMap = grouped.get(storeCategory);
 
             // 매장 정보 초기화
             if (!storeMap.containsKey(storeId)) {
@@ -89,7 +83,7 @@ public class StoreServiceImpl implements StoreService {
                         .longitude(raw.getLongitude())
                         .openTime(raw.getOpenTime())
                         .closeTime(raw.getCloseTime())
-                        .storeCategoryId(categoryId)
+                        .storeCategory(raw.getStoreCategory())
                         .benefits(new ArrayList<>())
                         .build()
                 );

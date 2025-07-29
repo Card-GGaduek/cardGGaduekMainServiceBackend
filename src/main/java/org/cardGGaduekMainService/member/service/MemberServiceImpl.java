@@ -7,6 +7,7 @@ import org.cardGGaduekMainService.exception.ErrorCode;
 import org.cardGGaduekMainService.member.domain.MemberVO;
 import org.cardGGaduekMainService.member.dto.MemberFindDTO;
 import org.cardGGaduekMainService.member.dto.MemberJoinDTO;
+import org.cardGGaduekMainService.member.dto.MemberUpdateDTO;
 import org.cardGGaduekMainService.member.mapper.MemberMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -98,5 +99,19 @@ public class MemberServiceImpl implements MemberService {
 
             return memberFind;
         }
+    }
+
+    public void updateMemberInfo(MemberUpdateDTO memberUpdateDTO){
+        if(memberUpdateDTO.getEmail() != null && !memberUpdateDTO.getEmail().isEmpty()){
+            String hashedEmail = encryptService.aesEncrypt(memberUpdateDTO.getEmail());
+            memberUpdateDTO.setEmail(hashedEmail);
+        }
+
+        if(memberUpdateDTO.getPhone() != null && !memberUpdateDTO.getPhone().isEmpty()){
+            String encryptedPhone = encryptService.aesEncrypt(memberUpdateDTO.getPhone());
+            memberUpdateDTO.setPhone(encryptedPhone);
+        }
+
+        memberMapper.updateMember(memberUpdateDTO);
     }
 }

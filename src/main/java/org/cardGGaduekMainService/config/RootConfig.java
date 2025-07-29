@@ -30,8 +30,8 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.coupon.memberCoupon.mapper",
         "org.cardGGaduekMainService.coupon.couponProduct.mapper",
         "org.cardGGaduekMainService.cardProduct.mapper",
-        "org.cardGGaduekMainService.card.mapper"
-        "org.cardGGaduekMainService.product.booking.mapper"
+        "org.cardGGaduekMainService.card.mapper",
+        "org.cardGGaduekMainService.product.booking.mapper",
         "org.cardGGaduekMainService.cardPerformance.mapper",
         "org.cardGGaduekMainService.cardSummary.mapper",
 })
@@ -45,11 +45,12 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.transaction.service",
         "org.cardGGaduekMainService.store.service",
         "org.cardGGaduekMainService.common.mail.service",
+        "org.cardGGaduekMainService.coupon.couponProduct.service",
         "org.cardGGaduekMainService.coupon.memberCoupon.service",
         "org.cardGGaduekMainService.notification.service",
         "org.cardGGaduekMainService.cardProduct.service",
-        "org.cardGGaduekMainService.card.service"
-        "org.cardGGaduekMainService.product.booking.service"
+        "org.cardGGaduekMainService.card.service",
+        "org.cardGGaduekMainService.product.booking.service",
         "org.cardGGaduekMainService.cardPerformance.service",
         "org.cardGGaduekMainService.cardSummary.service",
 })
