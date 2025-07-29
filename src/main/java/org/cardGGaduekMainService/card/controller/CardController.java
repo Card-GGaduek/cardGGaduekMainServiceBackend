@@ -1,12 +1,12 @@
 package org.cardGGaduekMainService.card.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cardGGaduekMainService.response.SuccessCode;
+import org.cardGGaduekMainService.card.dto.CardImageDTO;
 import org.cardGGaduekMainService.card.service.CardService;
+import org.cardGGaduekMainService.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/card")
@@ -19,4 +19,12 @@ public class CardController {
         cardService.deleteCard(cardId);
         return ResponseEntity.noContent().build(); // 204 No Content
     }
+
+    @PatchMapping("/{cardId}/image")
+    public ResponseEntity<ApiResponse<Void>> updateCardImage(@PathVariable Long cardId,
+                                                             @RequestBody CardImageDTO request) {
+        cardService.updateCardImage(cardId, request.getImageUrl());
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_IMAGE_UPDATE, null));
+    }
+
 }
