@@ -6,9 +6,13 @@ import org.cardGGaduekMainService.card.dto.CardBenefitInfoDTO;
 import org.springframework.data.repository.query.Param;
 import org.apache.ibatis.annotations.Mapper;
 import org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO;
+import org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO;
+import org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO;
+import org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO;
 
 import java.util.List;
 
+@Mapper
 public interface CardMapper {
     List<CardFrontDTO> getCardFrontInfo(Long memberId);
 

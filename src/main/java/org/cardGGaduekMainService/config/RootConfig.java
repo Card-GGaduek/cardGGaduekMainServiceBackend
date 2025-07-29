@@ -33,6 +33,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.card.mapper",
         "org.cardGGaduekMainService.card.benefit.mapper",
         "org.cardGGaduekMainService.product.booking.mapper",
+        "org.cardGGaduekMainService.product.rooms.mapper",
         "org.cardGGaduekMainService.cardPerformance.mapper",
         "org.cardGGaduekMainService.cardSummary.mapper",
 })
@@ -54,6 +55,8 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.product.booking.service",
         "org.cardGGaduekMainService.cardPerformance.service",
         "org.cardGGaduekMainService.cardSummary.service",
+        "org.cardGGaduekMainService.cardProduct.service",
+        "org.cardGGaduekMainService.place.service",
 })
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;
