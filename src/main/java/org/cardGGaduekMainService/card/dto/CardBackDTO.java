@@ -6,16 +6,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.cardGGaduekMainService.card.benefit.dto.CardBenefitDTO;
 
-import java.time.LocalDate;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CardDTO {
-
-    private String cardName;
-    private String company;
-    List<CardBenefitDTO> benefits;
+public class CardBackDTO {
+    private String cardProductName;
+    private String bankName;
+    private List<CardBenefitInfoDTO> benefits;
 }

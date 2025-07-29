@@ -3,42 +3,46 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.cardGGaduekMainService.store.mapper.StoreMapper">
     <resultMap id="storeMap" type="org.cardGGaduekMainService.store.domain.StoreVO">
-        <result column="store_id" property="id"/>
+        <result column="id" property="id"/>
         <result column="name" property="name"/>
         <result column="address" property="address"/>
         <result column="latitude" property="latitude"/>
         <result column="longitude" property="longitude"/>
         <result column="open_time" property="openTime"/>
         <result column="close_time" property="closeTime"/>
-        <result column="store_category_id" property="storeCategoryId"/>
+        <result column="store_category" property="storeCategory"/>
     </resultMap>
     <select id="getStores" resultMap="storeMap">
         SELECT *
         FROM store
         WHERE 1=1
+        <if test="latitude != null and longitude != null and radius != null">
+            AND (6371 * ACOS(COS(RADIANS(#{latitude})) * COS(RADIANS(latitude)) *
+            COS(RADIANS(longitude) - RADIANS(#{longitude})) +
+            SIN(RADIANS(#{latitude})) * SIN(RADIANS(latitude)))) &lt; #{radius}
+        </if>
         <if test="keyword != null and keyword != ''">
             AND (name LIKE CONCAT('%', #{keyword}, '%')
             OR address LIKE CONCAT('%', #{keyword}, '%'))
         </if>
-        <if test="storeCategoryId != null">
-            AND store.store_category_id = #{storeCategoryId}
+        <if test="storeCategory != null and storeCategory != ''">
+            AND store.store_category = #{storeCategory}
         </if>
+<!--        <!- 반경 필터링 -->
 <!--        <if test="latitude != null and longitude != null and radius != null">-->
-<!--            AND (6371 * ACOS(COS(RADIANS(#{latitude})) * COS(RADIANS(latitude)) *-->
-<!--            COS(RADIANS(longitude) - RADIANS(#{longitude})) +-->
-<!--            SIN(RADIANS(#{latitude})) * SIN(RADIANS(latitude)))-->
+<!--            HAVING distance &lt;= #{radius}-->
 <!--        </if>-->
-<!--        Having distance <-->
         ORDER BY
-        CASE WHEN name = #{keyword} THEN 1
-        WHEN name LIKE CONCAT(#{keyword}, '%') THEN 2
-        ELSE 3 END,
-        name ASC
+        CASE
+            WHEN name = #{keyword} THEN 1
+            WHEN name LIKE CONCAT(#{keyword}, '%') THEN 2
+            ELSE 3
+        END
     </select>
     <select id="getStoreById" resultMap="storeMap">
     SELECT *
     FROM store
-    WHERE store_id = #{id}
+    WHERE id = #{id}
     </select>
 <!--  회원-카드 혜택 결과 매핑  -->
     <resultMap id="storeBenefitMap" type="org.cardGGaduekMainService.store.dto.StoreBenefitRawDTO">
@@ -48,35 +52,30 @@
         <result column="latitude" property="latitude"/>
         <result column="longitude" property="longitude"/>
         <result column="openTime" property="openTime"/>
-        <result column="storeCategoryId" property="storeCategoryId"/>
+        <result column="storeCategory" property="storeCategory"/>
         <result column="cardName" property="cardName"/>
         <result column="benefitDescription" property="benefitDescription"/>
     </resultMap>
 
     <select id="getStoresByMemberCards" parameterType="long" resultMap="storeBenefitMap">
         SELECT
-            s.store_id AS storeId,
+            s.id AS storeId,
             s.name AS storeName,
             s.address,
             s.latitude,
             s.longitude,
             s.open_time AS openTime,
             s.close_time AS closeTime,
-            s.store_category_id AS storeCategoryId,
-            c.card_name AS cardName,
+            s.store_category AS storeCategory,
+            cp.card_product_name AS cardName,
             cb.description AS benefitDescription
-        FROM member_card mc
-                 JOIN card c ON mc.card_id = c.id
+        FROM card c
                  JOIN card_product cp ON c.card_product_id = cp.id
                  JOIN card_benefit cb ON cb.card_product_id = cp.id
-                 JOIN store s ON (
-            (cb.benefit_category = '편의점' AND s.store_category_id = 1) OR
-            (cb.benefit_category = '카페' AND s.store_category_id = 2) OR
-            (cb.benefit_category = '영화관' AND s.store_category_id = 3) OR
-            (cb.benefit_category = '주유소' AND s.store_category_id = 4)
-            )
-        WHERE mc.member_id = #{memberId}
-        ORDER BY s.store_category_id, s.name;
+                 JOIN store s ON cb.benefit_category = s.store_category
+        WHERE c.member_id = #{memberId}
+        ORDER BY s.store_category, s.name;
+
     </select>
 
 </mapper>

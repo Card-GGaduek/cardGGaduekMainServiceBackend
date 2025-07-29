@@ -21,7 +21,7 @@ public class BookingServiceImpl implements BookingService{
 
     @Override
     @Transactional
-    public Long createBooking(BookingRequestDTO bookingRequest){
+    public void createBooking(BookingRequestDTO bookingRequest){
         bookingRequest.setStatus("CONFIRMED");
 
         Long insertedRows = bookingMapper.createBooking(bookingRequest);
@@ -36,7 +36,6 @@ public class BookingServiceImpl implements BookingService{
             throw new RuntimeException("예약 생성 후 ID를 가져오는 데 실패했습니다. MyBatis 설정을 확인하세요.");
         }
         System.out.println("새로운 예약이 성공적으로 생성되었습니다. 예약 ID: " + newBookingId);
-        return newBookingId;
     }
 
     @Override

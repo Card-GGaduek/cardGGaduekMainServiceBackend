@@ -19,4 +19,8 @@ public interface CouponProductService {
      * @return 쿠폰 상품 전체 목록
      */
     List<CouponProductVO> findAllCouponProducts();
+
+    //
+    void issueCouponByMissionReward(Long memberId, String missionReward);
+    boolean hasCouponForMission(Long memberId, Long missionId);
 }
