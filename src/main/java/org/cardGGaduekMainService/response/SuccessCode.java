@@ -39,6 +39,14 @@ public enum SuccessCode {
 
     QR_CREATE_SUCCESS(601, "QR 코드 생성 성공"),
 
+
+    PLACE_FETCH_SUCCESS(503, "장소 조회 성공"),
+
+  
+    CARD_FRONT_FETCH_SUCCESS(801, "보유 카드 리스트 조회 성공"),
+    CARD_BACK_FETCH_SUCCESS(802, "카드 상세 정보 조회 성공"),
+
+
     //BOOKING
     BOOKING_REQUEST_SUCCESS(601, "예약 성공"),
     BOOKING_FETCH_SUCCESS(602, "예약 조회 성공");

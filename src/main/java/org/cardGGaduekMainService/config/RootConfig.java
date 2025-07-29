@@ -29,12 +29,11 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.notification.mapper",
         "org.cardGGaduekMainService.coupon.memberCoupon.mapper",
         "org.cardGGaduekMainService.coupon.couponProduct.mapper",
-        "org.cardGGaduekMainService.product.booking.mapper",
+        "org.cardGGaduekMainService.cardProduct.mapper",
         "org.cardGGaduekMainService.card.mapper",
         "org.cardGGaduekMainService.product.booking.mapper",
         "org.cardGGaduekMainService.cardPerformance.mapper",
         "org.cardGGaduekMainService.cardSummary.mapper",
-        "org.cardGGaduekMainService.product.rooms.mapper",
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",

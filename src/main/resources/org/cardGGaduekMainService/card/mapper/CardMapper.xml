@@ -5,13 +5,40 @@
 
 <mapper namespace="org.cardGGaduekMainService.card.mapper.CardMapper">
 
-    <!-- 카드 단건 조회 (삭제 시 유효성 확인용) -->
-    <select id="findByIdAndMemberId" resultType="org.cardGGaduekMainService.card.domain.CardVO">
-        SELECT *
-        FROM card
-        WHERE id = #{cardId}
-          AND member_id = #{memberId}
-          AND is_valid = 1
+    <select id="getCardFrontInfo" parameterType="long" resultType="org.cardGGaduekMainService.card.dto.CardFrontDTO">
+        SELECT
+            IFNULL(c.custom_image_url, cp.card_image_url) AS cardImageUrl,
+            cp.card_product_name AS cardProductName,
+            b.bank_name AS bankName,
+            m.name AS memberName
+        FROM card c
+                 JOIN card_product cp ON c.card_product_id = cp.id
+                 JOIN bank b ON cp.bank_id = b.id
+                 JOIN member m ON c.member_id = m.id
+        WHERE c.member_id = #{memberId}
+          AND c.is_valid = 1
+    </select>
+
+    <select id="getCardDetailInfo" resultType="org.cardGGaduekMainService.card.dto.CardBackDTO">
+        SELECT
+            cp.card_product_name AS cardProductName,
+            b.bank_name AS bankName
+        FROM card c
+                 JOIN card_product cp ON c.card_product_id = cp.id
+                 JOIN bank b ON cp.bank_id = b.id
+        WHERE c.id = #{cardId}
+    </select>
+
+    <select id="getCardBenefits" resultType="org.cardGGaduekMainService.card.dto.CardBenefitInfoDTO">
+        SELECT
+            benefit_category AS benefitCategory,
+            store_name AS storeName,
+            discount_rate AS discountRate,
+            description AS description
+        FROM card_benefit
+        WHERE card_product_id = (
+            SELECT card_product_id FROM card WHERE id = #{cardId}
+        )
     </select>
 
     <!-- 카드 유효성 false (삭제 처리) -->
@@ -21,48 +48,11 @@
         WHERE id = #{cardId}
     </update>
 
-
-    <!-- 카드 등록 -->
-    <insert id="insertCard" useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO card (
-            card_number,
-            expiration_date,
-            cvc,
-            card_password,
-            created_at,
-            custom_image_url,
-            card_product_id,
-            member_id,
-            is_valid
-        )
-        VALUES (
-                   #{cardNumber},
-                   #{expirationDate},
-                   #{cvc},
-                   #{cardPassword},
-                   #{createdAt},
-                   #{customImageUrl},
-                   #{cardProductId},
-                   #{memberId},
-                   #{isValid}
-               )
-    </insert>
-
-    <!-- 사용자 보유 카드 목록 -->
-    <select id="findAllByMemberId" resultType="org.cardGGaduekMainService.card.domain.CardVO">
-        SELECT *
-        FROM card
-        WHERE member_id = #{memberId}
-          AND is_valid = 1
-        ORDER BY created_at DESC
-    </select>
-
     <!-- 카드 이미지 변경 -->
     <update id="updateCustomImageUrl">
         UPDATE card
         SET custom_image_url = #{imageUrl}
         WHERE id = #{cardId}
     </update>
-
 
 </mapper>
