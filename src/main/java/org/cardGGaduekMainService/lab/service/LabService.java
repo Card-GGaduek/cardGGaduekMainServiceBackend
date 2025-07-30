@@ -12,6 +12,7 @@ public interface LabService {
     List<MissionProgressDTO> getMissionProgress(Long memberId);
     void updateMissionProgressByTransactions(Long memberId, List<SpendingCategory> transactionCategories);
     void syncMissionProgressWithTransactions(Long memberId);
+    void recalculateAndUpdateMissionProgress(Long memberId); // 🔥 추가
     FortuneResponseDTO drawTodayFortune(Long memberId);
     FortuneResponseDTO getTodayFortune(Long memberId);
     SpendingAnalysisResultDTO getSpendingAnalysis(Long memberId);
