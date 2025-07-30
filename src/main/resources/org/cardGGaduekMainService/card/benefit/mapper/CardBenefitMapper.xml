@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cardGGaduekMainService.card.benefit.mapper.CardBenefitMapper">
+    <select id="findBenefitByProductAndCategory" resultType="org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO">
+        SELECT
+            id,
+            card_product_id,
+            benefit_category,
+            store_name,
+            discount_rate,
+            description
+        FROM
+            card_benefit
+        WHERE
+            card_product_id = #{cardProductId} AND benefit_category = #{benefitCategory}
+    </select>
+
+    <select id="findBestBenefitForStore" resultType="org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO">
+        SELECT
+        id,
+        card_product_id,
+        benefit_category,
+        store_name,
+        discount_rate,  -- discount_rate 대신 discount_amount
+        description
+        FROM
+        card_benefit
+        WHERE
+        benefit_category = #{benefitCategory}
+        AND card_product_id IN
+        <foreach item="cardId" collection="userCardProductIds" open="(" separator="," close=")">
+            #{cardId}
+        </foreach>
+        ORDER BY
+        discount_rate DESC -- 할인 금액이 가장 큰 순으로 정렬
+        LIMIT 1
+    </select>
+</mapper>

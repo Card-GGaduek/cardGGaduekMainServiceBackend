@@ -31,7 +31,10 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.coupon.couponProduct.mapper",
         "org.cardGGaduekMainService.cardProduct.mapper",
         "org.cardGGaduekMainService.card.mapper",
+        "org.cardGGaduekMainService.card.benefit.mapper",
         "org.cardGGaduekMainService.product.booking.mapper",
+        "org.cardGGaduekMainService.product.rooms.mapper",
+        "org.cardGGaduekMainService.product.categoryPageContent.mapper",
         "org.cardGGaduekMainService.cardPerformance.mapper",
         "org.cardGGaduekMainService.cardSummary.mapper",
 })
@@ -48,11 +51,13 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.coupon.couponProduct.service",
         "org.cardGGaduekMainService.coupon.memberCoupon.service",
         "org.cardGGaduekMainService.notification.service",
-        "org.cardGGaduekMainService.cardProduct.service",
         "org.cardGGaduekMainService.card.service",
+        "org.cardGGaduekMainService.card.benefit.service",
         "org.cardGGaduekMainService.product.booking.service",
+        "org.cardGGaduekMainService.product.categoryPageContent.service",
         "org.cardGGaduekMainService.cardPerformance.service",
         "org.cardGGaduekMainService.cardSummary.service",
+        "org.cardGGaduekMainService.cardProduct.service",
         "org.cardGGaduekMainService.place.service",
 })
 public class RootConfig {

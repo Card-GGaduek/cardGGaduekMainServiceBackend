@@ -49,7 +49,10 @@ public enum SuccessCode {
 
     //BOOKING
     BOOKING_REQUEST_SUCCESS(601, "예약 성공"),
-    BOOKING_FETCH_SUCCESS(602, "예약 조회 성공");
+    BOOKING_FETCH_SUCCESS(602, "예약 조회 성공"),
+
+    //card product 전체 조회
+    CARDPRODUCT_FETCH_SUCCESS(501, "카드상품 조회성공");
   
     private final int code;
     private final String message;

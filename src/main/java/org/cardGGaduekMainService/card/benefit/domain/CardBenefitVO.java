@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.math.BigDecimal;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,7 +16,6 @@ public class CardBenefitVO {
     private Long card_product_id;
     private Long benefit_category_id;
     private String store_name;
-    private Double discount_rate;
+    private BigDecimal discountRate;
     private String description;
-
 }

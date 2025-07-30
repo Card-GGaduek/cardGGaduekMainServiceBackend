@@ -4,36 +4,13 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.cardGGaduekMainService.product.booking.mapper.BookingMapper">
-
-    <!-- 예약 생성 쿼리 -->
-    <insert id="createBooking" parameterType="org.cardGGaduekMainService.product.booking.dto.BookingRequestDTO"
-            useGeneratedKeys="true" keyProperty="id">
-        INSERT INTO bookings (
-            member_id,
-            room_id,
-            check_in_date,
-            check_out_date,
-            number_of_guests,
-            total_price,
-            status
-        ) VALUES (
-                     #{memberId},
-                     #{roomId},
-                     #{checkInDate},
-                     #{checkOutDate},
-                     #{numberOfGuests},
-                     #{totalPrice},
-                     #{status}
-                 )
-    </insert>
-
-    <!-- =============================================================== -->
-    <!-- 예약 내역 조회 기능 (아래 내용 추가) -->
-    <!-- =============================================================== -->
-
-    <!-- JOIN 쿼리 결과를 BookingDetailDTO 객체에 매핑하기 위한 resultMap -->
     <resultMap id="bookingDetailResultMap" type="org.cardGGaduekMainService.product.booking.dto.BookingDetailDTO">
         <id property="bookingId" column="booking_id"/>
+
+        <result property="name" column="name"/>
+        <result property="phone" column="phone"/>
+        <result property="email" column="email"/>
+        <result property="requestText" column="request_text"/>
         <result property="checkInDate" column="check_in_date"/>
         <result property="checkOutDate" column="check_out_date"/>
         <result property="totalPrice" column="total_price"/>
@@ -44,10 +21,53 @@
         <result property="address" column="address"/>
     </resultMap>
 
+    <!-- 예약 생성 쿼리 -->
+    <insert id="createBooking" parameterType="org.cardGGaduekMainService.product.booking.dto.BookingRequestDTO"
+            useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO bookings (
+            member_id,
+            room_id,
+            name,
+            email,
+            phone,
+            request_text,
+            check_in_date,
+            check_out_date,
+            number_of_guests,
+            total_price,
+            status,
+            card_id
+        ) VALUES (
+                     #{memberId},
+                     #{roomId},
+                     #{name},
+                     #{email},
+                     #{phone},
+                     #{requestText},
+                     #{checkInDate},
+                     #{checkOutDate},
+                     #{numberOfGuests},
+                     #{totalPrice},
+                     #{status},
+                     #{cardId}
+                 )
+    </insert>
+
+    <!-- =============================================================== -->
+    <!-- 예약 내역 조회 기능 (아래 내용 추가) -->
+    <!-- =============================================================== -->
+
+    <!-- JOIN 쿼리 결과를 BookingDetailDTO 객체에 매핑하기 위한 resultMap -->
+
+
     <!-- 특정 회원의 모든 예약 내역을 숙소/객실 정보와 함께 조회하는 쿼리 -->
     <select id="findBookingDetailsByMemberId" resultMap="bookingDetailResultMap">
         SELECT
             b.id AS booking_id,
+            b.name,
+            b.email,
+            b.phone,
+            b.request_text,
             b.check_in_date,
             b.check_out_date,
             b.total_price,
@@ -68,4 +88,35 @@
             b.check_in_date DESC
     </select>
 
+    <select id="findBookingDetailsByBookingId" resultMap="bookingDetailResultMap">
+        SELECT
+            b.id AS booking_id,
+            b.name,
+            b.email,
+            b.phone,
+            b.request_text,
+            b.check_in_date,
+            b.check_out_date,
+            b.total_price,
+            b.status,
+            b.booked_at,
+            r.name AS room_name,
+            a.name AS accommodation_name,
+            a.address
+        FROM
+            bookings AS b
+                INNER JOIN
+            rooms AS r ON b.room_id = r.id
+                INNER JOIN
+            accommodations AS a ON r.accommodation_id = a.id
+        WHERE
+            b.id = #{bookingId} </select>
+
+    <update id="updateBookingStatus">
+        UPDATE bookings
+        SET
+            status = #{status}
+        WHERE
+            id = #{bookingId}
+    </update>
 </mapper>
