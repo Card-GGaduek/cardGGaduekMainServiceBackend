@@ -1,7 +1,5 @@
 package org.cardGGaduekMainService.transaction.dto;
 
-
-import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -18,6 +16,7 @@ public class TransactionDTO {
 
     private Long id;
     private Long cardId;
+    private String storeName;
     private BigDecimal amount;
     @JsonIgnore
     private String cardName;

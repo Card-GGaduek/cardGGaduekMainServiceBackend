@@ -6,11 +6,11 @@
 
     <insert id="insertTransaction" parameterType="org.cardGGaduekMainService.transaction.domain.TransactionVO">
         INSERT INTO Transaction (
-            member_id, card_id, store_id, product_id, coupon_id,
+            member_id, card_id, store_name, product_id, coupon_id,
             amount, transaction_category_code, transaction_status, payment_method,
             date, approval_code, memo
         ) VALUES (
-                     #{memberId}, #{cardId}, #{storeId}, #{productId}, #{couponId},
+                     #{memberId}, #{cardId}, #{storeName}, #{productId}, #{couponId},
                      #{amount}, #{transactionCategory.name}, #{transactionStatus.name}, #{transactionMethod.name},
                      #{date}, #{approvalCode}, #{memo}
                  )
@@ -19,6 +19,7 @@
     <resultMap id="TransactionMap" type="org.cardGGaduekMainService.transaction.dto.TransactionDTO">
         <id     property="id"         column="id" />
         <result property="cardId"     column="card_id" />
+        <result property="storeName"  column="store_name"/>
         <result property="amount"     column="amount" />
         <result property="transDate"  column="date" />
         <result property="cardName" column="cardName" />
@@ -30,6 +31,7 @@
         SELECT
             t.id,
             t.card_id,
+            t.store_name,
             t.amount,
             t.date,
             cp.card_product_name as cardName
