@@ -41,4 +41,44 @@
         )
     </select>
 
+    <!-- 카드 유효성 false (삭제 처리) -->
+    <update id="softDeleteCard">
+        UPDATE card
+        SET is_valid = 0
+        WHERE id = #{cardId}
+    </update>
+
+    <!-- 카드 이미지 변경 -->
+    <update id="updateCustomImageUrl">
+        UPDATE card
+        SET custom_image_url = #{imageUrl}
+        WHERE id = #{cardId}
+    </update>
+
+    <select id="findBenefitByCardId" parameterType="Long" resultType="org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO">
+        SELECT
+            id,
+            card_product_id,
+            discount_rate,
+            benefit_category,
+            store_name,
+            description
+        FROM
+            card_benefit
+        WHERE
+            id = #{cardId}
+    </select>
+
+    <select id="findCardProductIdByCardId" parameterType="Long" resultType="Long">
+        SELECT card_product_id
+        FROM card
+        WHERE id = #{userCardId} AND is_valid = 1
+    </select>
+
+    <select id="findAllCardProductIdsByMemberId" parameterType="long" resultType="long">
+        SELECT DISTINCT card_product_id
+        FROM card
+        WHERE member_id = #{memberId} AND is_valid = 1
+    </select>
+
 </mapper>

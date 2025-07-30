@@ -17,6 +17,7 @@ public enum ErrorCode {
     NOTIFICATION_NOT_FOUND(2001, "알림을 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     INVALID_MAIL(4003, "유효하지 않은 이메일", HttpStatus.NOT_FOUND),
     INVALID_CODE(4004, "인증 번호가 일치하지 않습니다.", HttpStatus.CONFLICT),
+    PLACE_FETCH_FAIL(5001, "장소 조회 실패", HttpStatus.CONFLICT),
     QR_GENERATION_FAILED(5001, "QR 코드 생성에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     CARD_NOT_FOUND(3001, "카드 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
 

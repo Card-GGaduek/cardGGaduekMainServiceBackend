@@ -20,8 +20,8 @@ public interface LabMapper {
                                @Param("missionId") Long missionId,
                                @Param("statusCodeId") Integer statusCodeId,
                                @Param("progressValue") Integer progressValue);
-    int incrementProgressByCategoryIfMatched(@Param("memberId") Long memberId,
-                                             @Param("category") String category);
+    void updateMissionProgressByActualTransactionCount(@Param("memberId") Long memberId,
+                                                       @Param("missionId") Long missionId);
     List<String> selectTransactionCategoriesThisMonth(Long memberId);
     FortuneVO selectTodayFortuneByMemberId(Long memberId);
     SpendingAnalysisResultVO selectSpendingAnalysisResultByMemberId(Long memberId);

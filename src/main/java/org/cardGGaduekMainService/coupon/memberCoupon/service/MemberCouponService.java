@@ -3,6 +3,7 @@ package org.cardGGaduekMainService.coupon.memberCoupon.service;
 import org.cardGGaduekMainService.coupon.memberCoupon.domain.MemberCouponVO;
 import org.cardGGaduekMainService.member.dto.MemberCouponDTO;
 
+import java.math.BigDecimal;
 import java.util.List;
 
 
@@ -26,6 +27,11 @@ public interface MemberCouponService {
     List<MemberCouponVO> findCouponsByMember(Long memberId);
 
     MemberCouponDTO findMemberWithCoupons(Long memberId);
+
+    MemberCouponVO validateMemberCoupon(Long memberId, Long couponProductid);
+
+    BigDecimal getDiscountAmount(MemberCouponVO memberCouponVO);
+
 //    /**
 //     * 회원의 쿠폰을 사용 처리합니다.
 //     * @param memberCouponId 사용 처리할 회원 쿠폰의 ID

@@ -1,12 +1,16 @@
 package org.cardGGaduekMainService.card.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cardGGaduekMainService.card.dto.CardBackDTO;
+import org.cardGGaduekMainService.card.dto.CardFrontDTO;
 import org.cardGGaduekMainService.response.SuccessCode;
 import org.cardGGaduekMainService.card.dto.CardImageDTO;
 import org.cardGGaduekMainService.card.service.CardService;
 import org.cardGGaduekMainService.response.ApiResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/card")

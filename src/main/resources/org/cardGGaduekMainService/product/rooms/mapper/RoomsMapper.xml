@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cardGGaduekMainService.product.rooms.mapper.RoomsMapper">
+
+    <select id="findPriceById" resultType="java.math.BigDecimal">
+        SELECT
+            price_per_night  -- 가격 컬럼
+        FROM
+            rooms  -- 객실 정보 테이블
+        WHERE
+            id = #{id}
+    </select>
+
+</mapper>

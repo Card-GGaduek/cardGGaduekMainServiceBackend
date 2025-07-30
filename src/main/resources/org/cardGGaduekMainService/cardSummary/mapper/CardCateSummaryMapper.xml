@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cardGGaduekMainService.cardSummary.mapper.CardCateSummaryMapper">
+
+    <select id="selectCurrentMonthSummary"
+            resultType="org.cardGGaduekMainService.cardSummary.domain.CardCateSummaryVO">
+        SELECT
+            t.transaction_category_code AS transactionCategory,
+            SUM(t.amount)             AS totalSpent
+        FROM card c
+                 JOIN transaction t ON t.card_id = c.id
+        WHERE c.member_id = #{memberId}
+          AND YEAR(t.date)  = YEAR(CURRENT_DATE())
+          AND MONTH(t.date) = MONTH(CURRENT_DATE())
+        GROUP BY t.transaction_category_code
+        ORDER BY totalSpent DESC
+    </select>
+
+</mapper>
