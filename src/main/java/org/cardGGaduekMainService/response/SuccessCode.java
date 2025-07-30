@@ -14,6 +14,7 @@ public enum SuccessCode {
     MISSION_PROGRESS_FETCH_SUCCESS(201, "미션 진행 현황 조회 성공"),
     FORTUNE_FETCH_SUCCESS(202, "오늘의 소비 운세 조회 성공"),
     ANALYSIS_FETCH_SUCCESS(203, "소비 성향 분석 결과 조회 성공"),
+    LAB_OVERVIEW_FETCH_SUCCESS(204, "실험실 통합 조회 성공"),
 
     // LABIMAGE
     IMAGE_LUCKY_ITEM_SENT(701, "행운의 아이템 이미지 전송 성공"),

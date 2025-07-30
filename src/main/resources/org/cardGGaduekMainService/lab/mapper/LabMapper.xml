@@ -42,14 +42,21 @@
         WHERE mp.member_id = #{memberId}
     </select>
 
-<!-- 미션 카테고리의 거래내역 발생시 진행률 증가 -->
-    <update id="incrementProgressByCategoryIfMatched">
+    <!-- 🔥 핵심: 실제 거래 건수를 카운트하여 미션 진행률 업데이트 -->
+    <update id="updateMissionProgressByActualTransactionCount">
         UPDATE mission_progress mp
             JOIN mission m ON mp.mission_id = m.id
-        SET mp.progress_value = mp.progress_value + 1
+        SET mp.progress_value = (
+            SELECT COUNT(*)
+            FROM transaction t
+            WHERE t.member_id = #{memberId}
+              AND t.transaction_status = 'APPROVED'
+              AND t.transaction_category_code = m.category
+              AND t.date >= m.start_at
+              AND t.date &lt;= m.end_at
+        )
         WHERE mp.member_id = #{memberId}
-          AND m.category = #{category}
-          AND mp.progress_value &lt; m.goal_value
+          AND mp.mission_id = #{missionId}
     </update>
 
     <!-- 거래 내역에서 카테고리 추출 -->
@@ -103,7 +110,8 @@
         FROM fortune f
                  JOIN lucky_item li ON f.lucky_item_id = li.id
         WHERE f.member_id = #{memberId}
-          AND DATE(f.created_at) = CURRENT_DATE
+            AND DATE(created_at) = DATE(CONVERT_TZ(NOW(), '+00:00', '+09:00'))
+            -- AND DATE_FORMAT(created_at, '%Y-%m-%d') = DATE_FORMAT(NOW(), '%Y-%m-%d')
         LIMIT 1
     </select>
 
@@ -118,7 +126,7 @@
     <!-- 행운 넣기 -->
     <insert id="insertFortune">
         INSERT INTO fortune (member_id, fortune_index, lucky_item_id, created_at)
-        VALUES (#{memberId}, #{fortuneIndex}, #{itemId}, NOW())
+        VALUES (#{memberId}, #{fortuneIndex}, #{itemId}, CONVERT_TZ(NOW(), '+00:00', '+09:00'))
     </insert>
 
 
