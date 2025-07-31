@@ -34,9 +34,11 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.card.benefit.mapper",
         "org.cardGGaduekMainService.product.booking.mapper",
         "org.cardGGaduekMainService.product.rooms.mapper",
+        "org.cardGGaduekMainService.product.accommodation.mapper",
         "org.cardGGaduekMainService.product.categoryPageContent.mapper",
         "org.cardGGaduekMainService.cardPerformance.mapper",
         "org.cardGGaduekMainService.cardSummary.mapper",
+        "org.cardGGaduekMainService.totalbenefit.mapper",
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
@@ -55,10 +57,13 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.card.benefit.service",
         "org.cardGGaduekMainService.product.booking.service",
         "org.cardGGaduekMainService.product.categoryPageContent.service",
+        "org.cardGGaduekMainService.product.rooms.service",
+        "org.cardGGaduekMainService.product.accommodation.service",
         "org.cardGGaduekMainService.cardPerformance.service",
         "org.cardGGaduekMainService.cardSummary.service",
         "org.cardGGaduekMainService.cardProduct.service",
         "org.cardGGaduekMainService.place.service",
+        "org.cardGGaduekMainService.totalbenefit.service"
 })
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;

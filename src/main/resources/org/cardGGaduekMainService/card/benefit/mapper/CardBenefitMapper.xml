@@ -7,28 +7,35 @@
         SELECT
             id,
             card_product_id,
-            benefit_category,
+            store_category,
             store_name,
-            discount_rate,
+            store_name,
+            benefit_type,
+            value_type,
+            rate_value,
+            amount_value,
             description
         FROM
-            card_benefit
+            store_benefit
         WHERE
-            card_product_id = #{cardProductId} AND benefit_category = #{benefitCategory}
+            card_product_id = #{cardProductId} AND store_category = #{benefitCategory}
     </select>
 
     <select id="findBestBenefitForStore" resultType="org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO">
         SELECT
         id,
         card_product_id,
-        benefit_category,
+        store_category,
         store_name,
-        discount_rate,  -- discount_rate 대신 discount_amount
+        benefit_type,
+        value_type,
+        rate_value,
+        amount_value,
         description
         FROM
-        card_benefit
+        store_benefit
         WHERE
-        benefit_category = #{benefitCategory}
+        store_category = #{benefitCategory}
         AND card_product_id IN
         <foreach item="cardId" collection="userCardProductIds" open="(" separator="," close=")">
             #{cardId}
@@ -36,5 +43,18 @@
         ORDER BY
         discount_rate DESC -- 할인 금액이 가장 큰 순으로 정렬
         LIMIT 1
+    </select>
+    <select id="findBenefits" resultType="org.cardGGaduekMainService.card.benefit.dto.StoreBenefitDTO">
+        SELECT
+            id,
+            card_product_id AS cardProductId,
+            store_category AS storeCategory,
+            value_type AS valueType,
+            rate_value AS rateValue,
+            amount_value AS amountValue
+        FROM
+            store_benefit
+        WHERE
+            card_product_id = #{cardProductId} AND store_category = #{benefitCategory}
     </select>
 </mapper>
