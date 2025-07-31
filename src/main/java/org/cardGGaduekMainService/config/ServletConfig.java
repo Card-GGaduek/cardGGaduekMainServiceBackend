@@ -5,10 +5,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
-import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.springframework.web.servlet.config.annotation.*;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
 import org.springframework.web.servlet.view.JstlView;
 
@@ -26,6 +23,8 @@ import org.springframework.web.servlet.view.JstlView;
         "org.cardGGaduekMainService.common.mail.controller",
         "org.cardGGaduekMainService.coupon.memberCoupon.controller",
         "org.cardGGaduekMainService.product.booking.controller",
+        "org.cardGGaduekMainService.product.rooms.controller",
+        "org.cardGGaduekMainService.product.accommodation.controller",
         "org.cardGGaduekMainService.product.categoryPageContent.controller",
         "org.cardGGaduekMainService.card.controller",
         "org.cardGGaduekMainService.cardProduct.controller",
@@ -63,4 +62,10 @@ public class ServletConfig implements WebMvcConfigurer {
         return resolver;
     }
 
+    @Override
+    public void addViewControllers(ViewControllerRegistry registry) {
+        // API 경로(/api/**)가 아닌 모든 요청을 index.html로 포워딩
+        registry.addViewController("/{path:[^\\.]*}").setViewName("forward:/index.html");
+        registry.addViewController("/**/{path:[^\\.]*}").setViewName("forward:/index.html");
+    }
 }

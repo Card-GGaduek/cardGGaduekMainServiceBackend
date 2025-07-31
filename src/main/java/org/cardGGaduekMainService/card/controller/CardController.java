@@ -1,6 +1,7 @@
 package org.cardGGaduekMainService.card.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cardGGaduekMainService.card.domain.CardVO;
 import org.cardGGaduekMainService.card.dto.CardBackDTO;
 import org.cardGGaduekMainService.card.dto.CardFrontDTO;
 import org.cardGGaduekMainService.response.SuccessCode;
@@ -43,5 +44,9 @@ public class CardController {
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_BACK_FETCH_SUCCESS, detail));
     }
 
-
+//    @GetMapping("/{memberId}")
+//    public ResponseEntity<List<CardVO>> getCardsByMember(@PathVariable Long memberId) {
+//        List<CardVO> cards = cardService.findCardsByMember(memberId);
+//        return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_SUMMARY_FETCH_SUCCESS, cards));
+//    }
 }

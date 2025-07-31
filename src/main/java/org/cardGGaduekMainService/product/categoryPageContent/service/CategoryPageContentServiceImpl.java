@@ -43,7 +43,6 @@ public class CategoryPageContentServiceImpl implements CategoryPageContentServic
                 dto.setLinkUrl(content.getLinkUrl());
                 dto.setId(content.getId());
                 dto.setTitle(content.getTitle());
-                dto.setDiscountRate(bestBenefit.getDiscountRate());
 
                 resultList.add(dto);
             }

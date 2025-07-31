@@ -1,4 +1,4 @@
-package org.cardGGaduekMainService.card.benefit.domain;
+package org.cardGGaduekMainService.card.benefit.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -11,14 +11,11 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class CardBenefitVO {
+public class StoreBenefitDTO {
     private Long id;
-    private Long card_productId;
-    private Long storeCategory;
-    private String storeName;
-    private String benefitType;
+    private Long cardProductId;
+    private String storeCategory;
     private String valueType;
     private BigDecimal rateValue;
-    private BigDecimal amountValue;
-    private String description;
+    private Long amountValue;
 }
