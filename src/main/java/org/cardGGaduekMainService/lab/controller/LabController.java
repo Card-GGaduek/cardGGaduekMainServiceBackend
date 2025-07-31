@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/lab")
@@ -46,5 +48,16 @@ public class LabController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.ANALYSIS_FETCH_SUCCESS, analysis));
+    }
+
+    // 4. Lab 통합 조회
+    @GetMapping
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getLabData(@RequestParam Long memberId) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("missions", labService.getAllMissionsWithProgress(memberId));
+        result.put("fortune", labService.getTodayFortune(memberId));
+        result.put("analysis", labService.getSpendingAnalysis(memberId));
+
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.LAB_OVERVIEW_FETCH_SUCCESS, result));
     }
 }

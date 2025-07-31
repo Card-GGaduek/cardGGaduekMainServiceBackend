@@ -77,4 +77,19 @@
                 LEFT JOIN coupon_product cp ON mc.coupon_product_id = cp.id
         WHERE m.id = #{memberId}
     </select>
+
+    <select id="findByMemberIdAndCouponId" resultType="org.cardGGaduekMainService.coupon.memberCoupon.domain.MemberCouponVO">
+        SELECT
+            id,          -- DB 컬럼명
+            member_id,
+            coupon_status,
+            discount_value,
+            coupon_name,
+            coupon_category,
+            expired_at
+        FROM
+            member_coupon      -- 실제 DB 테이블 이름
+        WHERE
+            member_id = #{memberId} AND coupon_product_id = #{id}
+    </select>
 </mapper>

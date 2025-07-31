@@ -55,4 +55,30 @@
         WHERE id = #{cardId}
     </update>
 
+    <select id="findBenefitByCardId" parameterType="Long" resultType="org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO">
+        SELECT
+            id,
+            card_product_id,
+            discount_rate,
+            benefit_category,
+            store_name,
+            description
+        FROM
+            card_benefit
+        WHERE
+            id = #{cardId}
+    </select>
+
+    <select id="findCardProductIdByCardId" parameterType="Long" resultType="Long">
+        SELECT card_product_id
+        FROM card
+        WHERE id = #{userCardId} AND is_valid = 1
+    </select>
+
+    <select id="findAllCardProductIdsByMemberId" parameterType="long" resultType="long">
+        SELECT DISTINCT card_product_id
+        FROM card
+        WHERE member_id = #{memberId} AND is_valid = 1
+    </select>
+
 </mapper>

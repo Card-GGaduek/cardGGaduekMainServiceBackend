@@ -15,6 +15,10 @@ import java.time.LocalDateTime;
 public class BookingVO {
     private Long id;
     private Long memberId;
+    private String userEmail;
+    private String userName;
+    private String userPhone;
+    private String requestText;
     private Long roomId;
     private LocalDateTime checkInDate;
     private LocalDateTime checkOutDate;
@@ -22,4 +26,6 @@ public class BookingVO {
     private BigDecimal totalPrice;
     private String status;
     private LocalDateTime bookedAt;
+    private Long couponProductId;
+    private Long cardId;
 }

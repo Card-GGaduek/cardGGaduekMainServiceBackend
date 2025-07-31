@@ -1,5 +1,6 @@
 package org.cardGGaduekMainService.product.booking.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,10 +16,17 @@ import java.time.LocalDateTime;
 @Builder
 public class BookingDetailDTO {
     private Long bookingId;
+    private String name;
+    private String phone;
+    private String email;
+    private String requestText;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate checkInDate;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
     private LocalDate checkOutDate;
     private BigDecimal totalPrice;
     private String status;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd' 'HH:mm:ss")
     private LocalDateTime bookedAt;
 
     private String roomName;

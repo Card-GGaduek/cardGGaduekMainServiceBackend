@@ -63,28 +63,37 @@ public class LabServiceImpl implements LabService {
         // 🔹 미션 진행 현황이 없으면 자동 생성
         ensureMissionProgressExists(memberId);
 
-        for (SpendingCategory category : transactionCategories) {
-            // 🔥 업데이트 전 현재 진행 상황 조회
-            List<MissionProgressVO> beforeUpdate = labMapper.selectAllMissionsWithProgress(memberId);
+        // 🔥 업데이트 전 현재 진행 상황 조회
+        List<MissionProgressVO> beforeUpdate = labMapper.selectAllMissionsWithProgress(memberId);
 
-            // 진행률 증가
-            labMapper.incrementProgressByCategoryIfMatched(memberId, category.name());
+        // 🔹 실제 거래 건수 기반으로 진행률 재계산 및 업데이트
+        recalculateAndUpdateMissionProgress(memberId);
 
-            // 🔥 업데이트 후 진행 상황 조회 및 미션 성공 체크
-            List<MissionProgressVO> afterUpdate = labMapper.selectAllMissionsWithProgress(memberId);
+        // 🔥 업데이트 후 진행 상황 조회 및 미션 성공 체크
+        List<MissionProgressVO> afterUpdate = labMapper.selectAllMissionsWithProgress(memberId);
 
-            checkAndIssueCouponsForCompletedMissions(memberId, beforeUpdate, afterUpdate);
+        checkAndIssueCouponsForCompletedMissions(memberId, beforeUpdate, afterUpdate);
+    }
+
+    @Transactional
+    public void recalculateAndUpdateMissionProgress(Long memberId) {
+        // 현재 진행 중인 모든 미션 조회
+        List<Long> currentMissionIds = labMapper.selectCurrentMissionIds();
+
+        for (Long missionId : currentMissionIds) {
+            // 각 미션별로 실제 거래 건수 카운트하여 진행률 업데이트
+            labMapper.updateMissionProgressByActualTransactionCount(memberId, missionId);
         }
     }
 
     @Override
+    @Transactional
     public void syncMissionProgressWithTransactions(Long memberId) {
-        List<String> categoryCodes = labMapper.selectTransactionCategoriesThisMonth(memberId);
-        List<SpendingCategory> categories = categoryCodes.stream()
-                .map(SpendingCategory::fromCode)
-                .toList();
+        // 🔹 미션 진행 현황이 없으면 자동 생성
+        ensureMissionProgressExists(memberId);
 
-        updateMissionProgressByTransactions(memberId, categories);
+        // 🔹 실제 거래 건수 기반으로 모든 미션 진행률 재계산
+        recalculateAndUpdateMissionProgress(memberId);
     }
 
 

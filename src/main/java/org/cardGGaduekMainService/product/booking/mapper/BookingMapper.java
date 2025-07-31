@@ -1,6 +1,7 @@
 package org.cardGGaduekMainService.product.booking.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.cardGGaduekMainService.product.booking.dto.BookingDetailDTO;
 import org.cardGGaduekMainService.product.booking.dto.BookingRequestDTO;
 
@@ -16,4 +17,8 @@ public interface BookingMapper {
     Long createBooking(BookingRequestDTO bookingRequestDTO);
 
     List<BookingDetailDTO> findBookingDetailsByMemberId(Long memberId);
+
+    BookingDetailDTO findBookingDetailsByBookingId(Long memberId);
+
+    void updateBookingStatus(@Param("bookingId") Long bookingId, @Param("status") String status);
 }

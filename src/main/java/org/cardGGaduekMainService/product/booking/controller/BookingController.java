@@ -1,7 +1,6 @@
 package org.cardGGaduekMainService.product.booking.controller;
 
 import org.apache.ibatis.javassist.bytecode.annotation.LongMemberValue;
-import org.cardGGaduekMainService.member.dto.MemberCouponDTO;
 import org.cardGGaduekMainService.product.booking.dto.BookingDetailDTO;
 import org.cardGGaduekMainService.product.booking.dto.BookingRequestDTO;
 import org.cardGGaduekMainService.product.booking.service.BookingService;
@@ -25,19 +24,19 @@ public class BookingController {
     }
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Void>> handleCreateBooking(@RequestBody BookingRequestDTO bookingRequest){
+    public ResponseEntity<ApiResponse<Map<String,Long>>> handleCreateBooking(@RequestBody BookingRequestDTO bookingRequest){
+        Long newBookingId = bookingService.createBooking(bookingRequest);
 
-        bookingService.createBooking(bookingRequest);
-        return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_REQUEST_SUCCESS));
+        Map<String,Long> data = Collections.singletonMap("bookingId", newBookingId);
+
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_REQUEST_SUCCESS, data));
     }
 
     @GetMapping("/{memberId}")
     public ResponseEntity<ApiResponse<List<BookingDetailDTO>>> handleGetBookingsByMemberId(@PathVariable Long memberId) {
-        // 1. 서비스에서 예약 내역 리스트를 조회합니다.
+        // 서비스 계층을 호출하여 예약 내역을 조회합니다.
         List<BookingDetailDTO> bookings = bookingService.findBookingsByMemberId(memberId);
 
-        // 2. ApiResponse.success() 메소드에 조회한 bookings 데이터를 함께 전달합니다.
-        // 이렇게 하면 bookings를 포함한 ApiResponse 객체 하나가 생성됩니다.
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_FETCH_SUCCESS, bookings));
     }
 }
