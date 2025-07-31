@@ -64,7 +64,7 @@
             store_name,
             description
         FROM
-            card_benefit
+            store_benefit
         WHERE
             id = #{cardId}
     </select>
@@ -81,4 +81,21 @@
         WHERE member_id = #{memberId} AND is_valid = 1
     </select>
 
+    <select id="findById" parameterType="long" resultType="org.cardGGaduekMainService.card.domain.CardVO">
+        SELECT
+            id,
+            card_number AS cardNumber,
+            expiration_date AS expirationDate,
+            cvc,
+            card_password AS cardPassword,
+            created_at AS createdAt,
+            custom_image_url AS customImageUrl,
+            card_product_id AS cardProductId,
+            member_id AS memberId,
+            is_valid AS isValid
+        FROM
+            card
+        WHERE
+            id = #{cardId}
+    </select>
 </mapper>

@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Param;
 import org.cardGGaduekMainService.product.booking.dto.BookingDetailDTO;
 import org.cardGGaduekMainService.product.booking.dto.BookingRequestDTO;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Mapper
@@ -21,4 +22,12 @@ public interface BookingMapper {
     BookingDetailDTO findBookingDetailsByBookingId(Long memberId);
 
     void updateBookingStatus(@Param("bookingId") Long bookingId, @Param("status") String status);
+
+    Long findOverlappingBookingId(
+            @Param("roomId") Long roomId,
+            @Param("checkInDate") LocalDate checkInDate,
+            @Param("checkOutDate") LocalDate checkOutDate
+    );
+
+    void cancelOldPendingBookings();
 }

@@ -2,6 +2,8 @@ package org.cardGGaduekMainService.product.booking.service;
 
 import org.cardGGaduekMainService.product.booking.dto.BookingDetailDTO;
 import org.cardGGaduekMainService.product.booking.dto.BookingRequestDTO;
+import org.cardGGaduekMainService.product.booking.dto.PriceRequestDTO;
+import org.cardGGaduekMainService.product.booking.dto.PriceResponseDTO;
 import org.cardGGaduekMainService.product.booking.mapper.BookingMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,5 +21,6 @@ public interface BookingService {
 
     List<BookingDetailDTO> findBookingsByMemberId(Long memberId);
 
+    PriceResponseDTO calculatePrice(PriceRequestDTO priceRequest);
     //    void completePayment(Long bookingId);
 }
