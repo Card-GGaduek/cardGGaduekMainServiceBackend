@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cardGGaduekMainService.totalbenefit.mapper.TotalBenefitMapper">
+
+    <select id="findCategoryBenefitSummary" resultType="org.cardGGaduekMainService.totalbenefit.dto.TotalBenefitDTO$CategoryBenefit">
+        SELECT
+            t.store_category_code AS category,
+            SUM(
+                    CASE
+                        WHEN sb.value_type = 'PERCENT' THEN ROUND(t.amount * sb.rate_value / 100, 0)
+                        WHEN sb.value_type = 'AMOUNT' THEN sb.amount_value
+                        ELSE 0
+                        END
+            ) AS amount
+        FROM transaction t
+                 JOIN card c ON t.card_id = c.id
+                 JOIN card_product cp ON c.card_product_id = cp.id
+                 LEFT JOIN store_benefit sb
+                           ON sb.card_product_id = cp.id
+                               AND sb.store_category = t.store_category_code
+        WHERE c.member_id = #{memberId}
+          AND DATE_FORMAT(t.approval_date, '%Y-%m') = #{yearMonth}
+        GROUP BY t.store_category_code
+    </select>
+
+
+
+</mapper>
