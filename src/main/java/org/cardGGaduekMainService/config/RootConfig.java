@@ -59,6 +59,8 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.cardSummary.service",
         "org.cardGGaduekMainService.cardProduct.service",
         "org.cardGGaduekMainService.place.service",
+        "org.cardGGaduekMainService.common.s3",
+        "org.cardGGaduekMainService.config"
 })
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;

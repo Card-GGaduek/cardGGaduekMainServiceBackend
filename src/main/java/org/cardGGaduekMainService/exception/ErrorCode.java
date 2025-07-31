@@ -19,7 +19,8 @@ public enum ErrorCode {
     INVALID_CODE(4004, "인증 번호가 일치하지 않습니다.", HttpStatus.CONFLICT),
     PLACE_FETCH_FAIL(5001, "장소 조회 실패", HttpStatus.CONFLICT),
     QR_GENERATION_FAILED(5001, "QR 코드 생성에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
-    CARD_NOT_FOUND(3001, "카드 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+    CARD_NOT_FOUND(3001, "카드 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    IMAGE_UPLOAD_FAILED(3002, "이미지 업로드에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR);
 
 
 

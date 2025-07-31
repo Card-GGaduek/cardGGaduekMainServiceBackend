@@ -11,7 +11,7 @@ import javax.servlet.ServletRegistration;
 
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
     // 업로드 디렉토리 (Windows 예시: "C:/upload" , mac : "/User/seongbochoi/upload")
-    private static final String LOCATION = "C:/upload";
+    private static final String LOCATION = "/Users/yeahy/upload";
     private static final long MAX_FILE_SIZE = 10L * 1024 * 1024; // 10MB
     private static final long MAX_REQUEST_SIZE = 20L * 1024 * 1024; // 20MB
     private static final int FILE_SIZE_THRESHOLD = 5 * 1024 * 1024; // 5MB
@@ -42,7 +42,8 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
     @Override
     protected void customizeRegistration(ServletRegistration.Dynamic registration) {
         MultipartConfigElement multipartConfig = new MultipartConfigElement(
-                LOCATION,
+//                LOCATION,
+                null,
                 MAX_FILE_SIZE,
                 MAX_REQUEST_SIZE,
                 FILE_SIZE_THRESHOLD
