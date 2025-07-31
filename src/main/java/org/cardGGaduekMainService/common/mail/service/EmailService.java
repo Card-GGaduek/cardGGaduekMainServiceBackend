@@ -1,6 +1,7 @@
 package org.cardGGaduekMainService.common.mail.service;
 
 import lombok.RequiredArgsConstructor;
+import org.cardGGaduekMainService.common.util.EncryptService;
 import org.cardGGaduekMainService.common.util.RedisUtil;
 import org.cardGGaduekMainService.exception.CustomException;
 import org.cardGGaduekMainService.exception.ErrorCode;
@@ -23,6 +24,7 @@ public class EmailService {
     private final JavaMailSender mailSender;
     private final RedisUtil redisUtil;
     private final MemberMapper memberMapper;
+    private final EncryptService encryptService;
 
     @Value("${spring.mail.username}")
     private String configEmail;
@@ -66,7 +68,8 @@ public class EmailService {
 
     public void sendVerificationCode(String toEmail) throws MessagingException {
 
-        Optional<MemberVO> memberByEmail = Optional.ofNullable(memberMapper.getMemberByEmail(toEmail));
+        String encryptedEmail = encryptService.aesEncrypt(toEmail);
+        Optional<MemberVO> memberByEmail = Optional.ofNullable(memberMapper.getMemberByEmail(encryptedEmail));
         if (memberByEmail.isPresent()) throw new CustomException(ErrorCode.MEMBER_EMAIL_DUPLICATE);
 
         if (redisUtil.exists(toEmail)) {
