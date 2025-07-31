@@ -1,12 +1,13 @@
 package org.cardGGaduekMainService.totalbenefit.service;
 
 import lombok.RequiredArgsConstructor;
-import org.cardGGaduekMainService.totalbenefit.dto.TotalBenefitDTO;
-import org.cardGGaduekMainService.totalbenefit.dto.TotalBenefitDTO.CategoryBenefit;
+import org.cardGGaduekMainService.exception.CustomException;
+import org.cardGGaduekMainService.exception.ErrorCode;
+import org.cardGGaduekMainService.totalbenefit.dto.CategoryBenefitDTO;
+import org.cardGGaduekMainService.totalbenefit.dto.TotalBenefitResponseDTO;
 import org.cardGGaduekMainService.totalbenefit.mapper.TotalBenefitMapper;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Service
@@ -16,19 +17,17 @@ public class TotalBenefitServiceImpl implements TotalBenefitService {
     private final TotalBenefitMapper totalBenefitMapper;
 
     @Override
-    public TotalBenefitDTO getTotalBenefitSummary(Long memberId, String yearMonth) {
-        List<TotalBenefitDTO.CategoryBenefit> categoryBenefits =
-                totalBenefitMapper.findCategoryBenefitSummary(memberId, yearMonth);
+    public TotalBenefitResponseDTO getTotalBenefit(Long memberId, String yearMonth) {
+        List<CategoryBenefitDTO> benefits = totalBenefitMapper.getCategoryBenefits(memberId, yearMonth);
 
-        int total = categoryBenefits.stream()
-                .mapToInt(TotalBenefitDTO.CategoryBenefit::getAmount)
+        if (benefits == null || benefits.isEmpty()) {
+            throw new CustomException(ErrorCode.TOTAL_BENEFIT_NOT_FOUND);
+        }
+
+        long total = benefits.stream()
+                .mapToLong(CategoryBenefitDTO::getAmount)
                 .sum();
 
-        TotalBenefitDTO dto = new TotalBenefitDTO();
-        dto.setTotalBenefit(total);
-        dto.setCategoryBenefits(categoryBenefits);
-
-        return dto;
+        return new TotalBenefitResponseDTO(total, benefits);
     }
 }
-

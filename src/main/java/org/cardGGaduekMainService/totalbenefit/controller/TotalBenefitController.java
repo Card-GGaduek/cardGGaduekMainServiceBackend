@@ -1,24 +1,25 @@
 package org.cardGGaduekMainService.totalbenefit.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.cardGGaduekMainService.totalbenefit.dto.TotalBenefitDTO;
+import org.cardGGaduekMainService.response.ApiResponse;
+import org.cardGGaduekMainService.response.SuccessCode;
+import org.cardGGaduekMainService.totalbenefit.dto.TotalBenefitResponseDTO;
 import org.cardGGaduekMainService.totalbenefit.service.TotalBenefitService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api/main")
 @RequiredArgsConstructor
-@RequestMapping("/api/total-benefit")
 public class TotalBenefitController {
 
     private final TotalBenefitService totalBenefitService;
 
-    @GetMapping
-    public ResponseEntity<TotalBenefitDTO> getBenefitSummary(
+    @GetMapping("/total-benefit")
+    public ResponseEntity<ApiResponse<TotalBenefitResponseDTO>> getTotalBenefit(
             @RequestParam Long memberId,
-            @RequestParam String yearMonth  // ex: "2025-07"
-    ) {
-        TotalBenefitDTO summary = totalBenefitService.getTotalBenefitSummary(memberId, yearMonth);
-        return ResponseEntity.ok(summary);
+            @RequestParam String yearMonth) {
+        TotalBenefitResponseDTO response = totalBenefitService.getTotalBenefit(memberId, yearMonth);
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.TOTAL_BENEFIT_FETCH_SUCCESS, response));
     }
 }

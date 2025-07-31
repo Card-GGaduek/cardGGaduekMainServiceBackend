@@ -1,7 +1,7 @@
 package org.cardGGaduekMainService.totalbenefit.service;
 
-import org.cardGGaduekMainService.totalbenefit.dto.TotalBenefitDTO;
+import org.cardGGaduekMainService.totalbenefit.dto.TotalBenefitResponseDTO;
 
 public interface TotalBenefitService {
-    TotalBenefitDTO getTotalBenefitSummary(Long memberId, String yearMonth);
+    TotalBenefitResponseDTO getTotalBenefit(Long memberId, String yearMonth);
 }

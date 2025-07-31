@@ -5,27 +5,52 @@
 
 <mapper namespace="org.cardGGaduekMainService.totalbenefit.mapper.TotalBenefitMapper">
 
-    <select id="findCategoryBenefitSummary" resultType="org.cardGGaduekMainService.totalbenefit.dto.TotalBenefitDTO$CategoryBenefit">
+    <select id="getCategoryBenefits" resultType="org.cardGGaduekMainService.totalbenefit.dto.CategoryBenefitDTO">
         SELECT
             t.store_category_code AS category,
-            SUM(
-                    CASE
-                        WHEN sb.value_type = 'PERCENT' THEN ROUND(t.amount * sb.rate_value / 100, 0)
-                        WHEN sb.value_type = 'AMOUNT' THEN sb.amount_value
-                        ELSE 0
-                        END
-            ) AS amount
+            COALESCE(SUM(
+                             CASE
+                                 WHEN sb.value_type = 'PERCENT' THEN ROUND(t.amount * IFNULL(sb.rate_value, 0) / 100, 0)
+                                 WHEN sb.value_type = 'AMOUNT' THEN IFNULL(sb.amount_value, 0)
+                                 ELSE 0
+                                 END
+                     ), 0) AS amount
         FROM transaction t
                  JOIN card c ON t.card_id = c.id
                  JOIN card_product cp ON c.card_product_id = cp.id
-                 LEFT JOIN store_benefit sb
+            LEFT JOIN store_benefit sb
                            ON sb.card_product_id = cp.id
                                AND sb.store_category = t.store_category_code
-        WHERE c.member_id = #{memberId}
+        WHERE t.card_id IS NOT NULL
+          AND t.approval_result = 'APPROVED'
+          AND c.member_id = #{memberId}
           AND DATE_FORMAT(t.approval_date, '%Y-%m') = #{yearMonth}
         GROUP BY t.store_category_code
     </select>
 
-
-
 </mapper>
+
+<!--        🔄 쿼리 실행 흐름:-->
+<!--        1번 회원, 2025년 7월 조회 요청-->
+<!--        → transaction 테이블에서 해당 조건 거래들 찾기-->
+<!--        → card 테이블과 JOIN (어떤 카드로 결제했는지)-->
+<!--        → card_product 테이블과 JOIN (카드 상품 정보 가져오기)-->
+<!--        → store_benefit 테이블과 LEFT JOIN (혜택 설정 확인)-->
+<!--        → 각 거래별로 혜택 계산-->
+<!--        → 카테고리별로 그룹핑해서 합계-->
+<!--        → 최종 결과 반환-->
+<!--        📊 실제 데이터 처리 흐름:-->
+<!--        스타벅스 4,800원 거래-->
+<!--        → 카드 ID 1번으로 결제-->
+<!--        → 카드 상품 정보 찾기-->
+<!--        → COFFEE_SHOP 카테고리 혜택 있나? (있음)-->
+<!--        → 4,800 × 5% = 240원 혜택 계산-->
+<!--        올리브영 2,700원 거래-->
+<!--        → 카드 ID 1번으로 결제-->
+<!--        → 카드 상품 정보 찾기-->
+<!--        → SHOPPING 카테고리 혜택 있나? (없음)-->
+<!--        → 0원 혜택 계산-->
+<!--        카테고리별 합계-->
+<!--        → COFFEE_SHOP: 총 11,520원-->
+<!--        → SHOPPING: 총 0원-->
+<!--        → 최종 응답 생성-->
