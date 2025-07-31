@@ -22,7 +22,10 @@ public enum ErrorCode {
     CARD_NOT_FOUND(3001, "카드 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     BOOKING_NOT_FOUND(6001, "예약 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     ACCOMMODATION_NOT_FOUND(7001, "숙소를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
-    ROOM_NOT_AVAILABLE(8001, "이미 예약중이거나 신청할 수 없는 숙소입니다.", HttpStatus.UNAUTHORIZED);
+    ROOM_NOT_AVAILABLE(8001, "이미 예약중이거나 신청할 수 없는 숙소입니다.", HttpStatus.UNAUTHORIZED),
+
+    TOTAL_BENEFIT_NOT_FOUND(9001, "총 혜택 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+
 
     private final int code;
     private final String message;

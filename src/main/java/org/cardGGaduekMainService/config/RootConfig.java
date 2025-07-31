@@ -38,6 +38,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.product.categoryPageContent.mapper",
         "org.cardGGaduekMainService.cardPerformance.mapper",
         "org.cardGGaduekMainService.cardSummary.mapper",
+        "org.cardGGaduekMainService.totalbenefit.mapper",
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
@@ -62,6 +63,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.cardSummary.service",
         "org.cardGGaduekMainService.cardProduct.service",
         "org.cardGGaduekMainService.place.service",
+        "org.cardGGaduekMainService.totalbenefit.service"
 })
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;
