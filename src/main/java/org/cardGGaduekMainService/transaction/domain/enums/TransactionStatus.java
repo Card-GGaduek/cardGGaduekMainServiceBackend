@@ -1,5 +1,6 @@
 package org.cardGGaduekMainService.transaction.domain.enums;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import lombok.Getter;
 
 import java.util.Arrays;
@@ -17,11 +18,12 @@ public enum TransactionStatus {
         this.description = description;
     }
 
-    public static TransactionStatus fromCode(Long code) {
+    @JsonCreator
+    public static TransactionStatus fromString(String name) {
         return Arrays.stream(values())
-                .filter(status -> status.code.equals(code))
+                .filter(status -> status.name().equalsIgnoreCase(name))
                 .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("Unknown status code: " + code));
+                .orElseThrow(() -> new IllegalArgumentException("Unknown status: " + name));
     }
 }
 

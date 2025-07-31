@@ -1,11 +1,11 @@
 package org.cardGGaduekMainService.card.domain;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
@@ -13,15 +13,15 @@ import java.time.LocalDate;
 @Builder
 public class CardVO {
     private Long id;
-    private Long memberId;
-    private Long cardProductId;
-    private String cardName;
-    private String company;
     private String cardNumber;
-    private LocalDate expirationDate;
+    private LocalDateTime expirationDate;
     private String cvc;
-    private LocalDate createdAt;
-    private String cardImageUrl;
-    private String cardCategory;
+    private String cardPassword;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd hh-mm" )
+    private LocalDateTime createdAt;
     private String customImageUrl;
+    private Long cardProductId;
+    private Long memberId;
+    private boolean isValid;
 }
+

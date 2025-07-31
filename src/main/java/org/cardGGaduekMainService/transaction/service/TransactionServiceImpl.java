@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 
 import org.cardGGaduekMainService.exception.CustomException;
 import org.cardGGaduekMainService.exception.ErrorCode;
+import org.cardGGaduekMainService.lab.domain.enums.SpendingCategory;
 import org.cardGGaduekMainService.lab.service.LabService;
 import org.cardGGaduekMainService.transaction.domain.TransactionVO;
 import org.cardGGaduekMainService.transaction.dto.CardTransactionsDTO;
@@ -29,6 +30,21 @@ public class TransactionServiceImpl implements TransactionService {
 
         // 2. 소비 분석 결과 갱신
         labService.updateSpendingAnalysis(transactionVO.getMemberId());
+    }
+
+    @Override
+    public void createTransaction(TransactionDTO dto) {
+        // 1. 거래 저장
+        transactionMapper.insertTransaction(dto.toEntity());
+
+        // 2. 거래 카테고리를 SpendingCategory로 변환
+        SpendingCategory category = SpendingCategory.fromTransactionCategory(dto.getTransactionCategory());
+
+        // 3. LabService를 통해 미션 진행도 업데이트
+        labService.updateMissionProgressByTransactions(dto.getMemberId(), List.of(category));
+
+        // 4. 소비 분석 결과 갱신
+        labService.updateSpendingAnalysis(dto.getMemberId());
     }
 
     @Override

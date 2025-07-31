@@ -10,9 +10,9 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
 public class TransactionVO {
 
     private Long id;
@@ -28,6 +28,5 @@ public class TransactionVO {
     private LocalDateTime date;
     private String approvalCode;
     private String memo;
-
 
 }

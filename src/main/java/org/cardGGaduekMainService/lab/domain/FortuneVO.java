@@ -13,7 +13,9 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 public class FortuneVO {
-    private FortuneLevel fortuneLevel;  // 운세 지수랑 메시지(enum)
+    public FortuneLevel getFortuneLevel() {
+        return FortuneLevel.fromIndex(this.fortuneIndex);
+    }
     private int fortuneIndex;           // DB에서 직접 받아오는 운세 지수
     private String luckyItem;           // 행운의 아이템
     private String luckyItemImageUrl;   // 행운의 아이템 이미지

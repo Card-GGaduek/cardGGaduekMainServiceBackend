@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/lab")
@@ -23,8 +25,8 @@ public class LabController {
 
     // 1. 미션 진행 현황
     @GetMapping("/missions")
-    public ResponseEntity<ApiResponse<List<MissionProgressDTO>>> getMissionProgress(@RequestParam Long memberId) {
-        List<MissionProgressDTO> missions = labService.getMissionProgress(memberId);
+    public ResponseEntity<ApiResponse<List<MissionProgressDTO>>> getAllMissionsWithProgress(@RequestParam Long memberId) {
+        List<MissionProgressDTO> missions = labService.getAllMissionsWithProgress(memberId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.MISSION_PROGRESS_FETCH_SUCCESS, missions));
     }
 
@@ -46,5 +48,16 @@ public class LabController {
             return ResponseEntity.noContent().build();
         }
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.ANALYSIS_FETCH_SUCCESS, analysis));
+    }
+
+    // 4. Lab 통합 조회
+    @GetMapping
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getLabData(@RequestParam Long memberId) {
+        Map<String, Object> result = new HashMap<>();
+        result.put("missions", labService.getAllMissionsWithProgress(memberId));
+        result.put("fortune", labService.getTodayFortune(memberId));
+        result.put("analysis", labService.getSpendingAnalysis(memberId));
+
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.LAB_OVERVIEW_FETCH_SUCCESS, result));
     }
 }

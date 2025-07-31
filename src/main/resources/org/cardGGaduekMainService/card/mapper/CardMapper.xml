@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cardGGaduekMainService.card.mapper.CardMapper">
+
+    <select id="getCardFrontInfo" parameterType="long" resultType="org.cardGGaduekMainService.card.dto.CardFrontDTO">
+        SELECT
+            IFNULL(c.custom_image_url, cp.card_image_url) AS cardImageUrl,
+            cp.card_product_name AS cardProductName,
+            b.bank_name AS bankName,
+            m.name AS memberName
+        FROM card c
+                 JOIN card_product cp ON c.card_product_id = cp.id
+                 JOIN bank b ON cp.bank_id = b.id
+                 JOIN member m ON c.member_id = m.id
+        WHERE c.member_id = #{memberId}
+          AND c.is_valid = 1
+    </select>
+
+    <select id="getCardDetailInfo" resultType="org.cardGGaduekMainService.card.dto.CardBackDTO">
+        SELECT
+            cp.card_product_name AS cardProductName,
+            b.bank_name AS bankName
+        FROM card c
+                 JOIN card_product cp ON c.card_product_id = cp.id
+                 JOIN bank b ON cp.bank_id = b.id
+        WHERE c.id = #{cardId}
+    </select>
+
+    <select id="getCardBenefits" resultType="org.cardGGaduekMainService.card.dto.CardBenefitInfoDTO">
+        SELECT
+            benefit_category AS benefitCategory,
+            store_name AS storeName,
+            discount_rate AS discountRate,
+            description AS description
+        FROM card_benefit
+        WHERE card_product_id = (
+            SELECT card_product_id FROM card WHERE id = #{cardId}
+        )
+    </select>
+
+    <!-- 카드 유효성 false (삭제 처리) -->
+    <update id="softDeleteCard">
+        UPDATE card
+        SET is_valid = 0
+        WHERE id = #{cardId}
+    </update>
+
+    <!-- 카드 이미지 변경 -->
+    <update id="updateCustomImageUrl">
+        UPDATE card
+        SET custom_image_url = #{imageUrl}
+        WHERE id = #{cardId}
+    </update>
+
+    <select id="findBenefitByCardId" parameterType="Long" resultType="org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO">
+        SELECT
+            id,
+            card_product_id,
+            discount_rate,
+            benefit_category,
+            store_name,
+            description
+        FROM
+            card_benefit
+        WHERE
+            id = #{cardId}
+    </select>
+
+    <select id="findCardProductIdByCardId" parameterType="Long" resultType="Long">
+        SELECT card_product_id
+        FROM card
+        WHERE id = #{userCardId} AND is_valid = 1
+    </select>
+
+    <select id="findAllCardProductIdsByMemberId" parameterType="long" resultType="long">
+        SELECT DISTINCT card_product_id
+        FROM card
+        WHERE member_id = #{memberId} AND is_valid = 1
+    </select>
+
+</mapper>
