@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 public class CardBenefitVO {
     private Long id;
     private Long card_productId;
-    private Long storeCategory;
+    private String storeCategory;
     private String storeName;
     private String benefitType;
     private String valueType;

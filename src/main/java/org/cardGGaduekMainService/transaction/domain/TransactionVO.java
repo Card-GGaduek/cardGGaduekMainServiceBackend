@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.cardGGaduekMainService.transaction.domain.enums.TransactionCategory;
+import org.cardGGaduekMainService.transaction.domain.enums.TransactionMethod;
+import org.cardGGaduekMainService.transaction.domain.enums.TransactionStatus;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -21,10 +23,11 @@ public class TransactionVO {
     private String storeName;
     private Long productId;
     private Long couponId;
+    private Long storeId;
     private BigDecimal  amount;
     private TransactionCategory transactionCategory;
-    private TransactionCategory transactionStatus;
-    private TransactionCategory transactionMethod;
+    private TransactionStatus transactionStatus;
+    private TransactionMethod transactionMethod;
     private LocalDateTime date;
     private String approvalCode;
     private String memo;

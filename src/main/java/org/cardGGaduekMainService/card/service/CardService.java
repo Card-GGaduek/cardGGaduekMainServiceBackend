@@ -1,5 +1,6 @@
 package org.cardGGaduekMainService.card.service;
 
+import org.cardGGaduekMainService.card.dto.CardDTO;
 import org.cardGGaduekMainService.card.dto.CardFrontDTO;
 import org.cardGGaduekMainService.card.dto.CardBackDTO;
 import org.springframework.stereotype.Service;
@@ -13,4 +14,5 @@ public interface CardService {
     void deleteCard(Long cardId);
     void updateCardImage(Long cardId, String imageUrl);
 
+    List<CardDTO> findCardByMember(Long memberId);
 }

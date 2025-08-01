@@ -1,15 +1,14 @@
 package org.cardGGaduekMainService.card.service;
 
 import lombok.RequiredArgsConstructor;
-import org.cardGGaduekMainService.card.dto.CardBackDTO;
-import org.cardGGaduekMainService.card.dto.CardBenefitInfoDTO;
-import org.cardGGaduekMainService.card.dto.CardFrontDTO;
+import org.cardGGaduekMainService.card.dto.*;
 import org.cardGGaduekMainService.card.mapper.CardMapper;
 import org.cardGGaduekMainService.exception.CustomException;
 import org.cardGGaduekMainService.exception.ErrorCode;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +48,20 @@ public class CardServiceImpl implements CardService {
         cardMapper.updateCustomImageUrl(cardId, imageUrl);
     }
 
+    @Override
+    public List<CardDTO> findCardByMember(Long memberId){
+        List<CardInfoDTO> cardInfos = cardMapper.findCardsByMemberId(memberId);
+
+        return cardInfos.stream().map(info -> {
+            CardDTO dto = new CardDTO();
+            dto.setId(info.getId());
+            dto.setImageUrl(info.getCardImageUrl());
+
+            String lastFourDigits = info.getCardNumber().substring(info.getCardNumber().length() - 4);
+            dto.setName(info.getCardProductName() + " (" + lastFourDigits + ")");
+
+            return dto;
+        }).collect(Collectors.toList());
+    }
 
 }
