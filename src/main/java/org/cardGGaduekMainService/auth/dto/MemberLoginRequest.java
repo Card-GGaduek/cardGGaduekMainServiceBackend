@@ -1,4 +1,4 @@
-package org.cardGGaduekMainService.member.dto;
+package org.cardGGaduekMainService.auth.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,11 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class MemberJoinDTO {
-
+public class MemberLoginRequest {
     private String email;
     private String password;
-    private String name;
-    private String phone;
-
 }

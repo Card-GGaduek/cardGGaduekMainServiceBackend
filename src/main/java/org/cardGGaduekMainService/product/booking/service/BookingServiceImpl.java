@@ -1,11 +1,14 @@
 package org.cardGGaduekMainService.product.booking.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.cardGGaduekMainService.card.benefit.service.CardBenefitService;
+import org.cardGGaduekMainService.card.domain.CardVO;
+import org.cardGGaduekMainService.card.mapper.CardMapper;
 import org.cardGGaduekMainService.coupon.memberCoupon.domain.MemberCouponVO;
 import org.cardGGaduekMainService.coupon.memberCoupon.service.MemberCouponService;
-import org.cardGGaduekMainService.product.booking.dto.BookingDetailDTO;
-import org.cardGGaduekMainService.product.booking.dto.BookingRequestDTO;
-import org.cardGGaduekMainService.product.booking.dto.PaymentReadyDTO;
+import org.cardGGaduekMainService.exception.CustomException;
+import org.cardGGaduekMainService.exception.ErrorCode;
+import org.cardGGaduekMainService.product.booking.dto.*;
 import org.cardGGaduekMainService.product.booking.mapper.BookingMapper;
 import org.cardGGaduekMainService.product.rooms.mapper.RoomsMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +20,7 @@ import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
+@Log4j2
 @Service
 public class BookingServiceImpl implements BookingService{
 
@@ -24,15 +28,51 @@ public class BookingServiceImpl implements BookingService{
     private final MemberCouponService memberCouponService;
     private final RoomsMapper roomsMapper;
     private final CardBenefitService cardBenefitService;
+    private final CardMapper cardMapper;
 
     @Autowired
-    public BookingServiceImpl(BookingMapper bookingMapper, MemberCouponService memberCouponService, RoomsMapper roomsMapper, CardBenefitService cardBenefitService){
+    public BookingServiceImpl(BookingMapper bookingMapper, MemberCouponService memberCouponService, RoomsMapper roomsMapper, CardBenefitService cardBenefitService, CardMapper cardMapper){
         this.bookingMapper = bookingMapper;
         this.memberCouponService = memberCouponService;
         this.roomsMapper = roomsMapper;
         this.cardBenefitService = cardBenefitService;
+        this.cardMapper = cardMapper;
     }
 
+    @Override
+    @Transactional(readOnly = true)
+    public PriceResponseDTO calculatePrice(PriceRequestDTO priceRequest){
+        BigDecimal originalPrice = calculateOriginalPrice(priceRequest.getRoomId(), priceRequest.getCheckInDate(), priceRequest.getCheckOutDate());
+
+        BigDecimal couponDiscountAmount = BigDecimal.ZERO;
+        BigDecimal priceAfterCoupon = originalPrice;
+        if(priceRequest.getCouponProductId() != null){
+            MemberCouponVO memberCouponVO = memberCouponService.validateMemberCoupon(
+                    priceRequest.getMemberId(),
+                    priceRequest.getCouponProductId()
+            );
+            couponDiscountAmount = memberCouponService.getDiscountAmount(memberCouponVO);
+            priceAfterCoupon = originalPrice.subtract(couponDiscountAmount);
+        }
+
+        BigDecimal cardDiscountAmount = BigDecimal.ZERO;
+
+        if(priceRequest.getCardId() != null){
+            String category = "HOTEL";
+            cardDiscountAmount = cardBenefitService.getCardDiscountAmount(
+                    priceRequest.getCardId(),
+                    priceAfterCoupon,
+                    category
+            );
+        }
+
+        BigDecimal finalPrice = priceAfterCoupon.subtract(cardDiscountAmount);
+        if(finalPrice.compareTo(BigDecimal.ZERO) < 0){
+            finalPrice = BigDecimal.ZERO;
+        }
+
+        return new PriceResponseDTO(originalPrice, couponDiscountAmount, cardDiscountAmount, finalPrice);
+    }
     @Override
     public BigDecimal calculateOriginalPrice(Long roomId, LocalDate checkInDate, LocalDate checkOutDate){
         BigDecimal pricePerNight = roomsMapper.findPriceById(roomId);
@@ -43,6 +83,28 @@ public class BookingServiceImpl implements BookingService{
     @Override
     @Transactional
     public Long createBooking(BookingRequestDTO bookingRequest){
+//        String currentStatus = roomsMapper.findRoomStatusById(bookingRequest.getRoomId());
+//        if(!"예약가능".equals(currentStatus)){
+//            roomsMapper.updateRoomStatus(bookingRequest.getRoomId(), "예약불가능");
+//        }
+
+        Long overlappingId = bookingMapper.findOverlappingBookingId(
+                bookingRequest.getRoomId(),
+                bookingRequest.getCheckInDate(),
+                bookingRequest.getCheckOutDate()
+        );
+
+        if(overlappingId != null){
+            throw new CustomException(ErrorCode.ROOM_NOT_AVAILABLE);
+        }
+
+        if(bookingRequest.getCardId() != null){
+            CardVO card = cardMapper.findById(bookingRequest.getCardId());
+
+            if(card == null || !card.getMemberId().equals(bookingRequest.getMemberId())){
+                throw new CustomException(ErrorCode.CARD_NOT_FOUND);
+            }
+        }
 
         BigDecimal originalPrice = calculateOriginalPrice(bookingRequest.getRoomId(), bookingRequest.getCheckInDate(), bookingRequest.getCheckOutDate());
         BigDecimal priceAfterCoupon = originalPrice;
@@ -58,10 +120,11 @@ public class BookingServiceImpl implements BookingService{
             priceAfterCoupon = originalPrice.subtract(discountAmount);
         }
 
+
         BigDecimal finalPrice = priceAfterCoupon;
         BigDecimal cardDiscountAmount = BigDecimal.ZERO;
         if(bookingRequest.getCardId() != null){
-            String category = "호텔";
+            String category = "HOTEL";
 
             cardDiscountAmount = cardBenefitService.getCardDiscountAmount(
                     bookingRequest.getCardId(),
@@ -71,14 +134,19 @@ public class BookingServiceImpl implements BookingService{
             finalPrice = priceAfterCoupon.subtract(cardDiscountAmount);
         }
 
+        if(finalPrice.compareTo(BigDecimal.ZERO) < 0){
+            finalPrice = BigDecimal.ZERO;
+        }
+
         bookingRequest.setTotalPrice(finalPrice);
         bookingRequest.setStatus("PENDING");
         bookingMapper.createBooking(bookingRequest);
 
+
         Long newBookingId = bookingRequest.getId();
 
         if(newBookingId == null){
-            throw new RuntimeException("예약 생성 후 ID를 가져오는 데 실패했습니다. MyBatis 설정을 확인하세요.");
+            throw new CustomException(ErrorCode.BOOKING_NOT_FOUND);
         }
         return newBookingId;
     }
@@ -93,7 +161,7 @@ public class BookingServiceImpl implements BookingService{
         BookingDetailDTO bookingDetailDTO = bookingMapper.findBookingDetailsByBookingId(bookingId);
 
         if(bookingDetailDTO == null){
-            throw new RuntimeException("존재하지 않는 예약입니다.");
+            throw new CustomException(ErrorCode.BOOKING_NOT_FOUND);
         }
 
         String orderId = "ORD_" + bookingId + "_" + System.currentTimeMillis();
