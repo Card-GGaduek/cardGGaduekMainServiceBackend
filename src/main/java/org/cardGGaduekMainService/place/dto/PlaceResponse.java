@@ -16,8 +16,9 @@ public class PlaceResponse {
 	@NoArgsConstructor
 	@AllArgsConstructor
 	public static class PlaceDTO {
-		private String name;
-		private String category;
+		private String name;                // displayName.text
+		private String formattedAddress;    // formattedAddress
+		private String primaryType;         // primaryType
 		private LocationDTO locationDTO;
 	}
 

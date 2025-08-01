@@ -1,17 +1,20 @@
 package org.cardGGaduekMainService.place.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.cardGGaduekMainService.place.domain.DisplayName;
 
+
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GoogleApiResponse {
-    private List<Place> place;
+    private List<Place> places = new ArrayList<>();
 
     @Data
     @NoArgsConstructor
@@ -20,6 +23,8 @@ public class GoogleApiResponse {
         private DisplayName displayName;
         private List<String> types;
         private Location location;
+        private String formattedAddress;
+        private String primaryType;
     }
 
     @Data

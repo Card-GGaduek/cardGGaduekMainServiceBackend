@@ -2,6 +2,7 @@ package org.cardGGaduekMainService.config;
 
 import org.cardGGaduekMainService.security.config.EncryptConfig;
 import org.cardGGaduekMainService.security.config.SecurityConfig;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
