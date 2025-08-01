@@ -13,6 +13,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
@@ -21,6 +22,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @PropertySource({"classpath:/application.properties"})
+@EnableScheduling
 @MapperScan(basePackages = {
         "org.cardGGaduekMainService.member.mapper",
         "org.cardGGaduekMainService.lab.mapper",

@@ -98,4 +98,19 @@
         WHERE
             id = #{cardId}
     </select>
+
+    <select id="findCardsByMemberId" parameterType="long" resultType="org.cardGGaduekMainService.card.dto.CardInfoDTO">
+        SELECT
+            c.id,
+            c.card_number AS cardNumber,
+            cp.card_product_name AS cardProductName,
+            cp.card_image_url AS cardImageUrl
+        FROM
+            card c
+                JOIN
+            card_product cp ON c.card_product_id = cp.id
+        WHERE
+            c.member_id = #{memberId} AND c.is_valid = 1
+    </select>
+
 </mapper>
