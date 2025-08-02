@@ -20,7 +20,7 @@ public enum ErrorCode {
     PLACE_FETCH_FAIL(5001, "장소 조회 실패", HttpStatus.CONFLICT),
     QR_GENERATION_FAILED(5001, "QR 코드 생성에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     NAVER_LOGIN_FAILED(1003, "네이버 로그인 실패", HttpStatus.CONFLICT),
-    CARD_NOT_FOUND(3001, "카드 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
+    CARD_NOT_FOUND(3001, "카드 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
 
     
     BOOKING_NOT_FOUND(6001, "예약 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),

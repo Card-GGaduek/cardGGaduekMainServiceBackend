@@ -78,4 +78,47 @@
 
     </select>
 
+    <resultMap id="storeBenefitRawMap" type="org.cardGGaduekMainService.store.dto.StoreBenefitRawDTO">
+        <result column="storeId" property="storeId"/>
+        <result column="storeName" property="storeName"/>
+        <result column="address" property="address"/>
+        <result column="latitude" property="latitude"/>
+        <result column="longitude" property="longitude"/>
+        <result column="openTime" property="openTime"/>
+        <result column="closeTime" property="closeTime"/>
+        <result column="storeCategory" property="storeCategory"/>
+        <result column="cardName" property="cardName"/>
+        <result column="benefitDescription" property="benefitDescription"/>
+    </resultMap>
+
+    <select id="getStoresWithBenefit" parameterType="org.cardGGaduekMainService.store.dto.StoreSearchConditionDTO" resultMap="storeBenefitRawMap">
+        SELECT
+        s.id AS storeId,
+        s.name AS storeName,
+        s.address,
+        s.latitude,
+        s.longitude,
+        s.open_time AS openTime,
+        s.close_time AS closeTime,
+        s.store_category AS storeCategory,
+        cp.card_product_name AS cardName,
+        cb.description AS benefitDescription
+        FROM
+        store s
+        LEFT JOIN card_benefit cb ON s.store_category = cb.benefit_category
+        LEFT JOIN card_product cp ON cb.card_product_id = cp.id
+        WHERE 1=1
+        <if test="latitude != null and longitude != null and radius != null">
+            AND (6371 * ACOS(COS(RADIANS(#{latitude})) * COS(RADIANS(latitude)) *
+            COS(RADIANS(longitude) - RADIANS(#{longitude})) +
+            SIN(RADIANS(#{latitude})) * SIN(RADIANS(latitude)))) &lt; #{radius}
+        </if>
+        <if test="keyword != null and keyword != ''">
+            AND s.name LIKE CONCAT('%', #{keyword}, '%')
+        </if>
+        <if test="storeCategory != null and storeCategory != ''">
+            AND s.store_category = #{storeCategory}
+        </if>
+        ORDER BY storeId
+    </select>
 </mapper>

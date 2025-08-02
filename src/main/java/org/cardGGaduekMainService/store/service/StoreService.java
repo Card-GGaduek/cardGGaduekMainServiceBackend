@@ -18,10 +18,10 @@ public interface StoreService {
 
 
     // 지도에서 매장 검색
-    List<StoreSearchResponseDTO> findStores(StoreSearchConditionDTO conditionDTO);
+    List<StoreWithBenefitDTO> findStores(StoreSearchConditionDTO conditionDTO);
 
     // 매장 상세정보 조회
-    StoreSearchResponseDTO getStoreDetail(Long id);
+    StoreWithBenefitDTO findStoreDetail(Long id);
 
     /**
      * 회원이 보유한 카드로 혜택 적용 가능한 매장 목록 조회

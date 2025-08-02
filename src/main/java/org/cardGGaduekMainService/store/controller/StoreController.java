@@ -34,8 +34,8 @@ public class StoreController {
      * @return 검색된 가맹점 목록
      * */
     @GetMapping("/search")
-    public ResponseEntity<ApiResponse<List<StoreSearchResponseDTO>>> searchStores(@ModelAttribute StoreSearchConditionDTO conditionDTO){
-        List<StoreSearchResponseDTO> stores = storeService.findStores(conditionDTO);
+    public ResponseEntity<ApiResponse<List<StoreWithBenefitDTO>>> searchStores(@ModelAttribute StoreSearchConditionDTO conditionDTO){
+        List<StoreWithBenefitDTO> stores = storeService.findStores(conditionDTO);
         log.info("검색 요청={}",conditionDTO);
         System.out.println("====== [매장 검색 요청] ======");
         System.out.println("keyword = " + conditionDTO.getKeyword());
@@ -46,8 +46,8 @@ public class StoreController {
 
         log.info("🔁 응답 DTO 목록 (StoreSearchResponseDTO):");
         stores.forEach(store -> log.info("  ➤ ID={}, Name={}, Lat={}, Lng={}",
-                store.getId(),
-                store.getName(),
+                store.getStoreId(),
+                store.getStoreName(),
                 store.getLatitude(),
                 store.getLongitude()
         ));
@@ -65,8 +65,8 @@ public class StoreController {
      *
      * */
     @GetMapping("/{id}")
-    public ResponseEntity<ApiResponse<StoreSearchResponseDTO>> getStoreDetail(@PathVariable Long id){
-        StoreSearchResponseDTO store = storeService.getStoreDetail(id);
+    public ResponseEntity<ApiResponse<StoreWithBenefitDTO>> getStoreDetail(@PathVariable Long id){
+        StoreWithBenefitDTO store = storeService.findStoreDetail(id);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.STORE_GET_SUCCESS, store));
     }
 

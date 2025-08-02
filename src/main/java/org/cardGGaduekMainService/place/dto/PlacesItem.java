@@ -1,6 +1,8 @@
-package org.cardGGaduekMainService.place.domain;
+package org.cardGGaduekMainService.place.dto;
 
 import lombok.Data;
+import org.cardGGaduekMainService.place.domain.DisplayName;
+import org.cardGGaduekMainService.place.domain.Location;
 
 @Data
 public class PlacesItem{

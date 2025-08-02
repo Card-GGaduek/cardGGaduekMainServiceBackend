@@ -3,6 +3,7 @@ package org.cardGGaduekMainService.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.web.multipart.MultipartResolver;
 import org.springframework.web.multipart.support.StandardServletMultipartResolver;
 import org.springframework.web.servlet.config.annotation.*;
@@ -20,7 +21,7 @@ import org.springframework.web.servlet.view.JstlView;
         "org.cardGGaduekMainService.store.controller",
         "org.cardGGaduekMainService.payment.controller",
         "org.cardGGaduekMainService.notification.controller",
-        "org.cardGGaduekMainService.common.mail.controller",
+        "org.cardGGaduekMainService.common.controller",
         "org.cardGGaduekMainService.coupon.memberCoupon.controller",
         "org.cardGGaduekMainService.product.booking.controller",
         "org.cardGGaduekMainService.product.rooms.controller",
@@ -33,6 +34,7 @@ import org.springframework.web.servlet.view.JstlView;
         "org.cardGGaduekMainService.place.controller",
         "org.cardGGaduekMainService.totalbenefit.controller",
 })
+@Configuration
 public class ServletConfig implements WebMvcConfigurer {
 
     @Override
@@ -42,6 +44,14 @@ public class ServletConfig implements WebMvcConfigurer {
                 .addResourceLocations("/resources/"); // webapp/resources/경로로 매핑
     }
 
+    @Override
+    public void addCorsMappings(CorsRegistry registry) {
+        registry.addMapping("/**") // 모든 API 경로 허용
+                .allowedOrigins("http://localhost:5173") // Vue 개발 서버 출처 허용
+                .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS") // 허용할 HTTP 메서드
+                .allowedHeaders("*") // 모든 요청 헤더 허용
+                .allowCredentials(true); // 쿠키 포함 요청 허용 (필요 시)
+    }
     // jsp view resolver 설정
 //    @Override
 //    public void configureViewResolvers(ViewResolverRegistry registry) {
