@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cardGGaduekMainService.main.mapper.MainCardMapper">
+
+    <!-- 카드 앞면 -->
+    <select id="getCardFrontById" resultType="org.cardGGaduekMainService.main.dto.CardFrontDTO">
+        SELECT
+        c.id AS cardId,
+        c.card_number AS cardNumber,
+        m.name AS cardholderName,
+        b.bank_name AS cardCompany,
+        cp.card_image_url AS cardImageUrl
+        FROM card c
+        JOIN member m ON c.member_id = m.id
+        JOIN card_product cp ON c.card_product_id = cp.id
+        JOIN bank b ON cp.bank_code = b.id
+        WHERE c.id = #{cardId}
+    </select>
+
+
+    <!-- 카드 뒷면 기본 정보 -->
+    <select id="getCardBackBasicById" resultType="org.cardGGaduekMainService.main.dto.CardBackDTO">
+        SELECT
+        cp.card_product_name AS cardName,
+        b.bank_name AS cardCompany
+        FROM card c
+        JOIN card_product cp ON c.card_product_id = cp.id
+        JOIN bank b ON cp.bank_code = b.id
+        WHERE c.id = #{cardId}
+    </select>
+
+    <!-- 카드 혜택 -->
+    <select id="getCardBenefitsById" resultType="string">
+        SELECT sb.description
+        FROM card c
+        JOIN card_product cp ON c.card_product_id = cp.id
+        JOIN store_benefit sb ON sb.card_product_id = cp.id
+        WHERE c.id = #{cardId}
+    </select>
+
+</mapper>
