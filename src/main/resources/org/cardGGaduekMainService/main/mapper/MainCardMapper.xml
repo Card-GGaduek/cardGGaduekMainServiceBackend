@@ -41,4 +41,19 @@
         WHERE c.id = #{cardId}
     </select>
 
+    <select id="getCardListByMemberId" resultType="org.cardGGaduekMainService.main.dto.CardFrontDTO">
+        SELECT
+            c.id AS cardId,
+            c.card_number AS cardNumber,
+            m.name AS cardholderName,
+            b.bank_name AS cardCompany,
+            cp.card_image_url AS cardImageUrl
+        FROM card c
+                 JOIN member m ON c.member_id = m.id
+                 JOIN card_product cp ON c.card_product_id = cp.id
+                 JOIN bank b ON cp.bank_code = b.id
+        WHERE c.member_id = #{memberId}
+    </select>
+
+
 </mapper>

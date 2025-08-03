@@ -13,4 +13,6 @@ public interface MainCardMapper {
     CardBackDTO getCardBackBasicById(Long cardId);
 
     List<String> getCardBenefitsById(Long cardId);
+    List<CardFrontDTO> getCardListByMemberId(Long memberId);
+
 }

@@ -35,4 +35,14 @@ public class MainCardServiceImpl implements MainCardService {
         base.setBenefits(benefits);
         return base;
     }
+
+    @Override
+    public List<CardFrontDTO> getCardList(Long memberId) {
+        List<CardFrontDTO> list = mapper.getCardListByMemberId(memberId);
+        if (list.isEmpty()) {
+            throw new CustomException(ErrorCode.CARD_NOT_FOUND);
+        }
+        return list;
+    }
+
 }
