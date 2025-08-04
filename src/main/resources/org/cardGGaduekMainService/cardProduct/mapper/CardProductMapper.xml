@@ -10,27 +10,27 @@
         SELECT
             cp.id,
             cp.card_type AS cardType,
-            cp.bank_id AS bankId,
+            cp.bank_code AS bankId,
             cp.card_product_name AS cardProductName,
             cp.card_image_url AS cardImageUrl,
             cp.annual_fee AS annualFee,
             cp.issued_date AS issuedDate,
-            cp.required_monthly_spending AS requiredMonthlySpending,
-            COUNT(cb.id) AS benefitCount
-        FROM card_benefit cb
-                 JOIN card_product cp ON cb.card_product_id = cp.id
+            cp.required_monthly_spent AS requiredMonthlySpending,
+            COUNT(sb.id) AS benefitCount
+        FROM card_product cp
+                 LEFT JOIN store_benefit sb ON cp.id = sb.card_product_id
         GROUP BY
             cp.id,
             cp.card_type,
-            cp.bank_id,
+            cp.bank_code,
             cp.card_product_name,
             cp.card_image_url,
             cp.annual_fee,
             cp.issued_date,
-            cp.required_monthly_spending
-        <!--혜택 수가 동일하면 최근 출시 카드 기준-->
+            cp.required_monthly_spent
         ORDER BY benefitCount DESC, cp.issued_date DESC
     </select>
+
 
     <select id="findAllCardProducts" resultType="org.cardGGaduekMainService.cardProduct.dto.CardProductDTO">
         SELECT
