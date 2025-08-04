@@ -9,4 +9,5 @@ import java.util.List;
 public interface MerchantMapper {
     List<Merchant> findAll();
     Merchant findById(Long id);
+    Merchant findMerchantWithBenefits(Long id);
 }
