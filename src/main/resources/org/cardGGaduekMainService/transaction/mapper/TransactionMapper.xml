@@ -5,8 +5,10 @@
 <mapper namespace="org.cardGGaduekMainService.transaction.mapper.TransactionMapper">
 
     <insert id="insertTransaction" parameterType="org.cardGGaduekMainService.transaction.domain.TransactionVO">
+
         INSERT INTO Transaction (
             member_id, card_id, store_name, product_id, coupon_id,
+
             amount, transaction_category_code, transaction_status, payment_method,
             date, approval_code, memo
         ) VALUES (

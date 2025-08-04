@@ -4,7 +4,7 @@ import lombok.Data;
 
 @Data
 public class LuckyItemVO {
-    private int itemId;
+    private int id;
     private String itemName;
     private String fileName;
 }

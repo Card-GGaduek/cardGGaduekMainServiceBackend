@@ -18,3 +18,4 @@ public class CardPerformanceDTO {
     private Long spentAmount;
     private String cardImageUrl;
 }
+

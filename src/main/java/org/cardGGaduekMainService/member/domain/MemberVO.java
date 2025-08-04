@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Builder
 public class MemberVO {
     private Long id;
+    private String naverUserId;
     private String email;
     private String password;
     private String name;

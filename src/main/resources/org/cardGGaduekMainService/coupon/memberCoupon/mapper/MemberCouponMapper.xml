@@ -7,18 +7,21 @@
 
     <!-- MemberCouponVO + CouponProductVO 매핑 -->
     <resultMap id="memberCouponWithProductResult" type="org.cardGGaduekMainService.coupon.memberCoupon.domain.MemberCouponVO">
-        <id property="id" column="mc_id"/>
-        <result property="member_id" column="member_id"/>
-        <result property="coupon_product_id" column="coupon_product_id"/>
-        <result property="status_code_id" column="status_code_id"/>
-        <result property="issued_at" column="mc_issued_at"/>
+        <id property="id" column="id"/>
+        <result property="memberId" column="member_id"/>
+        <result property="couponProductId" column="coupon_product_id"/>
+        <result property="couponName"      column="coupon_name"/>
+        <result property="couponCategory"  column="coupon_category"/>
+        <result property="discountValue"   column="discount_value"/>
+        <result property="couponStatus" column="coupon_status"/>
+        <result property="expiredAt"       column="expired_at"/>
 
         <association property="couponProduct" javaType="org.cardGGaduekMainService.coupon.couponProduct.domain.CouponProductVO">
-            <id property="id" column="cp_id"/>
-            <result property="coupon_name" column="coupon_name"/>
-            <result property="description" column="description"/>
-            <result property="expired_at" column="expired_at"/>
-            <result property="discount_value" column="discount_value"/>
+            <id     property="id"              column="cp_id"/>
+            <result property="couponName"      column="cp_coupon_name"/>
+            <result property="couponCategory"  column="cp_coupon_category"/>
+            <result property="discountValue"   column="cp_discount_value"/>
+            <result property="expiredAt"       column="cp_expired_at"/>
         </association>
     </resultMap>
 
@@ -31,16 +34,19 @@
     <!-- 쿠폰 목록 (MemberCouponVO 기준) -->
     <select id="getCouponsWithProductInfo" resultMap="memberCouponWithProductResult">
         SELECT
-            mc.id as mc_id,
+            mc.id,
             mc.member_id,
             mc.coupon_product_id,
-            mc.status_code_id,
-            mc.issued_at as mc_issued_at,
-            cp.id as cp_id,
-            cp.coupon_name,
-            cp.description,
-            cp.expired_at,
-            cp.discount_value
+            mc.coupon_name,
+            mc.coupon_category,
+            mc.discount_value,
+            mc.coupon_status,
+            mc.expired_at,
+            cp.id AS cp_id,
+            cp.coupon_name AS cp_coupon_name,
+            cp.coupon_category AS cp_coupon_category,
+            cp.discount_value AS cp_discount_value,
+            cp.expired_at AS cp_expired_at
         FROM
             member_coupon mc
                 JOIN coupon_product cp ON mc.coupon_product_id = cp.id
@@ -52,19 +58,38 @@
         SELECT
             m.id as member_id,
             m.name as member_name,
-            mc.id as mc_id,
+            mc.id as id,
+            mc.member_id,
             mc.coupon_product_id,
-            mc.status_code_id,
-            mc.issued_at as mc_issued_at,
-            cp.id as cp_id,
-            cp.coupon_name,
-            cp.description,
-            cp.expired_at,
-            cp.discount_value
+            mc.coupon_name,
+            mc.coupon_category,
+            mc.discount_value,
+            mc.coupon_status,
+            mc.expired_at,
+            cp.id AS cp_id,
+            cp.coupon_name AS cp_coupon_name,
+            cp.coupon_category AS cp_coupon_category,
+            cp.discount_value AS cp_discount_value,
+            cp.expired_at AS cp_expired_at
         FROM
             member m
                 LEFT JOIN member_coupon mc ON m.id = mc.member_id
                 LEFT JOIN coupon_product cp ON mc.coupon_product_id = cp.id
         WHERE m.id = #{memberId}
+    </select>
+
+    <select id="findByMemberIdAndCouponId" resultType="org.cardGGaduekMainService.coupon.memberCoupon.domain.MemberCouponVO">
+        SELECT
+            id,          -- DB 컬럼명
+            member_id,
+            coupon_status,
+            discount_value,
+            coupon_name,
+            coupon_category,
+            expired_at
+        FROM
+            member_coupon      -- 실제 DB 테이블 이름
+        WHERE
+            member_id = #{memberId} AND coupon_product_id = #{id}
     </select>
 </mapper>

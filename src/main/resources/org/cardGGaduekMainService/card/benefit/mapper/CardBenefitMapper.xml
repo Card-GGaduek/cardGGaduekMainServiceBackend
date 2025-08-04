@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cardGGaduekMainService.card.benefit.mapper.CardBenefitMapper">
+    <select id="findBenefitByProductAndCategory" resultType="org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO">
+        SELECT
+            id,
+            card_product_id,
+            store_category,
+            store_name,
+            store_name,
+            benefit_type,
+            value_type,
+            rate_value,
+            amount_value,
+            description
+        FROM
+            store_benefit
+        WHERE
+            card_product_id = #{cardProductId} AND store_category = #{benefitCategory}
+    </select>
+
+    <select id="findBestBenefitForStore" resultType="org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO">
+        SELECT
+        id,
+        card_product_id AS cardProductId,
+        store_category AS storeCategory,
+        store_name AS storeName,
+        value_type AS valueType,
+        rate_value AS rateValue,
+        amount_value AS amountValue,
+        description
+        FROM
+        store_benefit
+        WHERE
+        store_name = #{storeName}
+        AND card_product_id IN
+        <foreach item="cardId" collection="userCardProductIds" open="(" separator="," close=")">
+            #{cardId}
+        </foreach>
+    </select>
+    <select id="findBenefits" resultType="org.cardGGaduekMainService.card.benefit.dto.StoreBenefitDTO">
+        SELECT
+            id,
+            card_product_id AS cardProductId,
+            store_category AS storeCategory,
+            value_type AS valueType,
+            rate_value AS rateValue,
+            amount_value AS amountValue
+        FROM
+            store_benefit
+        WHERE
+            card_product_id = #{cardProductId} AND store_category = #{benefitCategory}
+    </select>
+
+    <select id="findAllBenefitsForCategory" resultType="org.cardGGaduekMainService.card.benefit.dto.StoreBenefitDTO">
+        SELECT
+        id,
+        card_product_id AS cardProductId,
+        store_category AS storeCategory,
+        store_name AS storeName,
+        value_type AS valueType,
+        rate_value AS rateValue,
+        amount_value AS amountValue,
+        description
+        FROM
+        store_benefit
+        WHERE
+        store_category = #{categoryName}
+        AND card_product_id IN
+        <foreach item="cardId" collection="userCardProductIds" open="(" separator="," close=")">
+            #{cardId}
+        </foreach>
+    </select>
+</mapper>
