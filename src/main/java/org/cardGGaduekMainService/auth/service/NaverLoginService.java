@@ -58,7 +58,9 @@ public class NaverLoginService {
                     .email(decryptedEmail)
                     .build();
 
-            tokenResponse.setAccessToken(memberAuthProvider.createToken(memberByNaverId.get().getId()));
+            String accessToken = memberAuthProvider.createToken(memberByNaverId.get().getId());
+            System.out.println("accessToken: " + accessToken);
+            tokenResponse.setAccessToken(accessToken);
             tokenResponse.setUser(user);
             return tokenResponse;
         } else {
@@ -89,7 +91,9 @@ public class NaverLoginService {
                     .username(naverProfileResponse.getName())
                     .build();
 
-            tokenResponse.setAccessToken(memberAuthProvider.createToken(memberCreate.getId()));
+            String accessToken = memberAuthProvider.createToken(memberCreate.getId());
+            System.out.println("accessToken: " + accessToken);
+            tokenResponse.setAccessToken(accessToken);
             tokenResponse.setUser(user);
             return tokenResponse;
 

@@ -57,6 +57,7 @@ public enum SuccessCode {
 
     //숙소 조회
     ACCOMMODATION_FETCH_SUCCESS(901, "숙소 조회 성공"),
+    MEMBER_FETCH_SUCCESS(305, "회원 조회 성공"),
 
     // TOTAL_BENEFIT
     TOTAL_BENEFIT_FETCH_SUCCESS(901, "총 혜택 정보 조회 성공");

@@ -2,6 +2,7 @@ package org.cardGGaduekMainService.transaction.controller;
 
 
 import lombok.RequiredArgsConstructor;
+import org.cardGGaduekMainService.auth.dto.LoginMember;
 import org.cardGGaduekMainService.response.ApiResponse;
 import org.cardGGaduekMainService.response.SuccessCode;
 import org.cardGGaduekMainService.transaction.domain.TransactionVO;
@@ -9,6 +10,7 @@ import org.cardGGaduekMainService.transaction.dto.CardTransactionsDTO;
 import org.cardGGaduekMainService.transaction.dto.TransactionDTO;
 import org.cardGGaduekMainService.transaction.service.TransactionService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -30,10 +32,11 @@ public class TransactionController {
 //        return ResponseEntity.ok(ApiResponse.success(SuccessCode.TRANSACTION_INSERT_SUCCESS));
 //    }
 
-    @GetMapping("/api/members/{memberId}/cards/transactions")
+    @GetMapping("/api/members/cards/transactions")
     public ResponseEntity<ApiResponse<List<CardTransactionsDTO>>> getCardTransactions(
-            @PathVariable("memberId") Long memberId
-    ) {
+            @AuthenticationPrincipal LoginMember loginMember
+            ) {
+        Long memberId = loginMember.getId();
         List<CardTransactionsDTO> result = transactionService.getTransactionsGroupedByCard(memberId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.MEMBER_TRANSACTION_FETCH_SUCCESS, result));
     }

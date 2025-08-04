@@ -40,6 +40,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 String token = authHeader.substring(7);
 
                 Long id = memberAuthProvider.getMemberIdFromToken(token);
+                System.out.println("id: " + id);
 
                 MemberFindDTO memberById = memberService.findMemberById(id);
 
@@ -57,7 +58,6 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                         .build();
 
 
-
                 List<GrantedAuthority> authorities = Collections.emptyList();
                 authorities = List.of(new SimpleGrantedAuthority("ROLE_USER"));
 
@@ -71,8 +71,8 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             }
 
             // 필터가 끝났으므로, 다음 필터나 컨트롤러로 요청을 넘김.
-//            filterChain.doFilter(request, response);
-            super.doFilter(request, response, filterChain);
+            filterChain.doFilter(request, response);
+//            super.doFilter(request, response, filterChain);
         } catch (JWTVerificationException e) {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json;charset=UTF-8");
