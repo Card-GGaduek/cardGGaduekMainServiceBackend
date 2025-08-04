@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.auth.MemberAuthProvider;
-import org.cardGGaduekMainService.auth.TokenResponse;
+import org.cardGGaduekMainService.auth.dto.TokenResponse;
 import org.cardGGaduekMainService.auth.dto.NaverProfileResponse;
+import org.cardGGaduekMainService.auth.dto.User;
 import org.cardGGaduekMainService.common.util.EncryptService;
 import org.cardGGaduekMainService.exception.CustomException;
 import org.cardGGaduekMainService.exception.ErrorCode;
@@ -48,7 +49,17 @@ public class NaverLoginService {
         Optional<MemberVO> memberByNaverId = Optional.ofNullable(memberMapper.getMemberByNaverId(naverProfileResponse.getId()));
         if (memberByNaverId.isPresent()) {
             TokenResponse tokenResponse = new TokenResponse();
+
+            MemberVO naverMember = memberByNaverId.get();
+
+            String decryptedEmail = encryptService.aesDecrypt(naverMember.getEmail());
+            User user = User.builder()
+                    .username(naverMember.getName())
+                    .email(decryptedEmail)
+                    .build();
+
             tokenResponse.setAccessToken(memberAuthProvider.createToken(memberByNaverId.get().getId()));
+            tokenResponse.setUser(user);
             return tokenResponse;
         } else {
 
@@ -72,7 +83,14 @@ public class NaverLoginService {
             memberMapper.createNaverMember(memberCreate);
 
             TokenResponse tokenResponse = new TokenResponse();
+
+            User user = User.builder()
+                    .email(naverProfileResponse.getEmail())
+                    .username(naverProfileResponse.getName())
+                    .build();
+
             tokenResponse.setAccessToken(memberAuthProvider.createToken(memberCreate.getId()));
+            tokenResponse.setUser(user);
             return tokenResponse;
 
         }
