@@ -1,7 +1,7 @@
 package org.cardGGaduekMainService.auth.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.cardGGaduekMainService.auth.TokenResponse;
+import org.cardGGaduekMainService.auth.dto.TokenResponse;
 import org.cardGGaduekMainService.auth.dto.MemberJoinRequest;
 import org.cardGGaduekMainService.auth.dto.NaverAuthRequest;
 import org.cardGGaduekMainService.auth.service.AuthService;
@@ -62,14 +62,12 @@ public class AuthController {
     }
 
     @PostMapping("/naverLogin")
-    public void naverLogin(@RequestBody NaverAuthRequest request) {
+    public ResponseEntity<ApiResponse<TokenResponse>> naverLogin(@RequestBody NaverAuthRequest request) {
         String code = request.getCode();
         String state = request.getState();
 
-//        System.out.println("code : " + code);
-//        System.out.println("state : " + state);
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.LOGIN_SUCCESS, naverLoginService.naverLogin(code, state)));
 
-        naverLoginService.naverLogin(code, state);
 
 
     }
