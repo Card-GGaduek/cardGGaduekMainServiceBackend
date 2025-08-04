@@ -18,7 +18,7 @@
                  )
     </insert>
 
-    <resultMap id="TransactionMap" type="org.cardGGaduekMainService.transaction.dto.TransactionDTO">
+    <resultMap id="TransactionMap" type="org.cardGGaduekMainService.transaction.dto.CTransactionDTO">
         <id     property="id"         column="id" />
         <result property="cardId"     column="card_id" />
         <result property="storeName"  column="store_name"/>
