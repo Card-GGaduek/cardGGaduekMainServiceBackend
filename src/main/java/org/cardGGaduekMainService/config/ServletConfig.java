@@ -32,6 +32,7 @@ import org.springframework.web.servlet.view.JstlView;
         "org.cardGGaduekMainService.cardPerformance.controller",
         "org.cardGGaduekMainService.cardSummary.controller",
         "org.cardGGaduekMainService.place.controller",
+        "org.cardGGaduekMainService.main.controller",
         "org.cardGGaduekMainService.totalbenefit.controller",
 })
 @Configuration
