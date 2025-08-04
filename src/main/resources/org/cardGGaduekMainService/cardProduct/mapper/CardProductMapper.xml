@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cardGGaduekMainService.cardProduct.mapper.CardProductMapper">
+
+    <select id="getTop5CardProductsByBenefitCount"
+            resultType="org.cardGGaduekMainService.cardProduct.domain.CardProductVO">
+        SELECT
+            cp.id,
+            cp.card_type AS cardType,
+            cp.bank_code AS bankId,
+            cp.card_product_name AS cardProductName,
+            cp.card_image_url AS cardImageUrl,
+            cp.annual_fee AS annualFee,
+            cp.issued_date AS issuedDate,
+            cp.required_monthly_spent AS requiredMonthlySpending,
+            COUNT(sb.id) AS benefitCount
+        FROM card_product cp
+                 LEFT JOIN store_benefit sb ON cp.id = sb.card_product_id
+        GROUP BY
+            cp.id,
+            cp.card_type,
+            cp.bank_code,
+            cp.card_product_name,
+            cp.card_image_url,
+            cp.annual_fee,
+            cp.issued_date,
+            cp.required_monthly_spent
+        ORDER BY benefitCount DESC, cp.issued_date DESC
+    </select>
+
+
+    <select id="findAllCardProducts" resultType="org.cardGGaduekMainService.cardProduct.dto.CardProductDTO">
+        SELECT
+            id,
+            card_product_name,
+            card_image_url
+        FROM
+            card_product
+    </select>
+    <select id="findCardProductDetail" parameterType="long" resultType="org.cardGGaduekMainService.cardProduct.domain.CardProductVO">
+        SELECT
+            cp.id,
+            cp.card_type AS cardType,
+            cp.bank_id AS bankId,
+            cp.card_product_name AS cardProductName,
+            cp.card_image_url AS cardImageUrl,
+            cp.annual_fee AS annualFee,
+            cp.issued_date AS issuedDate,
+            cp.required_monthly_spending AS requiredMonthlySpending,
+            COUNT(cb.id) AS benefitCount
+        FROM
+            card_product cp
+                LEFT JOIN
+            card_benefit cb ON cp.id = cb.card_product_id
+        WHERE
+            cp.id = #{productId} -- 조회할 카드 상품의 ID를 지정
+        GROUP BY
+            cp.id; -- 기본 키로 그룹화
+    </select>
+
+    <select id="findNameById" parameterType="long" resultType="string">
+        SELECT card_product_name
+        FROM card_product
+        WHERE id = #{cardProductId}
+    </select>
+</mapper>

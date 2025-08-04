@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.cardGGaduekMainService.product.categoryPageContent.mapper.CategoryPageContentMapper">
+
+    <select id="findBenefitContentForMember" resultType="org.cardGGaduekMainService.product.categoryPageContent.dto.CategoryPageContentDTO">
+        SELECT
+        cpc.id,
+        cpc.category_name AS categoryName,
+        cpc.title,
+        cpc.description,
+        cpc.image_url AS imageUrl,
+        cpc.link_url AS linkUrl
+        FROM
+        category_page_content cpc
+        WHERE
+        cpc.category_name = #{categoryName}
+        AND EXISTS (
+        -- 사용자가 가진 카드 중, 이 카테고리 혜택이 하나라도 있는지 확인
+        SELECT 1
+        FROM store_benefit cb
+        WHERE
+        cb.store_category = #{categoryName} -- 💡 카테고리 이름으로 직접 비교
+        AND cb.card_product_id IN
+        <foreach item="cardId" collection="userCardProductIds" open="(" separator="," close=")">
+            #{cardId}
+        </foreach>
+        )
+    </select>
+
+    <select id="findByCategoryName" parameterType="string" resultType="org.cardGGaduekMainService.product.categoryPageContent.dto.CategoryPageContentDTO">
+        SELECT
+            id,
+            category_name AS categoryName,
+            title,
+            description,
+            image_url AS imageUrl,
+            link_url AS linkUrl,
+            price
+        FROM
+            category_page_content
+        WHERE
+            category_name = #{categoryName}
+    </select>
+</mapper>

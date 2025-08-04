@@ -1,6 +1,8 @@
 package org.cardGGaduekMainService.config;
 
 import org.springframework.context.annotation.ComponentScan;
+import org.cardGGaduekMainService.security.config.EncryptConfig;
+import org.cardGGaduekMainService.security.config.SecurityConfig;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -14,6 +16,8 @@ import javax.servlet.ServletRegistration;
 @EnableWebMvc
 @ComponentScan(basePackages = "org.cardGGaduekMainService")
 public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
+
+
     // 업로드 디렉토리 (Windows 예시: "C:/upload" , mac : "/User/seongbochoi/upload")
     private static final String LOCATION = "C:/upload";
     private static final long MAX_FILE_SIZE = 10L * 1024 * 1024; // 10MB
@@ -22,7 +26,7 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 
     @Override
     protected Class<?>[] getRootConfigClasses() {
-        return new Class[] { RootConfig.class }; // DB, MyBatis 설정
+        return new Class[] { RootConfig.class, SecurityConfig.class, EncryptConfig.class, MailConfig.class, RedisConfig.class }; // DB, MyBatis 설정
     }
 
     @Override

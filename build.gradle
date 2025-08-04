@@ -13,6 +13,7 @@ repositories {
 ext {
     junitVersion = '5.10.2'
     springVersion = '5.3.37'
+    springSecurityVersion = '5.8.13'
     lombokVersion = '1.18.30'
 }
 
@@ -29,10 +30,19 @@ dependencies {
             { exclude group: 'commons-logging', module: 'commons-logging' }
     implementation "org.springframework:spring-webmvc:${springVersion}"
     implementation 'javax.inject:javax.inject:1'
+    implementation "org.springframework:spring-web:${springVersion}"
 
     // AOP
     implementation 'org.aspectj:aspectjrt:1.9.20'
     implementation 'org.aspectj:aspectjweaver:1.9.20'
+
+    // Redis
+    implementation 'org.springframework.data:spring-data-redis:2.6.4'
+    implementation 'io.lettuce:lettuce-core:6.1.9.RELEASE'
+
+    // 메일
+    implementation 'com.sun.mail:javax.mail:1.6.2'
+    implementation 'org.springframework:spring-context-support:5.3.34'
 
     // JSP, SERVLET, JSTL
     compileOnly('javax.servlet:javax.servlet-api:4.0.1')
@@ -60,6 +70,7 @@ dependencies {
 
     // Jackson - Json 처리
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.4'
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.12.7"
 
     // 데이터베이스
     implementation 'com.mysql:mysql-connector-j:8.1.0'
@@ -77,9 +88,29 @@ dependencies {
     implementation 'org.apache.logging.log4j:log4j-core:2.18.0'
     implementation 'org.apache.logging.log4j:log4j-slf4j-impl:2.18.0'
 
+    // 보안
+    implementation("org.springframework.security:spring-security-web:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-config:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-core:${springSecurityVersion}")
+    implementation("org.springframework.security:spring-security-taglibs:${springSecurityVersion}")
+
+
+    // QR 코드 생성
+    implementation 'com.google.zxing:core:3.5.2'
+    implementation 'com.google.zxing:javase:3.5.2'
+
+    // JWT
+    implementation 'com.auth0:java-jwt:4.3.0'
+//    implementation("io.jsonwebtoken:jjwt-api:0.11.5")
+//    runtimeOnly("io.jsonwebtoken:jjwt-impl:0.11.5")
+//    implementation("io.jsonwebtoken:jjwt-jackson:0.11.5")
+
+    implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4'
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testImplementation "org.springframework:spring-test:${springVersion}"
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+
 }
 
 test {
