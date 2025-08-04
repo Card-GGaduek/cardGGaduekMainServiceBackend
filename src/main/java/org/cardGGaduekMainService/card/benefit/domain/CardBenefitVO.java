@@ -13,7 +13,7 @@ import java.math.BigDecimal;
 @Builder
 public class CardBenefitVO {
     private Long id;
-    private Long card_productId;
+    private Long cardProductId;
     private String storeCategory;
     private String storeName;
     private String benefitType;

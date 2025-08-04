@@ -73,4 +73,24 @@
             #{cardId}
         </foreach>
     </select>
+    <select id="findBenefitsByStoreName"
+            resultType="org.cardGGaduekMainService.card.benefit.dto.StoreBenefitDTO">
+        SELECT
+        id,
+        card_product_id AS cardProductId,
+        store_category AS storeCategory,
+        store_name AS storeName,
+        value_type AS valueType,
+        rate_value AS rateValue,
+        amount_value AS amountValue,
+        description
+        FROM
+        store_benefit
+        WHERE
+        store_name = #{storeName}
+        AND card_product_id IN
+        <foreach item="cardId" collection="userCardProductIds" open="(" separator="," close=")">
+            #{cardId}
+        </foreach>
+    </select>
 </mapper>

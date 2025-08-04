@@ -61,5 +61,9 @@
             cp.id; -- 기본 키로 그룹화
     </select>
 
-
+    <select id="findNameById" parameterType="long" resultType="string">
+        SELECT card_product_name
+        FROM card_product
+        WHERE id = #{cardProductId}
+    </select>
 </mapper>

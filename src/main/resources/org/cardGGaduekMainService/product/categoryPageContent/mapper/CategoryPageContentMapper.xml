@@ -37,7 +37,8 @@
             title,
             description,
             image_url AS imageUrl,
-            link_url AS linkUrl
+            link_url AS linkUrl,
+            price
         FROM
             category_page_content
         WHERE

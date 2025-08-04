@@ -18,7 +18,8 @@ public class CategoryPageContentDTO {
     private String description;
     private String imageUrl;
     private String linkUrl;
-
+    private String cardName;
     private BigDecimal discountRate;
+    private BigDecimal price;
     private int expectedBenefitAmount;
 }
