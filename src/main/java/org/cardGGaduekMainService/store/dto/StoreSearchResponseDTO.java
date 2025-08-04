@@ -26,29 +26,7 @@ public class StoreSearchResponseDTO {
     private boolean hasBenefit;
 
 
-    // 오픈시간 - 마감시간 time 테이블 포맷 변경 (ex : 08:00 , 23:00)
-    public static StoreSearchResponseDTO from(StoreVO store) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
 
-        String openTimeStr = (store.getOpenTime() != null)
-                ? store.getOpenTime().toLocalTime().format(formatter)
-                : null;
-
-        String closeTimeStr = (store.getCloseTime() != null)
-                ? store.getCloseTime().toLocalTime().format(formatter)
-                : null;
-
-        return StoreSearchResponseDTO.builder()
-                .id(store.getId())
-                .name(store.getName())
-                .address(store.getAddress())
-                .latitude(store.getLatitude())
-                .longitude(store.getLongitude())
-                .openTime(openTimeStr)
-                .closeTime(closeTimeStr)
-                .storeCategory(store.getStoreCategory())
-                .build();
-    }
 
 
     }

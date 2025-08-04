@@ -14,4 +14,28 @@
             id = #{id}
     </select>
 
+    <select id="findByAccommodationId" parameterType="long" resultType="org.cardGGaduekMainService.product.rooms.dto.RoomsDTO">
+        SELECT
+            id,
+            accommodation_id AS accommodationId,
+            name,
+            price_per_night AS pricePerNight,
+            max_capacity AS maxCapacity
+        FROM
+            rooms
+        WHERE
+            accommodation_id = #{accommodationId}
+    </select>
+
+    <select id="findRoomStatusById" parameterType="long" resultType="string">
+        SELECT is_valid
+        FROM rooms
+        WHERE id = #{roomid}
+    </select>
+
+    <update id="updateRoomStatus">
+        UPDATE rooms
+        SET is_valid = #{status}
+        WHERE id = #{roomId}
+    </update>
 </mapper>

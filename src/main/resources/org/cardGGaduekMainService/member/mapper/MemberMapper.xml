@@ -6,8 +6,8 @@
 <mapper namespace="org.cardGGaduekMainService.member.mapper.MemberMapper">
 
     <insert id="createMember">
-        INSERT INTO member (email, password, name, phone)
-        VALUES (#{email}, #{password}, #{name}, #{phone})
+        INSERT INTO member (email, password, name, phone, is_active, created_at, updated_at)
+        VALUES (#{email}, #{password}, #{name}, #{phone}, #{isActive}, #{createdAt}, #{updatedAt})
     </insert>
     <insert id="createNaverMember">
         INSERT INTO member (naver_user_id, email, name, phone)

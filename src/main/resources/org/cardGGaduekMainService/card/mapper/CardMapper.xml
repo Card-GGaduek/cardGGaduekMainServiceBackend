@@ -64,7 +64,7 @@
             store_name,
             description
         FROM
-            card_benefit
+            store_benefit
         WHERE
             id = #{cardId}
     </select>
@@ -79,6 +79,38 @@
         SELECT DISTINCT card_product_id
         FROM card
         WHERE member_id = #{memberId} AND is_valid = 1
+    </select>
+
+    <select id="findById" parameterType="long" resultType="org.cardGGaduekMainService.card.domain.CardVO">
+        SELECT
+            id,
+            card_number AS cardNumber,
+            expiration_date AS expirationDate,
+            cvc,
+            card_password AS cardPassword,
+            created_at AS createdAt,
+            custom_image_url AS customImageUrl,
+            card_product_id AS cardProductId,
+            member_id AS memberId,
+            is_valid AS isValid
+        FROM
+            card
+        WHERE
+            id = #{cardId}
+    </select>
+
+    <select id="findCardsByMemberId" parameterType="long" resultType="org.cardGGaduekMainService.card.dto.CardInfoDTO">
+        SELECT
+            c.id,
+            c.card_number AS cardNumber,
+            cp.card_product_name AS cardProductName,
+            cp.card_image_url AS cardImageUrl
+        FROM
+            card c
+                JOIN
+            card_product cp ON c.card_product_id = cp.id
+        WHERE
+            c.member_id = #{memberId} AND c.is_valid = 1
     </select>
 
 </mapper>

@@ -3,6 +3,8 @@ package org.cardGGaduekMainService.product.booking.controller;
 import org.apache.ibatis.javassist.bytecode.annotation.LongMemberValue;
 import org.cardGGaduekMainService.product.booking.dto.BookingDetailDTO;
 import org.cardGGaduekMainService.product.booking.dto.BookingRequestDTO;
+import org.cardGGaduekMainService.product.booking.dto.PriceRequestDTO;
+import org.cardGGaduekMainService.product.booking.dto.PriceResponseDTO;
 import org.cardGGaduekMainService.product.booking.service.BookingService;
 import org.cardGGaduekMainService.response.ApiResponse;
 import org.cardGGaduekMainService.response.SuccessCode;
@@ -32,6 +34,11 @@ public class BookingController {
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_REQUEST_SUCCESS, data));
     }
 
+    @PostMapping("/price")
+    public ResponseEntity<ApiResponse<PriceResponseDTO>> getPrice(@RequestBody PriceRequestDTO priceRequestDTO){
+        PriceResponseDTO priceResponseDTO = bookingService.calculatePrice(priceRequestDTO);
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_FETCH_SUCCESS, priceResponseDTO));
+    }
     @GetMapping("/{memberId}")
     public ResponseEntity<ApiResponse<List<BookingDetailDTO>>> handleGetBookingsByMemberId(@PathVariable Long memberId) {
         // 서비스 계층을 호출하여 예약 내역을 조회합니다.
