@@ -161,6 +161,7 @@ public class NaverLoginService {
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
+            throw new CustomException(ErrorCode.NAVER_LOGIN_FAILED);
         }
 
         return null;

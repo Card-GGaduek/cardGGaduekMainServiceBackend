@@ -53,8 +53,15 @@ public enum SuccessCode {
     BOOKING_FETCH_SUCCESS(602, "예약 조회 성공"),
 
     //card product 전체 조회
-    CARDPRODUCT_FETCH_SUCCESS(501, "카드상품 조회성공");
-  
+    CARDPRODUCT_FETCH_SUCCESS(501, "카드상품 조회성공"),
+
+    //숙소 조회
+    ACCOMMODATION_FETCH_SUCCESS(901, "숙소 조회 성공"),
+
+    // TOTAL_BENEFIT
+    TOTAL_BENEFIT_FETCH_SUCCESS(901, "총 혜택 정보 조회 성공");
+
+
     private final int code;
     private final String message;
 

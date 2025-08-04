@@ -119,4 +119,30 @@
         WHERE
             id = #{bookingId}
     </update>
+
+    <select id="findOverlappingBookingId" resultType="long">
+        SELECT id
+        FROM bookings
+        WHERE
+            room_id = #{roomId}
+          AND (
+            status = 'CONFIRMED'
+                OR (status = 'PENDING' AND booked_at > NOW() - INTERVAL 10 MINUTE)
+            )
+          AND <![CDATA[
+            #{checkInDate} < check_out_date AND #{checkOutDate} > check_in_date
+        ]]>
+    LIMIT 1
+    </select>
+
+    <update id="cancelOldPendingBookings">
+        UPDATE bookings
+        SET status = 'CANCELED'
+        WHERE
+        status = 'PENDING'
+        AND
+            <![CDATA[
+            booked_at <= NOW() - INTERVAL 10 MINUTE
+        ]]>
+    </update>
 </mapper>

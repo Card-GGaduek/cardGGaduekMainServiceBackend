@@ -1,6 +1,5 @@
 package org.cardGGaduekMainService.transaction.dto;
 
-
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
@@ -23,6 +22,7 @@ public class TransactionDTO {
 
     private Long id;
     private Long cardId;
+    private String storeName;
     private BigDecimal amount;
     @JsonIgnore
     private String cardName;
@@ -48,13 +48,13 @@ public class TransactionDTO {
         return TransactionVO.builder()
                 .memberId(memberId)
                 .cardId(cardId)
-                .storeId(storeId)
+                .storeName(storeName)
                 .productId(productId)
                 .couponId(couponId)
                 .amount(amount)
                 .transactionCategory(transactionCategory)
-                .transactionStatus(transactionStatus)
-                .transactionMethod(transactionMethod)
+                .transactionStatus(transactionCategory)
+                .transactionMethod(transactionCategory)
                 .date(date)
                 .approvalCode(approvalCode)
                 .memo(memo)

@@ -20,4 +20,5 @@ public class CategoryPageContentDTO {
     private String linkUrl;
 
     private BigDecimal discountRate;
+    private int expectedBenefitAmount;
 }

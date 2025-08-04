@@ -13,7 +13,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.client.RestTemplate;
 
 import javax.sql.DataSource;
 
@@ -21,6 +23,7 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @PropertySource({"classpath:/application.properties"})
+@EnableScheduling
 @MapperScan(basePackages = {
         "org.cardGGaduekMainService.member.mapper",
         "org.cardGGaduekMainService.lab.mapper",
@@ -34,10 +37,12 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.card.benefit.mapper",
         "org.cardGGaduekMainService.product.booking.mapper",
         "org.cardGGaduekMainService.product.rooms.mapper",
+        "org.cardGGaduekMainService.product.accommodation.mapper",
         "org.cardGGaduekMainService.product.categoryPageContent.mapper",
         "org.cardGGaduekMainService.cardPerformance.mapper",
         "org.cardGGaduekMainService.cardSummary.mapper",
         "org.cardGGaduekMainService.main.mapper",
+        "org.cardGGaduekMainService.totalbenefit.mapper",
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
@@ -56,11 +61,14 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.card.benefit.service",
         "org.cardGGaduekMainService.product.booking.service",
         "org.cardGGaduekMainService.product.categoryPageContent.service",
+        "org.cardGGaduekMainService.product.rooms.service",
+        "org.cardGGaduekMainService.product.accommodation.service",
         "org.cardGGaduekMainService.cardPerformance.service",
         "org.cardGGaduekMainService.cardSummary.service",
         "org.cardGGaduekMainService.cardProduct.service",
         "org.cardGGaduekMainService.place.service",
         "org.cardGGaduekMainService.main.service",
+        "org.cardGGaduekMainService.totalbenefit.service",
 })
 public class RootConfig {
     @Value("${jdbc.driver}") String driver;
@@ -70,6 +78,11 @@ public class RootConfig {
 
     @Autowired
     ApplicationContext applicationContext;
+
+    @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
 
     @Bean
     public DataSource dataSource() {
