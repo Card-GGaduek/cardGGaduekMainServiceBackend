@@ -7,7 +7,8 @@
     <resultMap id="CardPerformanceResultMap" type="org.cardGGaduekMainService.cardPerformance.domain.CardPerformanceVO">
         <result property="cardId"                  column="card_id"/>
         <result property="cardProductName"         column="card_product_name"/>
-        <result property="requiredMonthlySpending" column="required_monthly_spending"/>
+        <result property="requiredMonthlySpent" column="required_monthly_spent"/>
+        <result property="cardImageUrl"            column="card_image_url"/>
         <result property="spentAmount"             column="spent_amount"/>
     </resultMap>
 
@@ -16,8 +17,10 @@
         SELECT
             cp.id                                AS card_id,
             cp.card_product_name                 AS card_product_name,
-            cp.required_monthly_spending         AS required_monthly_spending,
+            cp.required_monthly_spent        AS required_monthly_spent,
+            cp.card_image_url                AS card_image_url,
             COALESCE(SUM(t.amount), 0)           AS spent_amount
+
         FROM card_product cp
                  INNER JOIN card c
                             ON cp.id = c.card_product_id
@@ -26,7 +29,7 @@
                                AND DATE_FORMAT(t.date, '%Y-%m') = DATE_FORMAT(CURRENT_DATE, '%Y-%m')
         WHERE c.member_id = #{memberId}
         GROUP BY
-            cp.id, cp.card_product_name, cp.required_monthly_spending
+            cp.id, cp.card_product_name, cp.required_monthly_spent
     </select>
 
 </mapper>

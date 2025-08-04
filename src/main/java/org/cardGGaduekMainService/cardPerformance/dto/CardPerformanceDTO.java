@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,6 +14,8 @@ public class CardPerformanceDTO {
     private Long cardId;
     private String yearMonth;
     private String cardProductName;
-    private Long requiredMonthlySpending;
+    private Long requiredMonthlySpent;
     private Long spentAmount;
+    private String cardImageUrl;
 }
+

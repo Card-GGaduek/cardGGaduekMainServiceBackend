@@ -21,7 +21,7 @@ public class CardProductVO {
     private Long annualFee;// 연회비
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd" )
     private LocalDateTime issuedDate;       // 발급일자 (기본값 CURRENT_TIMESTAMP)
-    private Long requiredMonthlySpending;   // 기준 실적
+    private Long requiredMonthlySpent;   // 기준 실적
 
     //Top5 조회 결과에서만 추가되는 계산 컬럼
     private Long benefitCount;              // 혜택 개수 (JOIN + COUNT 결과)
