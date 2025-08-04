@@ -26,6 +26,7 @@ import javax.sql.DataSource;
 @EnableScheduling
 @MapperScan(basePackages = {
         "org.cardGGaduekMainService.member.mapper",
+        "org.cardGGaduekMainService.cardbenefit.mapper",
         "org.cardGGaduekMainService.lab.mapper",
         "org.cardGGaduekMainService.transaction.mapper",
         "org.cardGGaduekMainService.store.mapper",
@@ -59,6 +60,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.notification.service",
         "org.cardGGaduekMainService.card.service",
         "org.cardGGaduekMainService.card.benefit.service",
+        "org.cardGGaduekMainService.cardbenefit.service",
         "org.cardGGaduekMainService.product.booking.service",
         "org.cardGGaduekMainService.product.categoryPageContent.service",
         "org.cardGGaduekMainService.product.rooms.service",
@@ -71,6 +73,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.totalbenefit.service",
 })
 public class RootConfig {
+
     @Value("${jdbc.driver}") String driver;
     @Value("${jdbc.url}") String url;
     @Value("${jdbc.username}") String username;
@@ -87,15 +90,13 @@ public class RootConfig {
     @Bean
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
-
         config.setDriverClassName(driver);
         config.setJdbcUrl(url);
         config.setUsername(username);
         config.setPassword(password);
-
-        HikariDataSource dataSource = new HikariDataSource(config);
-        return dataSource;
+        return new HikariDataSource(config);
     }
+
 
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {
@@ -107,10 +108,8 @@ public class RootConfig {
     }
 
     @Bean
-    public DataSourceTransactionManager transactionManager(){
-        DataSourceTransactionManager manager = new DataSourceTransactionManager(dataSource());
-
-        return manager;
+    public DataSourceTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(dataSource());
     }
-
 }
+

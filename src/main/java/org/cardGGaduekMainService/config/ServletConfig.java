@@ -34,6 +34,7 @@ import org.springframework.web.servlet.view.JstlView;
         "org.cardGGaduekMainService.place.controller",
         "org.cardGGaduekMainService.main.controller",
         "org.cardGGaduekMainService.totalbenefit.controller",
+        "org.cardGGaduekMainService.cardbenefit.controller",
 })
 @Configuration
 public class ServletConfig implements WebMvcConfigurer {
