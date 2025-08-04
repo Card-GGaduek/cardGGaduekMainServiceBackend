@@ -30,22 +30,22 @@ public class StoreServiceImpl implements StoreService {
 
     // 지도에서 매장 검색
     @Override
-    public List<StoreSearchResponseDTO> findStores(StoreSearchConditionDTO conditionDTO) {
+    public List<StoreWithBenefitDTO> findStores(StoreSearchConditionDTO conditionDTO) {
 
         List<StoreVO> stores = storeMapper.getStores(conditionDTO);
 
         if (stores.isEmpty()) throw new CustomException(ErrorCode.STORE_NOT_FOUND);
 
         return stores.stream()
-                .map(StoreSearchResponseDTO::from)
+                .map(StoreWithBenefitDTO::from)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public StoreSearchResponseDTO getStoreDetail(Long id) {
+    public StoreWithBenefitDTO findStoreDetail(Long id) {
         StoreVO store = storeMapper.getStoreById(id);
         if (store == null) throw new CustomException(ErrorCode.STORE_NOT_FOUND);
-        return StoreSearchResponseDTO.from(store);
+        return StoreWithBenefitDTO.from(store);
     }
 
     // 회원이 보유한 카드로 혜택 적용 가능한 매장 목록 조회
@@ -78,7 +78,7 @@ public class StoreServiceImpl implements StoreService {
                 storeMap.put(storeId, StoreWithBenefitDTO.builder()
                         .storeId(storeId)
                         .storeName(raw.getStoreName())
-                        .address(raw.getStoreName())
+                        .address(raw.getAddress())
                         .latitude(raw.getLatitude())
                         .longitude(raw.getLongitude())
                         .openTime(raw.getOpenTime())
