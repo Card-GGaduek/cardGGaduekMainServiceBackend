@@ -11,5 +11,13 @@ import java.util.List;
 public class CardBackDTO {
     private String cardName;
     private String cardCompany;
-    private List<String> benefits;
+    private List<BenefitInfo> benefits;
+
+    @Data
+    @AllArgsConstructor
+    @NoArgsConstructor
+    public static class BenefitInfo {
+        private String storeCategory;
+        private String description;
+    }
 }

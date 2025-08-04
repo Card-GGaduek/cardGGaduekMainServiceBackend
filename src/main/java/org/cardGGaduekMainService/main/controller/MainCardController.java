@@ -28,10 +28,10 @@ public class MainCardController {
         CardBackDTO dto = service.getCardBack(cardId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_BACK_FETCH_SUCCESS, dto));
     }
+
     @GetMapping("/list")
     public ResponseEntity<ApiResponse<List<CardFrontDTO>>> getCardList(@RequestParam Long memberId) {
         List<CardFrontDTO> list = service.getCardList(memberId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_FRONT_FETCH_SUCCESS, list));
     }
-
 }

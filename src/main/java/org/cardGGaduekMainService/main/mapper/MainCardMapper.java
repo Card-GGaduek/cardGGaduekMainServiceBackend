@@ -9,10 +9,7 @@ import java.util.List;
 @Mapper
 public interface MainCardMapper {
     CardFrontDTO getCardFrontById(Long cardId);
-
     CardBackDTO getCardBackBasicById(Long cardId);
-
-    List<String> getCardBenefitsById(Long cardId);
+    List<CardBackDTO.BenefitInfo> getCardBenefitsWithCategoryById(Long cardId);
     List<CardFrontDTO> getCardListByMemberId(Long memberId);
-
 }

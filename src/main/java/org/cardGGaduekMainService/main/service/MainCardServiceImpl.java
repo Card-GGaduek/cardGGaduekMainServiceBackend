@@ -31,7 +31,7 @@ public class MainCardServiceImpl implements MainCardService {
         if (base == null) {
             throw new CustomException(ErrorCode.CARD_NOT_FOUND);
         }
-        List<String> benefits = mapper.getCardBenefitsById(cardId);
+        List<CardBackDTO.BenefitInfo> benefits = mapper.getCardBenefitsWithCategoryById(cardId);
         base.setBenefits(benefits);
         return base;
     }
@@ -44,5 +44,4 @@ public class MainCardServiceImpl implements MainCardService {
         }
         return list;
     }
-
 }
