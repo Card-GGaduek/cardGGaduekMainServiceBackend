@@ -7,7 +7,6 @@ import org.cardGGaduekMainService.response.SuccessCode;
 import org.cardGGaduekMainService.transaction.domain.TransactionVO;
 import org.cardGGaduekMainService.transaction.dto.CardTransactionsDTO;
 import org.cardGGaduekMainService.transaction.service.TransactionService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +25,7 @@ public class TransactionController {
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.TRANSACTION_INSERT_SUCCESS));
     }
 
-    @GetMapping("/memebers/{memberId}/cards/transactions")
+    @GetMapping("/api/members/{memberId}/cards/transactions")
     public ResponseEntity<ApiResponse<List<CardTransactionsDTO>>> getCardTransactions(
             @PathVariable("memberId") Long memberId
     ) {

@@ -34,8 +34,9 @@ public class CardPerformanceServiceImpl implements CardPerformanceService {
                         .cardId(vo.getCardId())
                         .yearMonth(yearMonthString)
                         .cardProductName(vo.getCardProductName())
-                        .requiredMonthlySpending(vo.getRequiredMonthlySpending())
+                        .requiredMonthlySpent(vo.getRequiredMonthlySpent())
                         .spentAmount(vo.getSpentAmount())
+                        .cardImageUrl(vo.getCardImageUrl())
                         .build()
                 )
                 .collect(Collectors.toList());

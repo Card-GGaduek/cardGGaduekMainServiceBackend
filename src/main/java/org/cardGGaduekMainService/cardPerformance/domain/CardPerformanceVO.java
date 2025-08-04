@@ -13,7 +13,8 @@ public class CardPerformanceVO {
 
     private Long cardId;
     private String cardProductName;
-    private Long requiredMonthlySpending;
+    private Long requiredMonthlySpent;
     private Long spentAmount;
+    private String cardImageUrl;
 
 }
