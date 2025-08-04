@@ -4,6 +4,7 @@ import org.cardGGaduekMainService.card.domain.CardVO;
 import org.cardGGaduekMainService.card.dto.CardFrontDTO;
 import org.cardGGaduekMainService.card.dto.CardBackDTO;
 import org.cardGGaduekMainService.card.dto.CardBenefitInfoDTO;
+import org.cardGGaduekMainService.card.dto.CardInfoDTO;
 import org.springframework.data.repository.query.Param;
 import org.apache.ibatis.annotations.Mapper;
 import org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO;
@@ -34,4 +35,5 @@ public interface CardMapper {
      * @return 소유하고 있다면 1, 아니면 0
      */
     CardVO findById(Long cardId);
+    List<CardInfoDTO> findCardsByMemberId(Long memberId);
 }
