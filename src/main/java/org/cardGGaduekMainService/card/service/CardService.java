@@ -3,6 +3,7 @@ package org.cardGGaduekMainService.card.service;
 import org.cardGGaduekMainService.card.dto.CardDTO;
 import org.cardGGaduekMainService.card.dto.CardFrontDTO;
 import org.cardGGaduekMainService.card.dto.CardBackDTO;
+import org.cardGGaduekMainService.card.dto.MyCardDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,4 +16,6 @@ public interface CardService {
     void updateCardImage(Long cardId, String imageUrl);
 
     List<CardDTO> findCardByMember(Long memberId);
+
+    List<MyCardDTO> findMyCards(Long memberId);
 }

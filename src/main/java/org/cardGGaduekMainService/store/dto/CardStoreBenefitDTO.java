@@ -12,7 +12,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StoreBenefitDTO {
+public class CardStoreBenefitDTO {
     private Long id;                    // 가맹점 고유 ID
     private String name;                // 가맹점 이름
     private String address;             // 가맹점 주소

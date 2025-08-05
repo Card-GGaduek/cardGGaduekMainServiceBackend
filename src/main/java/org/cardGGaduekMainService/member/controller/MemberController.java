@@ -5,6 +5,7 @@ import org.cardGGaduekMainService.auth.dto.LoginMember;
 import org.cardGGaduekMainService.auth.dto.MemberJoinRequest;
 import org.cardGGaduekMainService.member.dto.MemberFindDTO;
 import org.cardGGaduekMainService.member.dto.MemberUpdateDTO;
+import org.cardGGaduekMainService.member.dto.MyPageDTO;
 import org.cardGGaduekMainService.member.service.MemberService;
 import org.cardGGaduekMainService.response.ApiResponse;
 import org.cardGGaduekMainService.response.SuccessCode;
@@ -32,8 +33,8 @@ public class MemberController {
     }
 
     @GetMapping("/api/member/me")
-    public ResponseEntity<ApiResponse<MemberFindDTO>> memberFindById(@AuthenticationPrincipal LoginMember loginMember){
-        return ResponseEntity.ok(ApiResponse.success(SuccessCode.MEMBER_FETCH_SUCCESS, memberService.findMemberById(loginMember.getId()) ));
+    public ResponseEntity<ApiResponse<MyPageDTO>> memberFindById(@AuthenticationPrincipal LoginMember loginMember){
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.MEMBER_FETCH_SUCCESS, memberService.findMyPageInfo(loginMember.getId())));
     }
 
 }

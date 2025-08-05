@@ -3,6 +3,7 @@ package org.cardGGaduekMainService.member.mapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.cardGGaduekMainService.member.domain.MemberVO;
 import org.cardGGaduekMainService.member.dto.MemberUpdateDTO;
+import org.cardGGaduekMainService.member.dto.MyPageDTO;
 
 @Mapper
 public interface MemberMapper {
@@ -13,4 +14,5 @@ public interface MemberMapper {
     MemberVO getMemberById(Long id);
     MemberVO getMemberByNaverId(String naverId);
     int updateMember(MemberUpdateDTO memberUpdateDTO);
+    MyPageDTO getMyPageInfo(Long memberId);
 }
