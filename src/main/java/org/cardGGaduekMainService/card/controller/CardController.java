@@ -35,7 +35,7 @@ public class CardController {
     @PostMapping("/{cardId}/image")
     public ResponseEntity<ApiResponse<CardImageDTO>> updateCardImage(@PathVariable Long cardId,
                                                                      @RequestParam(value = "image", required = false) MultipartFile imageFile) {
-        try {
+        try {   
             // ✅ 이미지가 없으면 기본 이미지로 변경
             if (imageFile == null || imageFile.isEmpty()) {
                 cardService.updateCardImage(cardId, null); // custom_image_url 초기화
