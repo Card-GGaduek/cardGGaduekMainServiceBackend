@@ -1,12 +1,8 @@
 package org.cardGGaduekMainService.card.mapper;
 
 import org.cardGGaduekMainService.card.domain.CardVO;
-import org.cardGGaduekMainService.card.dto.CardFrontDTO;
-import org.cardGGaduekMainService.card.dto.CardBackDTO;
-import org.cardGGaduekMainService.card.dto.CardBenefitInfoDTO;
+import org.cardGGaduekMainService.card.dto.*;
 import org.apache.ibatis.annotations.Param;
-import org.cardGGaduekMainService.card.dto.CardInfoDTO;
-import org.springframework.data.repository.query.Param;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -33,4 +29,7 @@ public interface CardMapper {
      */
     CardVO findById(Long cardId);
     List<CardInfoDTO> findCardsByMemberId(Long memberId);
+
+
+    List<MyCardDTO> findMyCards(Long memberId);
 }

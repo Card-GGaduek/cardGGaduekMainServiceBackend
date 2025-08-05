@@ -2,18 +2,17 @@ package org.cardGGaduekMainService.card.controller;
 
 import com.google.protobuf.Api;
 import lombok.RequiredArgsConstructor;
+import org.cardGGaduekMainService.auth.dto.LoginMember;
 import org.cardGGaduekMainService.card.domain.CardVO;
-import org.cardGGaduekMainService.card.dto.CardBackDTO;
-import org.cardGGaduekMainService.card.dto.CardDTO;
-import org.cardGGaduekMainService.card.dto.CardFrontDTO;
+import org.cardGGaduekMainService.card.dto.*;
 import org.cardGGaduekMainService.common.s3.S3Uploader;
 import org.cardGGaduekMainService.exception.ErrorCode;
 import org.cardGGaduekMainService.response.SuccessCode;
-import org.cardGGaduekMainService.card.dto.CardImageDTO;
 import org.cardGGaduekMainService.card.service.CardService;
 import org.cardGGaduekMainService.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -74,4 +73,12 @@ public class CardController {
 //        List<CardVO> cards = cardService.findCardsByMember(memberId);
 //        return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_SUMMARY_FETCH_SUCCESS, cards));
 //    }
+
+
+    @GetMapping("/my")
+    public ResponseEntity<ApiResponse<List<MyCardDTO>>> getMyCards(@AuthenticationPrincipal LoginMember loginMember){
+        Long memberId = loginMember.getId();
+        List<MyCardDTO> myCards = cardService.findMyCards(memberId);
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_SUMMARY_FETCH_SUCCESS, myCards));
+    }
 }
