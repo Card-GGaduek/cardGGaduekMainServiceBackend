@@ -13,7 +13,9 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.web.client.RestTemplate;
 
 import javax.sql.DataSource;
 
@@ -21,8 +23,10 @@ import javax.sql.DataSource;
 @Configuration
 @EnableTransactionManagement
 @PropertySource({"classpath:/application.properties"})
+@EnableScheduling
 @MapperScan(basePackages = {
         "org.cardGGaduekMainService.member.mapper",
+        "org.cardGGaduekMainService.cardbenefit.mapper",
         "org.cardGGaduekMainService.lab.mapper",
         "org.cardGGaduekMainService.transaction.mapper",
         "org.cardGGaduekMainService.store.mapper",
@@ -34,9 +38,12 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.card.benefit.mapper",
         "org.cardGGaduekMainService.product.booking.mapper",
         "org.cardGGaduekMainService.product.rooms.mapper",
+        "org.cardGGaduekMainService.product.accommodation.mapper",
         "org.cardGGaduekMainService.product.categoryPageContent.mapper",
         "org.cardGGaduekMainService.cardPerformance.mapper",
         "org.cardGGaduekMainService.cardSummary.mapper",
+        "org.cardGGaduekMainService.main.mapper",
+        "org.cardGGaduekMainService.totalbenefit.mapper",
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
@@ -53,16 +60,23 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.notification.service",
         "org.cardGGaduekMainService.card.service",
         "org.cardGGaduekMainService.card.benefit.service",
+        "org.cardGGaduekMainService.cardbenefit.service",
         "org.cardGGaduekMainService.product.booking.service",
         "org.cardGGaduekMainService.product.categoryPageContent.service",
+        "org.cardGGaduekMainService.product.rooms.service",
+        "org.cardGGaduekMainService.product.accommodation.service",
         "org.cardGGaduekMainService.cardPerformance.service",
         "org.cardGGaduekMainService.cardSummary.service",
         "org.cardGGaduekMainService.cardProduct.service",
         "org.cardGGaduekMainService.place.service",
         "org.cardGGaduekMainService.common.s3",
-        "org.cardGGaduekMainService.config"
+        "org.cardGGaduekMainService.config",
+        "org.cardGGaduekMainService.main.service",
+        "org.cardGGaduekMainService.totalbenefit.service",
+        
 })
 public class RootConfig {
+
     @Value("${jdbc.driver}") String driver;
     @Value("${jdbc.url}") String url;
     @Value("${jdbc.username}") String username;
@@ -72,17 +86,20 @@ public class RootConfig {
     ApplicationContext applicationContext;
 
     @Bean
+    public RestTemplate restTemplate() {
+        return new RestTemplate();
+    }
+
+    @Bean
     public DataSource dataSource() {
         HikariConfig config = new HikariConfig();
-
         config.setDriverClassName(driver);
         config.setJdbcUrl(url);
         config.setUsername(username);
         config.setPassword(password);
-
-        HikariDataSource dataSource = new HikariDataSource(config);
-        return dataSource;
+        return new HikariDataSource(config);
     }
+
 
     @Bean
     public SqlSessionFactory sqlSessionFactory() throws Exception {
@@ -94,10 +111,8 @@ public class RootConfig {
     }
 
     @Bean
-    public DataSourceTransactionManager transactionManager(){
-        DataSourceTransactionManager manager = new DataSourceTransactionManager(dataSource());
-
-        return manager;
+    public DataSourceTransactionManager transactionManager() {
+        return new DataSourceTransactionManager(dataSource());
     }
-
 }
+

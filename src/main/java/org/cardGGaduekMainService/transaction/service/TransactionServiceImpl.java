@@ -7,6 +7,7 @@ import org.cardGGaduekMainService.exception.ErrorCode;
 import org.cardGGaduekMainService.lab.domain.enums.SpendingCategory;
 import org.cardGGaduekMainService.lab.service.LabService;
 import org.cardGGaduekMainService.transaction.domain.TransactionVO;
+import org.cardGGaduekMainService.transaction.dto.CTransactionDTO;
 import org.cardGGaduekMainService.transaction.dto.CardTransactionsDTO;
 import org.cardGGaduekMainService.transaction.dto.TransactionDTO;
 import org.cardGGaduekMainService.transaction.mapper.TransactionMapper;
@@ -49,28 +50,32 @@ public class TransactionServiceImpl implements TransactionService {
 
     @Override
     public List<CardTransactionsDTO> getTransactionsGroupedByCard(Long memberId) {
-        List<TransactionDTO> allTransactions = transactionMapper.selectTransactionsWithCardInfoByMemberId(memberId);
+        List<CTransactionDTO> allTransactions =
+                transactionMapper.selectTransactionsWithCardInfoByMemberId(memberId);
 
         if (allTransactions.isEmpty()) {
             throw new CustomException(ErrorCode.TRANSACTION_NOT_FOUND);
         }
 
-        Map<Long, List<TransactionDTO>> grouped = allTransactions.stream()
-                .collect(Collectors.groupingBy(TransactionDTO::getCardId));
+        Map<Long, List<CTransactionDTO>> grouped =
+                allTransactions.stream()
+                        .collect(Collectors.groupingBy(CTransactionDTO::getCardId));
 
         return grouped.entrySet().stream()
                 .map(entry -> {
-                    Long cardId = entry.getKey();
-                    List<TransactionDTO> txList = entry.getValue();
-                    TransactionDTO first = txList.get(0);
+                    Long cardId        = entry.getKey();
+                    List<CTransactionDTO> txList = entry.getValue();
+                    String cardName    = txList.get(0).getCardName();
 
                     return CardTransactionsDTO.builder()
                             .cardId(cardId)
-                            .cardName(first.getCardName())
+                            .cardName(cardName)
                             .transactions(txList)
                             .build();
                 })
                 .collect(Collectors.toList());
     }
+
+
 }
 

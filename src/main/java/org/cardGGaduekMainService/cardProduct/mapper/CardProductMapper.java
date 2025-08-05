@@ -9,4 +9,5 @@ public interface CardProductMapper {
     List<CardProductVO> getTop5CardProductsByBenefitCount();
     List<CardProductDTO> findAllCardProducts();
     CardProductVO findCardProductDetail(Long id);
+    String findNameById(Long cardProductId);
 }

@@ -2,7 +2,8 @@ package org.cardGGaduekMainService.auth.service;
 
 import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.auth.MemberAuthProvider;
-import org.cardGGaduekMainService.auth.TokenResponse;
+import org.cardGGaduekMainService.auth.dto.TokenResponse;
+import org.cardGGaduekMainService.auth.dto.User;
 import org.cardGGaduekMainService.common.util.EncryptService;
 import org.cardGGaduekMainService.exception.CustomException;
 import org.cardGGaduekMainService.exception.ErrorCode;
@@ -35,9 +36,17 @@ public class AuthService {
         if (!passwordEncoder.matches(pwd, member.getPassword())) throw new CustomException(ErrorCode.INVALID_PASSWORD);
 
         String accessToken = memberAuthProvider.createToken(member.getId());
+        String decryptedEmail = encryptService.aesDecrypt(member.getEmail());
+        String userName = member.getName();
+
+        User user = User.builder()
+                .username(userName)
+                .email(decryptedEmail)
+                .build();
 
         TokenResponse tokenResponse = new TokenResponse();
         tokenResponse.setAccessToken(accessToken);
+        tokenResponse.setUser(user);
 
         return tokenResponse;
 

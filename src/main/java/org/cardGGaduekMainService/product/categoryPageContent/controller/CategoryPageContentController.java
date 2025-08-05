@@ -34,9 +34,9 @@ public class CategoryPageContentController {
     }
 
     private Long getMemberIdFromAuthentication(Authentication authentication){
-//        if(authentication == null || !authentication.isAuthenticated()){
-//            throw new SecurityException("인증되지 않은 사용자입니다.");
-//        }
-        return 3L;
+        if(authentication == null || !authentication.isAuthenticated()){
+            throw new SecurityException("인증되지 않은 사용자입니다.");
+        }
+        return 2L;
     }
 }

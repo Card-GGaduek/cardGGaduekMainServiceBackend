@@ -4,8 +4,9 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.auth.MemberAuthProvider;
-import org.cardGGaduekMainService.auth.TokenResponse;
+import org.cardGGaduekMainService.auth.dto.TokenResponse;
 import org.cardGGaduekMainService.auth.dto.NaverProfileResponse;
+import org.cardGGaduekMainService.auth.dto.User;
 import org.cardGGaduekMainService.common.util.EncryptService;
 import org.cardGGaduekMainService.exception.CustomException;
 import org.cardGGaduekMainService.exception.ErrorCode;
@@ -48,7 +49,19 @@ public class NaverLoginService {
         Optional<MemberVO> memberByNaverId = Optional.ofNullable(memberMapper.getMemberByNaverId(naverProfileResponse.getId()));
         if (memberByNaverId.isPresent()) {
             TokenResponse tokenResponse = new TokenResponse();
-            tokenResponse.setAccessToken(memberAuthProvider.createToken(memberByNaverId.get().getId()));
+
+            MemberVO naverMember = memberByNaverId.get();
+
+            String decryptedEmail = encryptService.aesDecrypt(naverMember.getEmail());
+            User user = User.builder()
+                    .username(naverMember.getName())
+                    .email(decryptedEmail)
+                    .build();
+
+            String accessToken = memberAuthProvider.createToken(memberByNaverId.get().getId());
+            System.out.println("accessToken: " + accessToken);
+            tokenResponse.setAccessToken(accessToken);
+            tokenResponse.setUser(user);
             return tokenResponse;
         } else {
 
@@ -72,7 +85,16 @@ public class NaverLoginService {
             memberMapper.createNaverMember(memberCreate);
 
             TokenResponse tokenResponse = new TokenResponse();
-            tokenResponse.setAccessToken(memberAuthProvider.createToken(memberCreate.getId()));
+
+            User user = User.builder()
+                    .email(naverProfileResponse.getEmail())
+                    .username(naverProfileResponse.getName())
+                    .build();
+
+            String accessToken = memberAuthProvider.createToken(memberCreate.getId());
+            System.out.println("accessToken: " + accessToken);
+            tokenResponse.setAccessToken(accessToken);
+            tokenResponse.setUser(user);
             return tokenResponse;
 
         }
@@ -161,6 +183,7 @@ public class NaverLoginService {
             }
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
+            throw new CustomException(ErrorCode.NAVER_LOGIN_FAILED);
         }
 
         return null;

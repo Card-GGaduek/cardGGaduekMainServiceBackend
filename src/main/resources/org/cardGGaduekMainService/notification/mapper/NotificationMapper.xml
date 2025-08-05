@@ -20,8 +20,8 @@
             n.message,
             n.image_url,
             n.link_url,
-            n.type_code_id,
-            n.status_code_id,
+            n.type_code,
+            n.status_code,
             n.created_at
         FROM notification n
                  JOIN member m ON n.member_id = m.id

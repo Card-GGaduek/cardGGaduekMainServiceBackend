@@ -16,5 +16,5 @@ public class CardTransactionsDTO {
     //카드아이디
     private Long cardId;
     private String cardName;
-    private List<TransactionDTO> transactions;
+    private List<CTransactionDTO> transactions;
 }

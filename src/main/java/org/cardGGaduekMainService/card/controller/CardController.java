@@ -1,7 +1,10 @@
 package org.cardGGaduekMainService.card.controller;
 
+import com.google.protobuf.Api;
 import lombok.RequiredArgsConstructor;
+import org.cardGGaduekMainService.card.domain.CardVO;
 import org.cardGGaduekMainService.card.dto.CardBackDTO;
+import org.cardGGaduekMainService.card.dto.CardDTO;
 import org.cardGGaduekMainService.card.dto.CardFrontDTO;
 import org.cardGGaduekMainService.common.s3.S3Uploader;
 import org.cardGGaduekMainService.exception.ErrorCode;
@@ -61,5 +64,14 @@ public class CardController {
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_BACK_FETCH_SUCCESS, detail));
     }
 
-
+    @GetMapping("/{memberId}")
+    public ResponseEntity<ApiResponse<List<CardDTO>>> getCardsByMember(@PathVariable Long memberId){
+        List<CardDTO> cards = cardService.findCardByMember(memberId);
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARDPRODUCT_FETCH_SUCCESS, cards));
+    }
+//    @GetMapping("/{memberId}")
+//    public ResponseEntity<List<CardVO>> getCardsByMember(@PathVariable Long memberId) {
+//        List<CardVO> cards = cardService.findCardsByMember(memberId);
+//        return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_SUMMARY_FETCH_SUCCESS, cards));
+//    }
 }

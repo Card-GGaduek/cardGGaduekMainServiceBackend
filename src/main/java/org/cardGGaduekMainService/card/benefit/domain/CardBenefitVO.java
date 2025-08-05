@@ -13,9 +13,12 @@ import java.math.BigDecimal;
 @Builder
 public class CardBenefitVO {
     private Long id;
-    private Long card_product_id;
-    private Long benefit_category_id;
-    private String store_name;
-    private BigDecimal discountRate;
+    private Long cardProductId;
+    private String storeCategory;
+    private String storeName;
+    private String benefitType;
+    private String valueType;
+    private BigDecimal rateValue;
+    private BigDecimal amountValue;
     private String description;
 }

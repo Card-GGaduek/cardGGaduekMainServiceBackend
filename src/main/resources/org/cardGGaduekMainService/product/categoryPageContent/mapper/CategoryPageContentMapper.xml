@@ -20,9 +20,9 @@
         AND EXISTS (
         -- 사용자가 가진 카드 중, 이 카테고리 혜택이 하나라도 있는지 확인
         SELECT 1
-        FROM card_benefit cb
+        FROM store_benefit cb
         WHERE
-        cb.benefit_category = #{categoryName} -- 💡 카테고리 이름으로 직접 비교
+        cb.store_category = #{categoryName} -- 💡 카테고리 이름으로 직접 비교
         AND cb.card_product_id IN
         <foreach item="cardId" collection="userCardProductIds" open="(" separator="," close=")">
             #{cardId}
@@ -37,7 +37,8 @@
             title,
             description,
             image_url AS imageUrl,
-            link_url AS linkUrl
+            link_url AS linkUrl,
+            price
         FROM
             category_page_content
         WHERE

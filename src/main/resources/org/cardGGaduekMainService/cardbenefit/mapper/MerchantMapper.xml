@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+<mapper namespace="org.cardGGaduekMainService.cardbenefit.mapper.MerchantMapper">
+    <select id="findAll" resultType="org.cardGGaduekMainService.cardbenefit.domain.Merchant">
+        SELECT * FROM merchant;
+    </select>
+
+    <select id="findById" resultType="org.cardGGaduekMainService.cardbenefit.domain.Merchant">
+        SELECT * FROM merchant WHERE merchant.id = #{id};
+    </select>
+
+
+    <!--가맹점-혜택 조회-->
+    <resultMap id="MerchantWithBenefits" type="org.cardGGaduekMainService.cardbenefit.domain.Merchant">
+        <id property="id" column="id"/>
+        <result property="name" column="name"/>
+        <result property="category" column="category"/>
+        <result property="address" column="address"/>
+        <result property="latitude" column="latitude"/>
+        <result property="longitude" column="longitude"/>
+        <collection property="benefits" ofType="org.cardGGaduekMainService.cardbenefit.domain.Benefit">
+            <id property="benefitId" column="benefit_id"/>
+            <result property="benefitName" column="benefit_name"/>
+            <result property="discountRate" column="discount_rate"/>
+            <result property="conditions" column="conditions"/>
+            <result property="description" column="description"/>
+        </collection>
+    </resultMap>
+
+    <select id="findMerchantWithBenefits" parameterType="long" resultMap="MerchantWithBenefits">
+        SELECT m.id, m.name, m.category, m.address, m.latitude, m.longitude,
+               b.benefit_id, b.benefit_name, b.discount_rate, b.conditions, b.description
+        FROM merchant m
+                 LEFT JOIN merchant_benefit mb ON m.id = mb.merchant_id
+                 LEFT JOIN benefit b ON mb.benefit_id = b.benefit_id
+        WHERE m.id = #{id}
+    </select>
+
+</mapper>
