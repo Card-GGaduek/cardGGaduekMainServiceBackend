@@ -69,8 +69,11 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.cardSummary.service",
         "org.cardGGaduekMainService.cardProduct.service",
         "org.cardGGaduekMainService.place.service",
+        "org.cardGGaduekMainService.common.s3",
+        "org.cardGGaduekMainService.config",
         "org.cardGGaduekMainService.main.service",
         "org.cardGGaduekMainService.totalbenefit.service",
+        
 })
 public class RootConfig {
 

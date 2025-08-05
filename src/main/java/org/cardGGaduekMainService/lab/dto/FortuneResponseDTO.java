@@ -22,7 +22,9 @@ public class FortuneResponseDTO {
         dto.setFortuneIndex(level.getIndex());
         dto.setMessage(level.getMessage());
         dto.setLuckyItem(vo.getLuckyItem());
-        dto.setLuckyItemImageUrl("/api/lab/fortune/image/" + vo.getLuckyItemImageUrl());
+
+        String s3BaseUrl = "https://cardggaduek.s3.ap-southeast-2.amazonaws.com/image/items/";
+        dto.setLuckyItemImageUrl(s3BaseUrl + vo.getLuckyItemImageUrl() + ".png");
         dto.setCreatedAt(vo.getCreatedAt());
         dto.setTodayPicked(vo.isTodayPicked());
         return dto;

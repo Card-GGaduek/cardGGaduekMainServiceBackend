@@ -17,7 +17,9 @@ public class SpendingAnalysisResultDTO {
         SpendingAnalysisResultDTO dto = new SpendingAnalysisResultDTO();
         dto.setCategory(category.name());
         dto.setResultTitle(category.getResultTitle());
-        dto.setImageUrl("/api/lab/analysis/image/" + category.name().toLowerCase());
+
+        String s3BaseUrl = "https://cardggaduek.s3.ap-southeast-2.amazonaws.com/image/analysis/";
+        dto.setImageUrl(s3BaseUrl + category.name().toLowerCase() + ".png");
         dto.setAnalysisMonth(vo.getAnalysisMonth().toString());
         return dto;
     }

@@ -6,12 +6,16 @@ import org.cardGGaduekMainService.card.domain.CardVO;
 import org.cardGGaduekMainService.card.dto.CardBackDTO;
 import org.cardGGaduekMainService.card.dto.CardDTO;
 import org.cardGGaduekMainService.card.dto.CardFrontDTO;
+import org.cardGGaduekMainService.common.s3.S3Uploader;
+import org.cardGGaduekMainService.exception.ErrorCode;
 import org.cardGGaduekMainService.response.SuccessCode;
 import org.cardGGaduekMainService.card.dto.CardImageDTO;
 import org.cardGGaduekMainService.card.service.CardService;
 import org.cardGGaduekMainService.response.ApiResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -20,6 +24,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CardController {
     private final CardService cardService;
+    private final S3Uploader s3Uploader;
 
     @DeleteMapping("/{cardId}")
     public ResponseEntity<Void> deleteCard(@PathVariable Long cardId) {
@@ -27,11 +32,24 @@ public class CardController {
         return ResponseEntity.noContent().build(); // 204 No Content
     }
 
-    @PatchMapping("/{cardId}/image")
-    public ResponseEntity<ApiResponse<Void>> updateCardImage(@PathVariable Long cardId,
-                                                             @RequestBody CardImageDTO request) {
-        cardService.updateCardImage(cardId, request.getImageUrl());
-        return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_IMAGE_UPDATE, null));
+    @PostMapping("/{cardId}/image")
+    public ResponseEntity<ApiResponse<CardImageDTO>> updateCardImage(@PathVariable Long cardId,
+                                                                     @RequestParam(value = "image", required = false) MultipartFile imageFile) {
+        try {
+            // ✅ 이미지가 없으면 기본 이미지로 변경
+            if (imageFile == null || imageFile.isEmpty()) {
+                cardService.updateCardImage(cardId, null); // custom_image_url 초기화
+                return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_IMAGE_UPDATE, new CardImageDTO(null)));
+            }
+
+            // ✅ 이미지가 있으면 S3에 업로드
+            String imageUrl = s3Uploader.upload(imageFile, "image/cardImage"); // 🔥 이 경로로 저장
+            cardService.updateCardImage(cardId, imageUrl);
+            return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_IMAGE_UPDATE, new CardImageDTO(imageUrl)));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(ApiResponse.error(ErrorCode.IMAGE_UPLOAD_FAILED));
+        }
     }
   
     @GetMapping("/front/{memberId}")
