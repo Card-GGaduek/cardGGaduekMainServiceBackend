@@ -50,10 +50,10 @@ public class CardController {
                     .body(ApiResponse.error(ErrorCode.IMAGE_UPLOAD_FAILED));
         }
     }
-  
-    @GetMapping("/front/{memberId}")
-    public ResponseEntity<ApiResponse<List<CardFrontDTO>>> getCardFrontInfo(@PathVariable Long memberId) {
-        List<CardFrontDTO> cards = cardService.getCardFrontInfo(memberId);
+
+    @GetMapping("/front")
+    public ResponseEntity<ApiResponse<List<CardFrontDTO>>> getCardFrontInfo(@AuthenticationPrincipal LoginMember loginMember) {
+        List<CardFrontDTO> cards = cardService.getCardFrontInfo(loginMember.getId());
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_FRONT_FETCH_SUCCESS, cards));
     }
 
@@ -63,9 +63,9 @@ public class CardController {
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_BACK_FETCH_SUCCESS, detail));
     }
 
-    @GetMapping("/{memberId}")
-    public ResponseEntity<ApiResponse<List<CardDTO>>> getCardsByMember(@PathVariable Long memberId){
-        List<CardDTO> cards = cardService.findCardByMember(memberId);
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<CardDTO>>> getCardsByMember(@AuthenticationPrincipal LoginMember loginMember){
+        List<CardDTO> cards = cardService.findCardByMember(loginMember.getId());
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARDPRODUCT_FETCH_SUCCESS, cards));
     }
 //    @GetMapping("/{memberId}")
@@ -73,7 +73,6 @@ public class CardController {
 //        List<CardVO> cards = cardService.findCardsByMember(memberId);
 //        return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_SUMMARY_FETCH_SUCCESS, cards));
 //    }
-
 
     @GetMapping("/my")
     public ResponseEntity<ApiResponse<List<MyCardDTO>>> getMyCards(@AuthenticationPrincipal LoginMember loginMember){
