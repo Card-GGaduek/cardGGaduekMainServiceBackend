@@ -114,4 +114,39 @@
             c.member_id = #{memberId} AND c.is_valid = 1
     </select>
 
+    <select id="findMyCards" resultMap="myCardMap">
+        SELECT
+            c.id, c.card_number, cp.id AS card_product_id, cp.card_product_name, cp.card_image_url, cp.required_monthly_spent,
+            sb.store_name, sb.store_category, sb.benefit_type, sb.value_type, sb.rate_value, sb.amount_value, sb.description
+        FROM member m
+                 LEFT JOIN card c
+                           ON m.id = c.member_id
+                 LEFT JOIN card_product cp
+                           ON c.card_product_id = cp.id
+                 LEFT JOIN store_benefit sb
+                           ON cp.id = sb.card_product_id
+        WHERE m.id = #{memberId}
+
+    </select>
+
+    <resultMap id="myCardMap" type="org.cardGGaduekMainService.card.dto.MyCardDTO">
+        <id column="id" property="cardId" />
+        <result column="card_number" property="cardNumber" />
+        <result column="card_product_id" property="cardProductId" />
+        <result column="card_product_name" property="cardProductName" />
+        <result column="card_image_url" property="cardImageUrl" />
+        <result column="required_monthly_spent" property="requiredMonthlySpent" />
+        <collection property="storeBenefitList" resultMap="storeBenefitMap" />
+    </resultMap>
+
+    <resultMap id="storeBenefitMap" type="org.cardGGaduekMainService.storeBenefit.dto.StoreBenefitDTO" >
+        <result column="store_name" property="storeName" />
+        <result column="store_category" property="storeCategory" />
+        <result column="benefit_type" property="benefitType" />
+        <result column="value_type" property="valueType" />
+        <result column="rate_value" property="rateValue" />
+        <result column="amount_value" property="amountValue" />
+        <result column="description" property="description" />
+    </resultMap>
+
 </mapper>
