@@ -6,7 +6,7 @@ import org.cardGGaduekMainService.main.dto.CardFrontDTO;
 import java.util.List;
 
 public interface MainCardService {
-    CardFrontDTO getCardFront(Long cardId);
-    CardBackDTO getCardBack(Long cardId);
+    CardFrontDTO getCardFront(Long cardId, Long memberId);
+    CardBackDTO getCardBack(Long cardId, Long memberId);
     List<CardFrontDTO> getCardList(Long memberId);
 }

@@ -17,7 +17,12 @@ public class MainCardServiceImpl implements MainCardService {
     private final MainCardMapper mapper;
 
     @Override
-    public CardFrontDTO getCardFront(Long cardId) {
+    public CardFrontDTO getCardFront(Long cardId, Long memberId) {
+        // TODO: 권한 검증 로직 추가 가능
+        // if (!mapper.isCardOwnedByMember(cardId, memberId)) {
+        //     throw new CustomException(ErrorCode.CARD_ACCESS_DENIED);
+        // }
+
         CardFrontDTO dto = mapper.getCardFrontById(cardId);
         if (dto == null) {
             throw new CustomException(ErrorCode.CARD_NOT_FOUND);
@@ -26,7 +31,12 @@ public class MainCardServiceImpl implements MainCardService {
     }
 
     @Override
-    public CardBackDTO getCardBack(Long cardId) {
+    public CardBackDTO getCardBack(Long cardId, Long memberId) {
+        // TODO: 권한 검증 로직 추가 가능
+        // if (!mapper.isCardOwnedByMember(cardId, memberId)) {
+        //     throw new CustomException(ErrorCode.CARD_ACCESS_DENIED);
+        // }
+
         CardBackDTO base = mapper.getCardBackBasicById(cardId);
         if (base == null) {
             throw new CustomException(ErrorCode.CARD_NOT_FOUND);

@@ -12,25 +12,30 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/main/card")
+@RequestMapping("/api/main/{memberId}/cards")
 @RequiredArgsConstructor
 public class MainCardController {
     private final MainCardService service;
 
     @GetMapping("/{cardId}/front")
-    public ResponseEntity<ApiResponse<CardFrontDTO>> getCardFront(@PathVariable Long cardId) {
-        CardFrontDTO dto = service.getCardFront(cardId);
+    public ResponseEntity<ApiResponse<CardFrontDTO>> getCardFront(
+            @PathVariable Long memberId,
+            @PathVariable Long cardId) {
+        CardFrontDTO dto = service.getCardFront(cardId, memberId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_FRONT_FETCH_SUCCESS, dto));
     }
 
     @GetMapping("/{cardId}/back")
-    public ResponseEntity<ApiResponse<CardBackDTO>> getCardBack(@PathVariable Long cardId) {
-        CardBackDTO dto = service.getCardBack(cardId);
+    public ResponseEntity<ApiResponse<CardBackDTO>> getCardBack(
+            @PathVariable Long memberId,
+            @PathVariable Long cardId) {
+        CardBackDTO dto = service.getCardBack(cardId, memberId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_BACK_FETCH_SUCCESS, dto));
     }
 
-    @GetMapping("/list")
-    public ResponseEntity<ApiResponse<List<CardFrontDTO>>> getCardList(@RequestParam Long memberId) {
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<CardFrontDTO>>> getCardList(
+            @PathVariable Long memberId) {
         List<CardFrontDTO> list = service.getCardList(memberId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_FRONT_FETCH_SUCCESS, list));
     }
