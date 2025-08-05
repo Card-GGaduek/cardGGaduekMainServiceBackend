@@ -5,6 +5,8 @@ import org.cardGGaduekMainService.card.dto.*;
 import org.cardGGaduekMainService.card.mapper.CardMapper;
 import org.cardGGaduekMainService.exception.CustomException;
 import org.cardGGaduekMainService.exception.ErrorCode;
+import org.cardGGaduekMainService.member.domain.MemberVO;
+import org.cardGGaduekMainService.member.mapper.MemberMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,6 +17,7 @@ import java.util.stream.Collectors;
 public class CardServiceImpl implements CardService {
 
     private final CardMapper cardMapper;
+    private final MemberMapper memberMapper;
 
     @Override
     public List<CardFrontDTO> getCardFrontInfo(Long memberId) {
@@ -64,4 +67,15 @@ public class CardServiceImpl implements CardService {
         }).collect(Collectors.toList());
     }
 
+    @Override
+    public List<MyCardDTO> findMyCards(Long memberId) {
+        MemberVO memberById = memberMapper.getMemberById(memberId);
+        if (memberById == null) throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+
+        List<MyCardDTO> myCards = cardMapper.findMyCards(memberId);
+
+        return myCards;
+
+
+    }
 }

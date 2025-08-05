@@ -8,6 +8,7 @@ import org.cardGGaduekMainService.member.domain.MemberVO;
 import org.cardGGaduekMainService.member.dto.MemberFindDTO;
 import org.cardGGaduekMainService.auth.dto.MemberJoinRequest;
 import org.cardGGaduekMainService.member.dto.MemberUpdateDTO;
+import org.cardGGaduekMainService.member.dto.MyPageDTO;
 import org.cardGGaduekMainService.member.mapper.MemberMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -117,5 +118,18 @@ public class MemberServiceImpl implements MemberService {
         }
 
         memberMapper.updateMember(memberUpdateDTO);
+    }
+
+
+    @Override
+    public MyPageDTO findMyPageInfo(Long memberId) {
+        if (memberMapper.getMemberById(memberId) == null) throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+
+        MyPageDTO myPageInfo = memberMapper.getMyPageInfo(memberId);
+        if (myPageInfo == null) throw new CustomException(ErrorCode.MEMBER_NOT_FOUND);
+
+        myPageInfo.setEmail(encryptService.aesDecrypt(myPageInfo.getEmail()));
+        myPageInfo.setPhone(encryptService.aesDecrypt(myPageInfo.getPhone()));
+        return myPageInfo;
     }
 }

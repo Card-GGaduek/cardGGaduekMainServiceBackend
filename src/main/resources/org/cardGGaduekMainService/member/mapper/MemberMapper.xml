@@ -29,6 +29,28 @@
         SELECT * FROM member
         WHERE member.naver_user_id = #{naverId}
     </select>
+    <select id="getMyPageInfo" resultMap="myPageInfoMap">
+        SELECT m.name, m.email, m.phone, mc.coupon_product_id, mc.coupon_name, mc.coupon_category, mc.discount_value, mc.coupon_status, mc.expired_at FROM member m
+            LEFT JOIN member_coupon mc
+                ON m.id = mc.member_id
+        WHERE m.id = #{memberId}
+    </select>
+    
+    <resultMap id="myPageInfoMap" type="org.cardGGaduekMainService.member.dto.MyPageDTO" >
+        <result column="name" property="name" />
+        <result column="email" property="email" />
+        <result column="phone" property="phone" />
+        <collection property="couponList" resultMap="couponMap" />
+    </resultMap>
+
+    <resultMap id="couponMap" type="org.cardGGaduekMainService.member.dto.MyCouponDTO" >
+        <result column="coupon_product_id" property="couponProductId" />
+        <result column="coupon_name" property="couponName" />
+        <result column="coupon_category" property="couponCategory" />
+        <result column="discount_value" property="discountValue" />
+        <result column="coupon_status" property="couponStatus" />
+        <result column="expired_at" property="expiredAt" />
+    </resultMap>
 
     <update id="updateMember" parameterType="org.cardGGaduekMainService.member.dto.MemberUpdateDTO">
         UPDATE
