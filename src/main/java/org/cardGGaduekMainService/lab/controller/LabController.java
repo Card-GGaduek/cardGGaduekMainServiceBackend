@@ -1,6 +1,7 @@
 package org.cardGGaduekMainService.lab.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.cardGGaduekMainService.auth.dto.LoginMember;
 import org.cardGGaduekMainService.lab.dto.FortuneResponseDTO;
 import org.cardGGaduekMainService.lab.dto.MissionProgressDTO;
 import org.cardGGaduekMainService.lab.dto.SpendingAnalysisResultDTO;
@@ -10,8 +11,9 @@ import org.cardGGaduekMainService.response.SuccessCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
 
 import java.util.HashMap;
 import java.util.List;
@@ -25,15 +27,15 @@ public class LabController {
 
     // 1. 미션 진행 현황
     @GetMapping("/missions")
-    public ResponseEntity<ApiResponse<List<MissionProgressDTO>>> getAllMissionsWithProgress(@RequestParam Long memberId) {
-        List<MissionProgressDTO> missions = labService.getAllMissionsWithProgress(memberId);
+    public ResponseEntity<ApiResponse<List<MissionProgressDTO>>> getAllMissionsWithProgress(@AuthenticationPrincipal LoginMember loginMember) {
+        List<MissionProgressDTO> missions = labService.getAllMissionsWithProgress(loginMember.getId());
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.MISSION_PROGRESS_FETCH_SUCCESS, missions));
     }
 
     // 2. 오늘의 소비 운세
     @GetMapping("/fortune")
-    public ResponseEntity<ApiResponse<FortuneResponseDTO>> getTodayFortune(@RequestParam Long memberId) {
-        FortuneResponseDTO fortune = labService.getTodayFortune(memberId);
+    public ResponseEntity<ApiResponse<FortuneResponseDTO>> getTodayFortune(@AuthenticationPrincipal LoginMember loginMember) {
+        FortuneResponseDTO fortune = labService.getTodayFortune(loginMember.getId());
         if (fortune == null) {
             return ResponseEntity.noContent().build();
         }
@@ -42,8 +44,8 @@ public class LabController {
 
     // 3. 소비 성향 분석 결과
     @GetMapping("/analysis")
-    public ResponseEntity<ApiResponse<SpendingAnalysisResultDTO>> getSpendingAnalysis(@RequestParam Long memberId) {
-        SpendingAnalysisResultDTO analysis = labService.getSpendingAnalysis(memberId);
+    public ResponseEntity<ApiResponse<SpendingAnalysisResultDTO>> getSpendingAnalysis(@AuthenticationPrincipal LoginMember loginMember) {
+        SpendingAnalysisResultDTO analysis = labService.getSpendingAnalysis(loginMember.getId());
         if (analysis == null) {
             return ResponseEntity.noContent().build();
         }
@@ -52,11 +54,11 @@ public class LabController {
 
     // 4. Lab 통합 조회
     @GetMapping
-    public ResponseEntity<ApiResponse<Map<String, Object>>> getLabData(@RequestParam Long memberId) {
+    public ResponseEntity<ApiResponse<Map<String, Object>>> getLabData(@AuthenticationPrincipal LoginMember loginMember) {
         Map<String, Object> result = new HashMap<>();
-        result.put("missions", labService.getAllMissionsWithProgress(memberId));
-        result.put("fortune", labService.getTodayFortune(memberId));
-        result.put("analysis", labService.getSpendingAnalysis(memberId));
+        result.put("missions", labService.getAllMissionsWithProgress(loginMember.getId()));
+        result.put("fortune", labService.getTodayFortune(loginMember.getId()));
+        result.put("analysis", labService.getSpendingAnalysis(loginMember.getId()));
 
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.LAB_OVERVIEW_FETCH_SUCCESS, result));
     }

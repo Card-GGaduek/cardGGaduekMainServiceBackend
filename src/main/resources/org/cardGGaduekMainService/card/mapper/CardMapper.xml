@@ -15,7 +15,7 @@
             c.is_valid AS isValid
         FROM card c
                  JOIN card_product cp ON c.card_product_id = cp.id
-                 JOIN bank b ON cp.bank_id = b.id
+                 JOIN bank b ON cp.bank_code = b.id
                  JOIN member m ON c.member_id = m.id
         WHERE c.member_id = #{memberId}
     </select>
@@ -26,7 +26,7 @@
             b.bank_name AS bankName
         FROM card c
                  JOIN card_product cp ON c.card_product_id = cp.id
-                 JOIN bank b ON cp.bank_id = b.id
+                 JOIN bank b ON cp.bank_code = b.id
         WHERE c.id = #{cardId}
     </select>
 
@@ -114,18 +114,17 @@
             c.member_id = #{memberId} AND c.is_valid = 1
     </select>
 
-
     <select id="findMyCards" resultMap="myCardMap">
         SELECT
             c.id, c.card_number, cp.id AS card_product_id, cp.card_product_name, cp.card_image_url, cp.required_monthly_spent,
             sb.store_name, sb.store_category, sb.benefit_type, sb.value_type, sb.rate_value, sb.amount_value, sb.description
         FROM member m
-            LEFT JOIN card c
-                ON m.id = c.member_id
-            LEFT JOIN card_product cp
-                ON c.card_product_id = cp.id
-            LEFT JOIN store_benefit sb
-                ON cp.id = sb.card_product_id
+                 LEFT JOIN card c
+                           ON m.id = c.member_id
+                 LEFT JOIN card_product cp
+                           ON c.card_product_id = cp.id
+                 LEFT JOIN store_benefit sb
+                           ON cp.id = sb.card_product_id
         WHERE m.id = #{memberId}
 
     </select>
