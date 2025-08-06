@@ -12,6 +12,7 @@ import lombok.NoArgsConstructor;
 public class CardPerformanceDTO {
 
     private Long cardId;
+    private String ownerName;
     private String yearMonth;
     private String cardProductName;
     private Long requiredMonthlySpent;

@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,13 +24,18 @@ public class CardPerformanceController {
 
 
     @GetMapping("/api/members/cardPerformance")
-    @PreAuthorize("hasRole('USER')")
     public ResponseEntity<ApiResponse<List<CardPerformanceDTO>>> getCardPerformances(
             @AuthenticationPrincipal LoginMember loginMember) {
-        System.out.println(loginMember);
         Long memberId = loginMember.getId();
-        List<CardPerformanceDTO> cardPerformances = cardPerformanceService.getCardPerformances(memberId);
-        return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_PERFORMANCE_FETCH_SUCCESS, cardPerformances));
+        String owner  = loginMember.getName();
+
+        List<CardPerformanceDTO> cardPerformanceDTO = cardPerformanceService.getCardPerformances(memberId)
+                .stream()
+                .peek(dto -> dto.setOwnerName(owner))
+                .collect(Collectors.toList());
+
+        return ResponseEntity.ok(ApiResponse.success(
+                SuccessCode.CARD_PERFORMANCE_FETCH_SUCCESS, cardPerformanceDTO));
     }
 
 
