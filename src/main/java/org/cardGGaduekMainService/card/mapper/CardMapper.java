@@ -3,6 +3,7 @@ package org.cardGGaduekMainService.card.mapper;
 import org.cardGGaduekMainService.card.domain.CardVO;
 import org.cardGGaduekMainService.card.dto.*;
 import org.apache.ibatis.annotations.Param;
+import org.cardGGaduekMainService.card.dto.CardInfoDTO;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public interface CardMapper {
     /**
      * 특정 카드가 특정 회원의 소유인지 확인합니다.
      * @param cardId 확인할 카드 ID
-     * @param memberId 회원 ID
+
      * @return 소유하고 있다면 1, 아니면 0
      */
     CardVO findById(Long cardId);
