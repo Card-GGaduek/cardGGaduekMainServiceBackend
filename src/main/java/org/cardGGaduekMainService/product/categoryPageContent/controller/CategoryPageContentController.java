@@ -1,11 +1,16 @@
 package org.cardGGaduekMainService.product.categoryPageContent.controller;
 
+import lombok.extern.log4j.Log4j2;
+import org.cardGGaduekMainService.auth.dto.LoginMember;
 import org.cardGGaduekMainService.product.categoryPageContent.domain.CategoryPageContentVO;
 import org.cardGGaduekMainService.product.categoryPageContent.dto.CategoryPageContentDTO;
 import org.cardGGaduekMainService.product.categoryPageContent.service.CategoryPageContentService;
+import org.cardGGaduekMainService.response.ApiResponse;
+import org.cardGGaduekMainService.response.SuccessCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,30 +18,22 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
+@Log4j2
 @RestController
 @RequestMapping("/api/category")
 public class CategoryPageContentController {
     private final CategoryPageContentService categoryPageContentService;
 
     @Autowired
-    public CategoryPageContentController(CategoryPageContentService categoryPageContentService){
+    public CategoryPageContentController(CategoryPageContentService categoryPageContentService ){
         this.categoryPageContentService = categoryPageContentService;
     }
 
     @GetMapping("/{categoryName}")
-    public ResponseEntity<List<CategoryPageContentDTO>> getCategoryContents(
+    public ResponseEntity<ApiResponse<List<CategoryPageContentDTO>>> getCategoryContents(
             @PathVariable String categoryName,
-            Authentication authentication) {
-        Long memberId = getMemberIdFromAuthentication(authentication);
-        List<CategoryPageContentDTO> contentVOList = categoryPageContentService.getBenefitContentForMember(categoryName, memberId);
-
-        return ResponseEntity.ok(contentVOList);
-    }
-
-    private Long getMemberIdFromAuthentication(Authentication authentication){
-        if(authentication == null || !authentication.isAuthenticated()){
-            throw new SecurityException("인증되지 않은 사용자입니다.");
-        }
-        return 2L;
+            @AuthenticationPrincipal LoginMember loginMember) {
+        List<CategoryPageContentDTO> contentVOList = categoryPageContentService.getBenefitContentForMember(categoryName, loginMember.getId());
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.CATEGORY_FETCH_SUCCESS, contentVOList));
     }
 }

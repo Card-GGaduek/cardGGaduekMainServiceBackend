@@ -2,6 +2,7 @@ package org.cardGGaduekMainService.cardProduct.service;
 
 import org.cardGGaduekMainService.cardProduct.domain.CardProductVO;
 import org.cardGGaduekMainService.cardProduct.dto.CardProductDTO;
+import org.cardGGaduekMainService.cardProduct.dto.CardProductDetailDTO;
 
 import java.util.List;
 
@@ -10,5 +11,5 @@ public interface CardProductService {
 
     List<CardProductDTO> getAllCardProducts();
 
-    CardProductVO getCardProductDetail(Long productId);
+    CardProductDetailDTO getCardProductDetail(Long productId);
 }

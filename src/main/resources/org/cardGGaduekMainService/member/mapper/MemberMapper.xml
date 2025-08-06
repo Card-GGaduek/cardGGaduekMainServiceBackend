@@ -30,11 +30,16 @@
         WHERE member.naver_user_id = #{naverId}
     </select>
     <select id="getMyPageInfo" resultMap="myPageInfoMap">
-        SELECT m.name, m.email, m.phone, mc.coupon_product_id, mc.coupon_name, mc.coupon_category, mc.discount_value, mc.coupon_status, mc.expired_at FROM member m
+        SELECT m.name, m.email, m.phone, mc.coupon_product_id, mc.coupon_name, mc.coupon_category, mc.discount_value, mc.coupon_status, mc.expired_at
+        ,b.name, b.email, b.phone, b.request_text, b.check_in_date, b.check_out_date, b.total_price, b.status, b.booked_at, b.room_name, b.accommodation_name, b.address
+        FROM member m
             LEFT JOIN member_coupon mc
                 ON m.id = mc.member_id
+            LEFT JOIN bookings b
+                ON m.id = b.member_id
         WHERE m.id = #{memberId}
     </select>
+
     
     <resultMap id="myPageInfoMap" type="org.cardGGaduekMainService.member.dto.MyPageDTO" >
         <result column="name" property="name" />
@@ -52,6 +57,21 @@
         <result column="expired_at" property="expiredAt" />
     </resultMap>
 
+    <resultMap id="bookingMap" type="org.cardGGaduekMainService.member.dto.MyBookingDTO" >
+        <result column="id" property="bookingId" />
+        <result column="name" property="name" />
+        <result column="phone" property="phone" />
+        <result column="email" property="email" />
+        <result column="request_text" property="requestText" />
+        <result column="check_in_date" property="checkInDate" />
+        <result column="check_out_date" property="checkOutDate" />
+        <result column="total_price" property="totalPrice" />
+        <result column="status" property="status" />
+        <result column="booked_at" property="bookedAt" />
+        <result column="room_name" property="roomName" />
+        <result column="accommodation_name" property="accommodationName" />
+        <result column="address" property="address" />
+    </resultMap>
     <update id="updateMember" parameterType="org.cardGGaduekMainService.member.dto.MemberUpdateDTO">
         UPDATE
             member
