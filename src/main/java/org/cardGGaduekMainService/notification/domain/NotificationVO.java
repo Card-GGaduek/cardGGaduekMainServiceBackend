@@ -18,7 +18,7 @@ public class NotificationVO {
     private String message;
     private String imageUrl;
     private String linkUrl;
-    private Long typeCodeId;
-    private Long statusCodeId;
+    private String typeCode;      // Long -> String 변경
+    private String statusCode;    // Long -> String 변경
     private Date createdAt;
 }
