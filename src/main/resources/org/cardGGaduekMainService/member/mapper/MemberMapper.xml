@@ -31,16 +31,39 @@
     </select>
     <select id="getMyPageInfo" resultMap="myPageInfoMap">
         SELECT m.name, m.email, m.phone, mc.coupon_product_id, mc.coupon_name, mc.coupon_category, mc.discount_value, mc.coupon_status, mc.expired_at
-        ,b.name, b.email, b.phone, b.request_text, b.check_in_date, b.check_out_date, b.total_price, b.status, b.booked_at, b.room_name, b.accommodation_name, b.address
         FROM member m
             LEFT JOIN member_coupon mc
                 ON m.id = mc.member_id
-            LEFT JOIN bookings b
-                ON m.id = b.member_id
         WHERE m.id = #{memberId}
     </select>
 
-    
+    <select id="getBookingsByMemberId" resultMap="bookingMap">
+        SELECT
+            b.id AS id,
+            b.name,
+            b.email,
+            b.phone,
+            b.request_text,
+            b.check_in_date,
+            b.check_out_date,
+            b.total_price,
+            b.status,
+            b.booked_at,
+            r.name AS room_name,
+            a.name AS accommodation_name,
+            a.address
+        FROM
+            bookings AS b
+                INNER JOIN
+            rooms AS r ON b.room_id = r.id
+                INNER JOIN
+            accommodations AS a ON r.accommodation_id = a.id
+        WHERE
+            b.member_id = #{memberId}
+        ORDER BY
+            b.check_in_date DESC
+    </select>
+
     <resultMap id="myPageInfoMap" type="org.cardGGaduekMainService.member.dto.MyPageDTO" >
         <result column="name" property="name" />
         <result column="email" property="email" />
