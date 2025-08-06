@@ -2,6 +2,7 @@ package org.cardGGaduekMainService.cardProduct.controller;
 
 import org.cardGGaduekMainService.cardProduct.domain.CardProductVO;
 import org.cardGGaduekMainService.cardProduct.dto.CardProductDTO;
+import org.cardGGaduekMainService.cardProduct.dto.CardProductDetailDTO;
 import org.cardGGaduekMainService.cardProduct.service.CardProductService;
 import org.cardGGaduekMainService.response.ApiResponse;
 import org.cardGGaduekMainService.response.SuccessCode;
@@ -30,8 +31,8 @@ public class CardProductsController {
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<ApiResponse<CardProductVO>> getCardProductDetail(@PathVariable Long productId){
-        CardProductVO cardProduct = cardProductService.getCardProductDetail(productId);
+    public ResponseEntity<ApiResponse<CardProductDetailDTO>> getCardProductDetail(@PathVariable Long productId){
+        CardProductDetailDTO cardProduct = cardProductService.getCardProductDetail(productId);
 
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARDPRODUCT_FETCH_SUCCESS, cardProduct));
     }

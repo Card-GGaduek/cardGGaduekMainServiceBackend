@@ -2,6 +2,7 @@ package org.cardGGaduekMainService.cardProduct.mapper;
 
 import org.cardGGaduekMainService.cardProduct.domain.CardProductVO;
 import org.cardGGaduekMainService.cardProduct.dto.CardProductDTO;
+import org.cardGGaduekMainService.cardProduct.dto.CardProductDetailDTO;
 
 import java.util.List;
 
@@ -10,4 +11,6 @@ public interface CardProductMapper {
     List<CardProductDTO> findAllCardProducts();
     CardProductVO findCardProductDetail(Long id);
     String findNameById(Long cardProductId);
+
+    List<CardProductDetailDTO> findDetailById(Long id);
 }
