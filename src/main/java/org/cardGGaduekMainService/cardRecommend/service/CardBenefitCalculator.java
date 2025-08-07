@@ -15,25 +15,25 @@ import static java.util.stream.Collectors.groupingBy;
 @RequiredArgsConstructor
 public class CardBenefitCalculator {
 
-    private final StoreBenefitMapper ruleMapper;
+    private final StoreBenefitMapper storeBenefitMapper;
 
     public CardBenefitDTO calc(CardProductVO prod,
                                Map<String,Integer> spend,
                                boolean owned) {
 
-        var ruleByStore = ruleMapper.findByCardProductId(prod.getId())
+        var ruleByStore = storeBenefitMapper.findByCardProductId(prod.getId())
                 .stream()
                 .collect(groupingBy(StoreBenefitVO::getStoreName));
 
-        Map<String,Integer> byStore = new LinkedHashMap<>();
-        int total = 0;
+        Map<String,Integer> benefitByStore = new LinkedHashMap<>();
+        int benefitTotal = 0;
         for (var e : spend.entrySet()) {
             int best = ruleByStore.getOrDefault(e.getKey(), List.of())
                     .stream()
                     .mapToInt(r -> BenefitUtil.toWon(e.getValue(), r))
                     .max().orElse(0);
-            byStore.put(e.getKey(), best);
-            total += best;
+            benefitByStore.put(e.getKey(), best);
+            benefitTotal += best;
         }
 
         boolean ok = spend.values().stream().mapToInt(Integer::intValue).sum()
@@ -44,8 +44,10 @@ public class CardBenefitCalculator {
                 .cardProductName(prod.getCardProductName())
                 .owned(owned)
                 .meetsRequiredSpend(ok)
-                .benefitByStore(new BenefitByStoreDTO(byStore))
-                .totalBenefit(total)
+                //매장별 할인 및 환급액
+                .benefitByStore(new BenefitByStoreDTO(benefitByStore))
+                //총 할인 및 환급액
+                .totalBenefit(benefitTotal)
                 .build();
     }
 }

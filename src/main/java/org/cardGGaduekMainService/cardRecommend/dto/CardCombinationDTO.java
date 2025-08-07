@@ -7,8 +7,9 @@ import java.util.List;
 
 @Data
 @Builder
-public class CombinationDTO {
-
+public class CardCombinationDTO {
+    //카드 조합 dto
     private List<CardBenefitDTO> cards;
+    // 카드 조합의 총 예상 캐시백 금액
     private int aggregateBenefit;
 }

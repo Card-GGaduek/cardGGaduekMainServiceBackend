@@ -1,8 +1,8 @@
 package org.cardGGaduekMainService.cardRecommend.service;
 
-import org.cardGGaduekMainService.cardRecommend.dto.RecommendDTO;
+import org.cardGGaduekMainService.cardRecommend.dto.CardRecommendDTO;
 
 public interface RecommendationService {
 
-    RecommendDTO build(Long memberId);
+    CardRecommendDTO build(Long memberId);
 }

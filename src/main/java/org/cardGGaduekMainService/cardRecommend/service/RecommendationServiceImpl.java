@@ -13,14 +13,15 @@ import static java.util.stream.Collectors.toSet;
 public class RecommendationServiceImpl implements RecommendationService {
 
     private final CardMapper cardMapper;
-    private final CardProductMapper productMapper;
+    private final CardProductMapper cardProductMapper;
     private final CardBenefitCalculator calc;
-    private final SpendPredictionService spendSvc;
+    private final SpendPredictionService spendpredictionService;
 
     @Override
-    public RecommendDTO build(Long memberId) {
+    public CardRecommendDTO build(Long memberId) {
 
-        Map<String,Integer> spend = spendSvc.predict(memberId);
+        // 예측된 지출 정보 가져오기
+        Map<String,Integer> spend = spendpredictionService.predict(memberId);
 
         /* 1. 보유 카드 */
         List<CardVO> ownedCards = cardMapper.findValidByMember(memberId);
@@ -28,36 +29,36 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .map(CardVO::getCardProductId)
                 .collect(toSet());
 
-        List<CardBenefitDTO> ownedDtos = ownedCards.stream().map(c ->
-                calc.calc(productMapper.findById(c.getCardProductId()), spend, true)
+        List<CardBenefitDTO> ownedCardDTO = ownedCards.stream().map(c ->
+                calc.calc(cardProductMapper.findById(c.getCardProductId()), spend, true)
         ).toList();
 
-        CombinationDTO current = CombinationDTO.builder()
-                .cards(ownedDtos)
+        CardCombinationDTO currentCard = CardCombinationDTO.builder()
+                .cards(ownedCardDTO)
                 .aggregateBenefit(
-                        ownedDtos.stream().mapToInt(CardBenefitDTO::getTotalBenefit).sum())
+                        ownedCardDTO.stream().mapToInt(CardBenefitDTO::getTotalBenefit).sum())
                 .build();
 
         /* 2. 후보 풀 (보유 포함) */
-        List<CardBenefitDTO> pool = productMapper.findAllActive().stream()
+        List<CardBenefitDTO> poolCard = cardProductMapper.findAllActive().stream()
                 .map(p -> calc.calc(p, spend, ownedIds.contains(p.getId())))
                 .toList();
 
-        List<CardBenefitDTO> best = greedy(pool);
-        int bestAgg = best.stream().mapToInt(CardBenefitDTO::getTotalBenefit).sum();
+        List<CardBenefitDTO> best = greedy(poolCard);
+        int bestAggBenefit = best.stream().mapToInt(CardBenefitDTO::getTotalBenefit).sum();
 
-        return RecommendDTO.builder()
+        return CardRecommendDTO.builder()
                 .memberId(memberId)
-                .current(current)
+                .current(currentCard)
                 .recommendation(
-                        CombinationDTO.builder().cards(best).aggregateBenefit(bestAgg).build())
-                .additionalSaving(bestAgg - current.getAggregateBenefit())
-                .predictionModel("RF")
+                        CardCombinationDTO.builder().cards(best).aggregateBenefit(bestAggBenefit).build())
+                .additionalSaving(bestAggBenefit - currentCard.getAggregateBenefit())
+                .predictionModel("XGBoost")
                 .build();
     }
 
     /* Greedy Top-3 */
-    private List<CardBenefitDTO> greedy(List<CardBenefitDTO> pool) {
+    private List<CardBenefitDTO> greedy(List<CardBenefitDTO> poolCard) {
 
         Set<String> covered = new HashSet<>();
         List<CardBenefitDTO> picks = new ArrayList<>();
@@ -65,14 +66,14 @@ public class RecommendationServiceImpl implements RecommendationService {
         while (picks.size() < 3) {
             CardBenefitDTO best = null; int bestGain = -1;
 
-            for (CardBenefitDTO cand : pool) {
-                if (picks.contains(cand) || !cand.isMeetsRequiredSpend()) continue;
+            for (CardBenefitDTO cardBenefitDTO : poolCard) {
+                if (picks.contains(cardBenefitDTO) || !cardBenefitDTO.isMeetsRequiredSpend()) continue;
 
-                int gain = cand.getBenefitByStore().map().entrySet().stream()
+                int gain = cardBenefitDTO.getBenefitByStore().map().entrySet().stream()
                         .filter(e -> !covered.contains(e.getKey()))
                         .mapToInt(Map.Entry::getValue).sum();
 
-                if (gain > bestGain) { bestGain = gain; best = cand; }
+                if (gain > bestGain) { bestGain = gain; best = cardBenefitDTO; }
             }
             if (best == null) break;
             picks.add(best);
