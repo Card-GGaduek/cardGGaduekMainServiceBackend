@@ -18,4 +18,5 @@ public class MyPageDTO {
     private String email;
     private String phone;
     private List<MyCouponDTO> couponList;
+    private List<MyBookingDTO> bookingList;
 }

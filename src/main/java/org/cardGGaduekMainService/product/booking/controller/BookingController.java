@@ -39,7 +39,8 @@ public class BookingController {
     }
 
     @PostMapping("/price")
-    public ResponseEntity<ApiResponse<PriceResponseDTO>> getPrice(@RequestBody PriceRequestDTO priceRequestDTO){
+    public ResponseEntity<ApiResponse<PriceResponseDTO>> getPrice(@RequestBody PriceRequestDTO priceRequestDTO, @AuthenticationPrincipal LoginMember loginMember){
+        priceRequestDTO.setMemberId(loginMember.getId());
         PriceResponseDTO priceResponseDTO = bookingService.calculatePrice(priceRequestDTO);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_FETCH_SUCCESS, priceResponseDTO));
     }
