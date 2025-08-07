@@ -22,6 +22,7 @@ public interface CardMapper {
     int softDeleteCard(@Param("cardId") Long cardId);   // is_valid=0으로 업데이트
     void updateCustomImageUrl(@Param("cardId") Long cardId, @Param("imageUrl") String imageUrl);
   
+
     /**
      * 특정 카드가 특정 회원의 소유인지 확인합니다.
      * @param cardId 확인할 카드 ID

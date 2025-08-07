@@ -27,7 +27,7 @@ public class MemberCouponController {
     private MemberCouponService memberCouponService;
 
     // 이전에 사용하던 메소드는 그대로 두거나, 아래와 같이 수정합니다.
-    @GetMapping("/coupons/{memberId}")
+    @GetMapping("/coupons")
     @ResponseBody
     public ResponseEntity<ApiResponse<MemberCouponDTO>> getMyCouponsWithDetails(@AuthenticationPrincipal LoginMember loginMember) { // 메소드 이름과 파라미터는 편의에 맞게 수정 가능
 

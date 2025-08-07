@@ -30,12 +30,40 @@
         WHERE member.naver_user_id = #{naverId}
     </select>
     <select id="getMyPageInfo" resultMap="myPageInfoMap">
-        SELECT m.name, m.email, m.phone, mc.coupon_product_id, mc.coupon_name, mc.coupon_category, mc.discount_value, mc.coupon_status, mc.expired_at FROM member m
+        SELECT m.name, m.email, m.phone, mc.coupon_product_id, mc.coupon_name, mc.coupon_category, mc.discount_value, mc.coupon_status, mc.expired_at
+        FROM member m
             LEFT JOIN member_coupon mc
                 ON m.id = mc.member_id
         WHERE m.id = #{memberId}
     </select>
-    
+
+    <select id="getBookingsByMemberId" resultMap="bookingMap">
+        SELECT
+            b.id AS id,
+            b.name,
+            b.email,
+            b.phone,
+            b.request_text,
+            b.check_in_date,
+            b.check_out_date,
+            b.total_price,
+            b.status,
+            b.booked_at,
+            r.name AS room_name,
+            a.name AS accommodation_name,
+            a.address
+        FROM
+            bookings AS b
+                INNER JOIN
+            rooms AS r ON b.room_id = r.id
+                INNER JOIN
+            accommodations AS a ON r.accommodation_id = a.id
+        WHERE
+            b.member_id = #{memberId}
+        ORDER BY
+            b.check_in_date DESC
+    </select>
+
     <resultMap id="myPageInfoMap" type="org.cardGGaduekMainService.member.dto.MyPageDTO" >
         <result column="name" property="name" />
         <result column="email" property="email" />
@@ -52,6 +80,21 @@
         <result column="expired_at" property="expiredAt" />
     </resultMap>
 
+    <resultMap id="bookingMap" type="org.cardGGaduekMainService.member.dto.MyBookingDTO" >
+        <result column="id" property="bookingId" />
+        <result column="name" property="name" />
+        <result column="phone" property="phone" />
+        <result column="email" property="email" />
+        <result column="request_text" property="requestText" />
+        <result column="check_in_date" property="checkInDate" />
+        <result column="check_out_date" property="checkOutDate" />
+        <result column="total_price" property="totalPrice" />
+        <result column="status" property="status" />
+        <result column="booked_at" property="bookedAt" />
+        <result column="room_name" property="roomName" />
+        <result column="accommodation_name" property="accommodationName" />
+        <result column="address" property="address" />
+    </resultMap>
     <update id="updateMember" parameterType="org.cardGGaduekMainService.member.dto.MemberUpdateDTO">
         UPDATE
             member

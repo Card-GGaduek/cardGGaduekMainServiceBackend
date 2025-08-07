@@ -60,8 +60,9 @@ public enum SuccessCode {
     MEMBER_FETCH_SUCCESS(305, "회원 조회 성공"),
 
     // TOTAL_BENEFIT
-    TOTAL_BENEFIT_FETCH_SUCCESS(901, "총 혜택 정보 조회 성공");
+    TOTAL_BENEFIT_FETCH_SUCCESS(901, "총 혜택 정보 조회 성공"),
 
+    CATEGORY_FETCH_SUCCESS(803, "카테고리 혜택 조회 성공");
 
     private final int code;
     private final String message;
