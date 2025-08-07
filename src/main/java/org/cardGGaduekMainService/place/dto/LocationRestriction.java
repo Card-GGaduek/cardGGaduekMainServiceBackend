@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class LocationBias{
+public class LocationRestriction {
 	private Rectangle rectangle;
 }

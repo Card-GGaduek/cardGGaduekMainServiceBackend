@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 public class PlaceSearchRequest {
     private String textQuery;
     private String languageCode;
-    private LocationBias locationBias;
+    private LocationRestriction locationRestriction;
     private String category;
 
 }

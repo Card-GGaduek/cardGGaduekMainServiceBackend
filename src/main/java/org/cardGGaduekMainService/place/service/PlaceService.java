@@ -56,7 +56,7 @@ public class PlaceService {
         rectangle.put("high", high);
         locationBias.put("rectangle", rectangle);
 
-        bodyMap.put("locationBias", locationBias);
+        bodyMap.put("locationRestriction", locationBias);
 
         ObjectMapper objectMapper = new ObjectMapper();
 
