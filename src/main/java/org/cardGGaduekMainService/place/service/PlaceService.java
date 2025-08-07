@@ -6,17 +6,15 @@ import org.apache.logging.log4j.LogManager;
 import org.cardGGaduekMainService.common.util.HttpClientUtil;
 import org.cardGGaduekMainService.exception.CustomException;
 import org.cardGGaduekMainService.exception.ErrorCode;
-import org.cardGGaduekMainService.place.dto.GoogleApiResponse;
-import org.cardGGaduekMainService.place.dto.PlaceResponse;
+import org.cardGGaduekMainService.place.dto2.request.PlaceRequest;
+import org.cardGGaduekMainService.place.dto2.response.PlaceList;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -29,57 +27,23 @@ public class PlaceService {
     @Value("${google.apikey}")
     private String googleApiKey;
     private final String GOOGLE_MAPS_API_URL = "https://places.googleapis.com/v1/places:searchText";
-    public PlaceResponse findPlaceByName(String textQuery, Double minLat, Double minLon, Double maxLat, Double maxLon) {
+    private final ObjectMapper objectMapper = new ObjectMapper();
+
+
+    public PlaceList findPlaceByName(PlaceRequest placeRequest) {
 
         Map<String, String> headers = new HashMap<>();
         headers.put("Content-Type", "application/json");
-        headers.put("X-Goog-FieldMask", "places.displayName,places.formattedAddress,places.location,places.primaryType");
+        headers.put("X-Goog-FieldMask", "places.displayName,places.formattedAddress,places.location,places.primaryType,places.types");
         headers.put("X-Goog-Api-Key", googleApiKey);
 
-        Map<String, Object> bodyMap = new HashMap<>();
-        bodyMap.put("textQuery", textQuery);
-        bodyMap.put("languageCode", "ko");
-
-        // Google Places API의 rectangle 기반 locationBias 정의
-        Map<String, Object> locationBias = new HashMap<>();
-        Map<String, Object> rectangle = new HashMap<>();
-
-        Map<String, Object> low = new HashMap<>();
-        low.put("latitude", minLat);
-        low.put("longitude", minLon);
-
-        Map<String, Object> high = new HashMap<>();
-        high.put("latitude", maxLat);
-        high.put("longitude", maxLon);
-
-        rectangle.put("low", low);
-        rectangle.put("high", high);
-        locationBias.put("rectangle", rectangle);
-
-        bodyMap.put("locationBias", locationBias);
-
-        ObjectMapper objectMapper = new ObjectMapper();
 
         try {
-            String jsonRequestBody = objectMapper.writeValueAsString(bodyMap);
+            String jsonRequestBody = objectMapper.writeValueAsString(placeRequest);
             String response = (String) HttpClientUtil.post(GOOGLE_MAPS_API_URL, headers, jsonRequestBody);
             log.debug("Google API 응답: {}", response);
 
-            GoogleApiResponse googleApiResponse = objectMapper.readValue(response, GoogleApiResponse.class);
-
-            List<PlaceResponse.PlaceDTO> places = googleApiResponse.getPlaces().stream()
-                    .map(place -> new PlaceResponse.PlaceDTO(
-                            place.getDisplayName().getText(),
-                            place.getFormattedAddress(),
-                            place.getPrimaryType(),
-                            new PlaceResponse.LocationDTO(
-                                    place.getLocation().getLatitude(),
-                                    place.getLocation().getLongitude()
-                            )
-                    ))
-                    .collect(Collectors.toList());
-
-            return new PlaceResponse(places);
+            return objectMapper.readValue(response, PlaceList.class);
 
         } catch (Exception e) {
             log.error("Google API 호출 또는 파싱 실패", e);
