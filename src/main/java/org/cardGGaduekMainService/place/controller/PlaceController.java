@@ -21,10 +21,10 @@ public class PlaceController {
     public ResponseEntity<ApiResponse<PlaceResponse>> findPlaceByName(@RequestBody PlaceSearchRequest request) {
         String textQuery = request.getTextQuery();
         String languageCode = request.getLanguageCode();
-        Double minLat = request.getLocationBias().getRectangle().getLow().getLatitude();
-        Double maxLat = request.getLocationBias().getRectangle().getHigh().getLatitude();
-        Double minLon = request.getLocationBias().getRectangle().getLow().getLongitude();
-        Double maxLon = request.getLocationBias().getRectangle().getHigh().getLongitude();
+        Double minLat = request.getLocationRestriction().getRectangle().getLow().getLatitude();
+        Double maxLat = request.getLocationRestriction().getRectangle().getHigh().getLatitude();
+        Double minLon = request.getLocationRestriction().getRectangle().getLow().getLongitude();
+        Double maxLon = request.getLocationRestriction().getRectangle().getHigh().getLongitude();
         String category = request.getCategory();
 
         PlaceResponse response = placeService.findPlaceByName(textQuery, minLat, minLon,maxLat,maxLon);
