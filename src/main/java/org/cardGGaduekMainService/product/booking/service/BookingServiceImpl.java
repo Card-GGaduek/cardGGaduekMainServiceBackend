@@ -39,6 +39,8 @@ public class BookingServiceImpl implements BookingService{
         this.cardMapper = cardMapper;
     }
 
+
+
     @Override
     @Transactional(readOnly = true)
     public PriceResponseDTO calculatePrice(PriceRequestDTO priceRequest){
@@ -175,5 +177,11 @@ public class BookingServiceImpl implements BookingService{
     @Transactional(readOnly = true)
     public List<BookingDetailDTO> findBookingsByMemberId(Long memberId){
         return bookingMapper.findBookingDetailsByMemberId(memberId);
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public List<BookingDetailDTO> findBookingsByAccommodationId(Long accommodationId){
+        return bookingMapper.getBookingsByAccommodationId(accommodationId);
     }
 }

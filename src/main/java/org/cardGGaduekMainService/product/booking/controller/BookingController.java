@@ -1,5 +1,6 @@
 package org.cardGGaduekMainService.product.booking.controller;
 
+import com.google.protobuf.Api;
 import org.apache.ibatis.javassist.bytecode.annotation.LongMemberValue;
 import org.cardGGaduekMainService.auth.dto.LoginMember;
 import org.cardGGaduekMainService.product.booking.dto.BookingDetailDTO;
@@ -48,6 +49,12 @@ public class BookingController {
     public ResponseEntity<ApiResponse<List<BookingDetailDTO>>> handleGetBookingsByMemberId(@AuthenticationPrincipal LoginMember loginMember) {
         // 서비스 계층을 호출하여 예약 내역을 조회합니다.
         List<BookingDetailDTO> bookings = bookingService.findBookingsByMemberId(loginMember.getId());
+
+        return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_FETCH_SUCCESS, bookings));
+    }
+    @GetMapping("/{accommodationId}")
+    public ResponseEntity<ApiResponse<List<BookingDetailDTO>>> getBookingByAccommodationId(@PathVariable("accommodationId") Long accommodationId) {
+        List<BookingDetailDTO> bookings = bookingService.findBookingsByAccommodationId(accommodationId);
 
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_FETCH_SUCCESS, bookings));
     }
