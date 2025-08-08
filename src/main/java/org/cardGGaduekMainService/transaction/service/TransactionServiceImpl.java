@@ -65,10 +65,12 @@ public class TransactionServiceImpl implements TransactionService {
                 .map(entry -> {
                     Long cardId        = entry.getKey();
                     List<CTransactionDTO> txList = entry.getValue();
+                    Long cardProductId = txList.get(0).getCardProductId();
                     String cardName    = txList.get(0).getCardName();
 
                     return CardTransactionsDTO.builder()
                             .cardId(cardId)
+                            .cardProductId(cardProductId)
                             .cardName(cardName)
                             .transactions(txList)
                             .build();

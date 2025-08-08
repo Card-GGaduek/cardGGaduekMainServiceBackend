@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CardPerformanceVO {
 
-    private Long cardId;
+    private Long cardProductId;
     private String cardProductName;
     private Long requiredMonthlySpent;
     private Long spentAmount;

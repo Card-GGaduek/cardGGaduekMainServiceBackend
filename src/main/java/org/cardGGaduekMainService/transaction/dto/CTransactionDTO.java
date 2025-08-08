@@ -16,6 +16,8 @@ public class CTransactionDTO {
 
     private Long id;
     private Long cardId;
+    @JsonIgnore
+    private Long cardProductId;
     private String storeName;
     private BigDecimal amount;
     @JsonIgnore

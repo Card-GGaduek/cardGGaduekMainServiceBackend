@@ -31,7 +31,7 @@ public class CardPerformanceServiceImpl implements CardPerformanceService {
         }
         return cardPerformances.stream()
                 .map(vo -> CardPerformanceDTO.builder()
-                        .cardId(vo.getCardId())
+                        .cardProductId(vo.getCardProductId())
                         .yearMonth(yearMonthString)
                         .cardProductName(vo.getCardProductName())
                         .requiredMonthlySpent(vo.getRequiredMonthlySpent())
