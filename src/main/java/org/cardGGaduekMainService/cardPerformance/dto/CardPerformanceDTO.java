@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class CardPerformanceDTO {
 
-    private Long cardId;
+    private Long cardProductId;
     private String ownerName;
     private String yearMonth;
     private String cardProductName;

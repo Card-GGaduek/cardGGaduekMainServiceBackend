@@ -5,7 +5,7 @@
 <mapper namespace="org.cardGGaduekMainService.cardPerformance.mapper.CardPerformanceMapper">
 
     <resultMap id="CardPerformanceResultMap" type="org.cardGGaduekMainService.cardPerformance.domain.CardPerformanceVO">
-        <result property="cardId"                  column="card_id"/>
+        <result property="cardProductId"                  column="card_product_id"/>
         <result property="cardProductName"         column="card_product_name"/>
         <result property="requiredMonthlySpent" column="required_monthly_spent"/>
         <result property="cardImageUrl"            column="card_image_url"/>
@@ -15,7 +15,7 @@
     <select id="selectByMemberId"
             resultMap="CardPerformanceResultMap">
         SELECT
-            cp.id                                AS card_id,
+            cp.id                                AS card_product_id,
             cp.card_product_name                 AS card_product_name,
             cp.required_monthly_spent        AS required_monthly_spent,
             cp.card_image_url                AS card_image_url,

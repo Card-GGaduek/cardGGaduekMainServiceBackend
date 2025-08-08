@@ -44,6 +44,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.cardSummary.mapper",
         "org.cardGGaduekMainService.main.mapper",
         "org.cardGGaduekMainService.totalbenefit.mapper",
+        "org.cardGGaduekMainService.cardRecommend.mapper",
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
@@ -73,6 +74,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.config",
         "org.cardGGaduekMainService.main.service",
         "org.cardGGaduekMainService.totalbenefit.service",
+        "org.cardGGaduekMainService.cardRecommend.service",
         
 })
 public class RootConfig {

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cardGGaduekMainService.cardRecommend.mapper.StoreBenefitMapper">
+    <resultMap id="BenefitMap" type="org.cardGGaduekMainService.cardRecommend.domain.StoreBenefitVO"/>
+    <select id="findByCardProductId"
+            parameterType="long"
+            resultType="org.cardGGaduekMainService.cardRecommend.domain.StoreBenefitVO">
+        SELECT store_name,
+               benefit_type,
+               value_type,
+               rate_value,
+               amount_value
+        FROM store_benefit
+        WHERE card_product_id = #{cardProductId}
+    </select>
+</mapper>

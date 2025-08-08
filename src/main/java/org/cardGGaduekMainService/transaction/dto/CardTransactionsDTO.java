@@ -15,6 +15,7 @@ import java.util.List;
 public class CardTransactionsDTO {
     //카드아이디
     private Long cardId;
+    private Long cardProductId;
     private String cardName;
     private List<CTransactionDTO> transactions;
 }

@@ -21,6 +21,7 @@
     <resultMap id="TransactionMap" type="org.cardGGaduekMainService.transaction.dto.CTransactionDTO">
         <id     property="id"         column="id" />
         <result property="cardId"     column="card_id" />
+        <result property="cardProductId"  column="card_product_id" />
         <result property="storeName"  column="store_name"/>
         <result property="amount"     column="amount" />
         <result property="transDate"  column="date" />
@@ -33,6 +34,7 @@
         SELECT
             t.id,
             t.card_id,
+            c.card_product_id,
             t.store_name,
             t.amount,
             t.date,
