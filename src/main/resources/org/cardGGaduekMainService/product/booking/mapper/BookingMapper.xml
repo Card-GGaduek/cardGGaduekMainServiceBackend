@@ -134,6 +134,20 @@
         ]]>
     LIMIT 1
     </select>
+    <select id="getBookingsByAccommodationId" parameterType="long"
+            resultType="org.cardGGaduekMainService.product.booking.dto.BookingDetailDTO">
+        SELECT
+            b.id              AS bookingId,
+            b.check_in_date   AS checkInDate,
+            b.check_out_date  AS checkOutDate,
+            b.status
+        FROM
+            bookings b
+                INNER JOIN
+            rooms r ON b.room_id = r.id
+        WHERE
+            r.accommodation_id = #{accommodationId}
+    </select>
 
     <update id="cancelOldPendingBookings">
         UPDATE bookings

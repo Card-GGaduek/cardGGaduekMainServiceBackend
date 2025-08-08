@@ -30,4 +30,5 @@ public interface BookingMapper {
     );
 
     void cancelOldPendingBookings();
+    List<BookingDetailDTO> getBookingsByAccommodationId(Long accommodationId);
 }

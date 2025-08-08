@@ -19,7 +19,7 @@
         cpc.category_name = #{categoryName}
         AND EXISTS (
         -- 사용자가 가진 카드 중, 이 카테고리 혜택이 하나라도 있는지 확인
-        SELECT 1
+        SELECT *
         FROM store_benefit cb
         WHERE
         cb.store_category = #{categoryName} -- 💡 카테고리 이름으로 직접 비교

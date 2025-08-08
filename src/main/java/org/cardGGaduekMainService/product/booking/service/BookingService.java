@@ -22,5 +22,7 @@ public interface BookingService {
     List<BookingDetailDTO> findBookingsByMemberId(Long memberId);
 
     PriceResponseDTO calculatePrice(PriceRequestDTO priceRequest);
+
+    List<BookingDetailDTO> findBookingsByAccommodationId(Long accommodationId);
     //    void completePayment(Long bookingId);
 }
