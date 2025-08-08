@@ -9,6 +9,8 @@ import org.cardGGaduekMainService.cardRecommend.util.BenefitUtil;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.Optional;
+
 import static java.util.stream.Collectors.groupingBy;
 
 @Service
@@ -28,25 +30,36 @@ public class CardBenefitCalculator {
         Map<String,Integer> benefitByStore = new LinkedHashMap<>();
         int benefitTotal = 0;
         for (var e : spend.entrySet()) {
-            int best = ruleByStore.getOrDefault(e.getKey(), List.of())
+            String store = e.getKey();
+            if ("total".equals(store)) continue; // total 키 제외
+
+            int best = ruleByStore.getOrDefault(store, List.of())
                     .stream()
                     .mapToInt(r -> BenefitUtil.toWon(e.getValue(), r))
                     .max().orElse(0);
-            benefitByStore.put(e.getKey(), best);
+            benefitByStore.put(store, best);
             benefitTotal += best;
         }
 
-        boolean ok = spend.values().stream().mapToInt(Integer::intValue).sum()
-                >= prod.getRequiredMonthlySpent();
+        int required = Optional.ofNullable(prod.getRequiredMonthlySpent()).orElse(0L).intValue();
+        // total 계산은 "total" 키가 있으면 그걸 쓰고, 없으면 가맹점 합으로 계산
+        int totalPredicted = Optional.ofNullable(spend.get("total"))
+                .orElseGet(() -> spend.entrySet().stream()
+                        .filter(en -> !"total".equals(en.getKey()))
+                        .mapToInt(Map.Entry::getValue)
+                        .sum());
+
+        // 카드 1장 기준 최소실적 충족 여부
+        boolean ok = totalPredicted >= required;
 
         return CardBenefitDTO.builder()
                 .cardProductId(prod.getId())
                 .cardProductName(prod.getCardProductName())
+                .cardProductImageUrl(prod.getCardImageUrl())
                 .owned(owned)
                 .meetsRequiredSpend(ok)
-                //매장별 할인 및 환급액
                 .benefitByStore(new BenefitByStoreDTO(benefitByStore))
-                //총 할인 및 환급액
+                .requiredMonthlySpent(required)
                 .totalBenefit(benefitTotal)
                 .build();
     }
