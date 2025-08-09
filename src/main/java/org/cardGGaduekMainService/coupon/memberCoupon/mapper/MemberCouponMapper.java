@@ -52,7 +52,7 @@ public interface MemberCouponMapper {
 
     MemberCouponVO findByMemberIdAndCouponId(
             @Param("memberId") Long memberId,
-            @Param("id") Long couponProductId
+            @Param("couponProductId") Long couponProductId
     );
 
     int insertMemberCoupon(
