@@ -1,5 +1,6 @@
 package org.cardGGaduekMainService.coupon.memberCoupon.service;
 
+import lombok.extern.log4j.Log4j2;
 import org.cardGGaduekMainService.coupon.memberCoupon.domain.MemberCouponVO;
 import org.cardGGaduekMainService.coupon.memberCoupon.mapper.MemberCouponMapper;
 import org.cardGGaduekMainService.member.dto.MemberCouponDTO;
@@ -13,6 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+@Log4j2
 @Service
 public class MemberCouponServiceImpl implements MemberCouponService {
 
@@ -54,4 +56,23 @@ public class MemberCouponServiceImpl implements MemberCouponService {
     }
     // MemberCouponService 인터페이스에 정의된 다른 메소드들도 여기에 구현해야 합니다.
     // (예: issueCoupon, useCoupon 등)
+
+    public void issueCouponByMissionReward(Long memberId, Long couponProductId) {
+        // 1. 중복 발급 여부 확인
+        MemberCouponVO existing = memberCouponMapper.findByMemberIdAndCouponId(memberId, couponProductId);
+        if (existing != null) {
+            // 이미 발급된 쿠폰
+            log.info("⚠️ 이미 발급된 쿠폰입니다 - memberId={}, couponProductId={}", memberId, couponProductId);
+            return;
+        }
+
+        // 2. 신규 발급
+        int result = memberCouponMapper.insertMemberCoupon(memberId, couponProductId);
+        if (result > 0) {
+            log.info("✅ 쿠폰 발급 완료 - memberId={}, couponProductId={}", memberId, couponProductId);
+        } else {
+            log.warn("❌ 쿠폰 발급 실패 - memberId={}, couponProductId={}", memberId, couponProductId);
+        }
+    }
+
 }

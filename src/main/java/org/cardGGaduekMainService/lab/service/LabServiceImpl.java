@@ -39,13 +39,6 @@ public class LabServiceImpl implements LabService {
         return list.stream().map(MissionProgressDTO::from).collect(Collectors.toList());
     }
 
-    @Override
-    public List<MissionProgressDTO> getMissionProgress(Long memberId) {
-        List<MissionProgressVO> list = labMapper.selectMissionProgressByMemberId(memberId);
-        if (list == null || list.isEmpty()) return List.of();
-        return list.stream().map(MissionProgressDTO::from).collect(Collectors.toList());
-    }
-
     private void ensureMissionProgressExists(Long memberId) {
         List<Long> existingMissionIds = labMapper.selectMissionIdsInProgressByMember(memberId);
         List<Long> allCurrentMissionIds = labMapper.selectCurrentMissionIds(); // 기간 유효한 모든 미션
@@ -72,7 +65,7 @@ public class LabServiceImpl implements LabService {
         // 🔥 업데이트 후 진행 상황 조회 및 미션 성공 체크
         List<MissionProgressVO> afterUpdate = labMapper.selectAllMissionsWithProgress(memberId);
 
-        checkAndIssueCouponsForCompletedMissions(memberId, beforeUpdate, afterUpdate);
+//        checkAndIssueCouponsForCompletedMissions(memberId, beforeUpdate, afterUpdate);
     }
 
     @Transactional
@@ -87,34 +80,25 @@ public class LabServiceImpl implements LabService {
     }
 
     @Override
-    @Transactional
-    public void syncMissionProgressWithTransactions(Long memberId) {
-        // 🔹 미션 진행 현황이 없으면 자동 생성
-        ensureMissionProgressExists(memberId);
-
-        // 🔹 실제 거래 건수 기반으로 모든 미션 진행률 재계산
-        recalculateAndUpdateMissionProgress(memberId);
+    public List<MissionProgressVO> getAllMissionsWithProgressVO(Long memberId) {
+        List<MissionProgressVO> list = labMapper.selectAllMissionsWithProgress(memberId);
+        return (list != null) ? list : List.of();
     }
-
 
     @Override
-    public FortuneResponseDTO drawTodayFortune(Long memberId) {
-        // 이미 뽑았는지 확인
-        FortuneVO today = labMapper.selectTodayFortuneByMemberId(memberId);
-        if (today != null) return FortuneResponseDTO.from(today);
+    @Transactional
+    public void syncMissionProgressWithTransactions(Long memberId) {
+        log.warn("✅ syncMissionProgressWithTransactions called for memberId={}", memberId);
 
-        // 아직 안 뽑았다면 랜덤으로 Fortune 생성
-        FortuneLevel randomLevel = FortuneLevel.getRandom(); // 랜덤 FortuneLevel
-        LuckyItemVO randomItem = labMapper.selectRandomLuckyItem(); // 랜덤 LuckyItem (mapper 작성 필요)
+        ensureMissionProgressExists(memberId); // 최초 진입 시 VO 생성용
 
-        // insert용 VO 구성
-        labMapper.insertFortune(memberId, randomLevel.getIndex(), randomItem.getId());
+        recalculateAndUpdateMissionProgress(memberId); // 거래 기반으로 진행률 업데이트
 
-        // 다시 조회해서 결과 반환
-        FortuneVO result = labMapper.selectTodayFortuneByMemberId(memberId);
-        return FortuneResponseDTO.from(result);
+        List<MissionProgressVO> progressList = getAllMissionsWithProgressVO(memberId);   // 진행률 계산 후
+
+        checkAndIssueCouponsForCompletedMissions(memberId, progressList); // 쿠폰 발급
+
     }
-
 
     @Override
     public FortuneResponseDTO getTodayFortune(Long memberId) {
@@ -184,30 +168,21 @@ public class LabServiceImpl implements LabService {
         }
     }
 
-    // 🔥 새로 추가할 메서드
-    private void checkAndIssueCouponsForCompletedMissions(Long memberId,
-                                                          List<MissionProgressVO> beforeUpdate,
-                                                          List<MissionProgressVO> afterUpdate) {
+    private void checkAndIssueCouponsForCompletedMissions(Long memberId, List<MissionProgressVO> progressList) {
+        for (MissionProgressVO progress : progressList) {
+            boolean isCompleted = progress.getProgressValue() >= progress.getGoalValue();
 
-        for (int i = 0; i < beforeUpdate.size() && i < afterUpdate.size(); i++) {
-            MissionProgressVO before = beforeUpdate.get(i);
-            MissionProgressVO after = afterUpdate.get(i);
-
-            // 미션 성공 조건: 업데이트 전에는 미완료, 업데이트 후에는 완료
-            boolean wasIncomplete = before.getProgressValue() < before.getGoalValue();
-            boolean isNowComplete = after.getProgressValue() >= after.getGoalValue();
-
-            if (wasIncomplete && isNowComplete) {
-                // 🎉 미션 성공! 쿠폰 발급
+            if (isCompleted) {
                 try {
-                    couponProductService.issueCouponByMissionReward(memberId, after.getReward());
-                    log.info("미션 성공 쿠폰 발급 완료 - memberId: {}, mission: {}, reward: {}",
-                            memberId, after.getMissionTitle(), after.getReward());
+                    couponProductService.issueCouponByMissionReward(memberId, progress.getReward());
+                    log.info("✅ 미션 성공 쿠폰 발급 시도 - memberId: {}, mission: {}, reward: {}",
+                            memberId, progress.getMissionTitle(), progress.getReward());
                 } catch (Exception e) {
-                    log.error("미션 성공 쿠폰 발급 실패 - memberId: {}, mission: {}",
-                            memberId, after.getMissionTitle(), e);
+                    log.error("❌ 미션 쿠폰 발급 실패 - memberId: {}, mission: {}", memberId, progress.getMissionTitle(), e);
                 }
             }
         }
     }
+
+
 }
