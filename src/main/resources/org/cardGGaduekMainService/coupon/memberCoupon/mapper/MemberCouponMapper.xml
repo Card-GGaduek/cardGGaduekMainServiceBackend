@@ -82,6 +82,7 @@
         SELECT
             id,          -- DB 컬럼명
             member_id,
+            coupon_product_id,
             coupon_status,
             discount_value,
             coupon_name,
@@ -90,6 +91,29 @@
         FROM
             member_coupon      -- 실제 DB 테이블 이름
         WHERE
-            member_id = #{memberId} AND coupon_product_id = #{id}
+            member_id = #{memberId} AND coupon_product_id = #{couponProductId}
     </select>
+
+    <insert id="insertMemberCoupon">
+        INSERT INTO member_coupon (
+            member_id,
+            coupon_product_id,
+            coupon_name,
+            coupon_category,
+            discount_value,
+            coupon_status,
+            expired_at
+        )
+        SELECT
+            #{memberId},
+            cp.id,
+            cp.coupon_name,
+            cp.coupon_category,
+            cp.discount_value,
+            '사용 가능',
+            cp.expired_at
+        FROM coupon_product cp
+        WHERE cp.id = #{couponProductId}
+    </insert>
+
 </mapper>

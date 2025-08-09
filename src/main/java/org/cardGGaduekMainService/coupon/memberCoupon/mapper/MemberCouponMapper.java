@@ -54,4 +54,10 @@ public interface MemberCouponMapper {
             @Param("memberId") Long memberId,
             @Param("id") Long couponProductId
     );
+
+    int insertMemberCoupon(
+            @Param("memberId") Long memberId,
+            @Param("couponProductId") Long couponProductId
+    );
+
 }
