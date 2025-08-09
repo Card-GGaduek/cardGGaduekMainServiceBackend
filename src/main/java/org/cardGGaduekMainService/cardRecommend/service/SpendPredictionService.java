@@ -17,7 +17,7 @@ public class SpendPredictionService {
      * Map<String,Object> → Map<String,Integer> 로 변환 후 리턴
      */
     public Map<String,Integer> predict(Long memberId) {
-        Map<String,Object> raw = flaskService.fetchRawSpend();
+        Map<String,Object> raw = flaskService.fetchRawSpend(memberId);
 
         return raw.entrySet().stream()
                 .collect(Collectors.toMap(
