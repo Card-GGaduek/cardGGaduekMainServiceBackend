@@ -3,10 +3,7 @@ package org.cardGGaduekMainService.product.booking.controller;
 import com.google.protobuf.Api;
 import org.apache.ibatis.javassist.bytecode.annotation.LongMemberValue;
 import org.cardGGaduekMainService.auth.dto.LoginMember;
-import org.cardGGaduekMainService.product.booking.dto.BookingDetailDTO;
-import org.cardGGaduekMainService.product.booking.dto.BookingRequestDTO;
-import org.cardGGaduekMainService.product.booking.dto.PriceRequestDTO;
-import org.cardGGaduekMainService.product.booking.dto.PriceResponseDTO;
+import org.cardGGaduekMainService.product.booking.dto.*;
 import org.cardGGaduekMainService.product.booking.service.BookingService;
 import org.cardGGaduekMainService.response.ApiResponse;
 import org.cardGGaduekMainService.response.SuccessCode;
@@ -45,6 +42,7 @@ public class BookingController {
         PriceResponseDTO priceResponseDTO = bookingService.calculatePrice(priceRequestDTO);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_FETCH_SUCCESS, priceResponseDTO));
     }
+
     @GetMapping
     public ResponseEntity<ApiResponse<List<BookingDetailDTO>>> handleGetBookingsByMemberId(@AuthenticationPrincipal LoginMember loginMember) {
         // 서비스 계층을 호출하여 예약 내역을 조회합니다.
@@ -52,9 +50,10 @@ public class BookingController {
 
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_FETCH_SUCCESS, bookings));
     }
+
     @GetMapping("/{accommodationId}")
-    public ResponseEntity<ApiResponse<List<BookingDetailDTO>>> getBookingByAccommodationId(@PathVariable("accommodationId") Long accommodationId) {
-        List<BookingDetailDTO> bookings = bookingService.findBookingsByAccommodationId(accommodationId);
+    public ResponseEntity<ApiResponse<List<BookingCapacityDTO>>> getBookingByAccommodationId(@PathVariable("accommodationId") Long accommodationId) {
+        List<BookingCapacityDTO> bookings = bookingService.findBookingsByAccommodationId(accommodationId);
 
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.BOOKING_FETCH_SUCCESS, bookings));
     }
