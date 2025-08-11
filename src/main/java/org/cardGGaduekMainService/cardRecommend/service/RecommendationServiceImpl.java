@@ -16,8 +16,6 @@ import static java.util.stream.Collectors.toSet;
 @RequiredArgsConstructor
 public class RecommendationServiceImpl implements RecommendationService {
 
-    //private static final int MAX_PICK = 3;
-
     private final CardMapper cardMapper;
     private final CardProductMapper cardProductMapper;
     private final CardBenefitCalculator cardBenefitCalculator;
@@ -49,9 +47,10 @@ public class RecommendationServiceImpl implements RecommendationService {
                         true))
                 .toList();
 
+        // (변경) 가맹점별 중복 없이 "최대 혜택만" 합산
         CardCombinationDTO current = CardCombinationDTO.builder()
                 .cards(ownedDtos)
-                .aggregateBenefit(ownedDtos.stream().mapToInt(CardBenefitDTO::getTotalBenefit).sum())
+                .aggregateBenefit(aggregateUniqueBenefit(ownedDtos))
                 .build();
 
         // 3) 후보 풀 계산 (보유 포함)
@@ -59,9 +58,11 @@ public class RecommendationServiceImpl implements RecommendationService {
                 .map(p -> cardBenefitCalculator.calc(p, spend, ownedIds.contains(p.getId())))
                 .toList();
 
-        // 4) "조합 최소실적 합 ≤ total" 제약을 반영한 그리디 Top-K
-        List<CardBenefitDTO> best = greedyWithTotalConstraint(pool, totalPredicted,3 );
-        int bestAgg = best.stream().mapToInt(CardBenefitDTO::getTotalBenefit).sum();
+        // 4) 3장 제약 + '증분 혜택' 기준 그리디 (중복 매장 업그레이드 반영)
+        List<CardBenefitDTO> best = greedyTopKWithMarginalGain(pool, totalPredicted, 3);
+
+        // (변경) 추천 조합 총합도 가맹점별 최대 혜택만 합산
+        int bestAgg = aggregateUniqueBenefit(best);
 
         return CardRecommendDTO.builder()
                 .memberId(memberId)
@@ -76,25 +77,22 @@ public class RecommendationServiceImpl implements RecommendationService {
     }
 
     /**
-     * total(예측 총지출) 제약을 만족하면서, 미커버 가맹점 혜택 증가분이 큰 카드부터 최대 K장 선택.
-     * - 조합의 최소실적 합 ≤ total 을 보장
-     * - 각 후보는 개별 최소실적 충족 가능(meetsRequiredSpend)해야 함
+     * 3장 제약 + '증분 혜택' 기반 그리디:
+     * - 개별 실적 가능(cand.isMeetsRequiredSpend())
+     * - 조합 실적 합 예산 내(req <= remainingRequiredBudget)
+     * - marginalGain = Σ max(0, cand[store] - currentBestByStore[store])
+     * - 선택 후 currentBestByStore를 매장별 max로 업데이트
      */
-    private List<CardBenefitDTO> greedyWithTotalConstraint(List<CardBenefitDTO> pool,
-                                                           int totalPredicted,
-                                                           int k) {
-
-        // 같은 카드 중복 방지 & 가맹점 중복 커버 방지
+    private List<CardBenefitDTO> greedyTopKWithMarginalGain(List<CardBenefitDTO> pool,
+                                                            int totalPredicted,
+                                                            int k) {
         Set<Long> pickedIds = new HashSet<>();
-        Set<String> coveredStores = new HashSet<>();
-
-        // 남은 '실적 예산' (조합 최소실적 합의 상한)
         int remainingRequiredBudget = totalPredicted;
-
-        // 선택 결과
         List<CardBenefitDTO> picks = new ArrayList<>(k);
 
-        // 카드별 정렬/중복 관리를 위해 id 기준으로 pool을 map화(선택사항)
+        // 매장별 현재까지 확보한 최대 혜택 (중복 매장 업그레이드 반영)
+        Map<String, Integer> currentBestByStore = new HashMap<>();
+
         Map<Long, CardBenefitDTO> byId = pool.stream()
                 .collect(Collectors.toMap(CardBenefitDTO::getCardProductId, c -> c, (a, b) -> a));
 
@@ -103,39 +101,79 @@ public class RecommendationServiceImpl implements RecommendationService {
             int bestGain = -1;
 
             for (CardBenefitDTO cand : byId.values()) {
-                Long id = cand.getCardProductId();
-                if (pickedIds.contains(id)) continue;
-
-                // 개별 카드가 자체 최소실적 충족 가능한지(예측 total 기준)
+                if (pickedIds.contains(cand.getCardProductId())) continue;
                 if (!cand.isMeetsRequiredSpend()) continue;
 
-                // 이 카드의 최소실적
                 int req = Math.max(0, cand.getRequiredMonthlySpent());
-
-                // 남은 예산으로 실적을 못 채우면 스킵
                 if (req > remainingRequiredBudget) continue;
 
-                // 커버되지 않은 가맹점에 대해 증가혜택 계산
-                int gain = cand.getBenefitByStore().map().entrySet().stream()
-                        .filter(e -> !"total".equals(e.getKey()))
-                        .filter(e -> !coveredStores.contains(e.getKey()))
-                        .mapToInt(Map.Entry::getValue)
-                        .sum();
+                // 현재 최대 혜택 대비 '증분'만 합산
+                int gain = 0;
+                if (cand.getBenefitByStore() != null && cand.getBenefitByStore().map() != null) {
+                    for (var e : cand.getBenefitByStore().map().entrySet()) {
+                        String store = e.getKey();
+                        if ("total".equals(store)) continue;
+                        int candVal = e.getValue() == null ? 0 : e.getValue();
+                        int curVal  = currentBestByStore.getOrDefault(store, 0);
+                        if (candVal > curVal) gain += (candVal - curVal);
+                    }
+                }
 
                 if (gain > bestGain) {
                     bestGain = gain;
                     best = cand;
+                } else if (gain == bestGain && best != null) {
+                    // 타이브레이커: 보유 → req 낮음 → totalBenefit 큼
+                    boolean candOwned = cand.isOwned();
+                    boolean bestOwned = best.isOwned();
+                    int candReq = Math.max(0, cand.getRequiredMonthlySpent());
+                    int bestReq = Math.max(0, best.getRequiredMonthlySpent());
+                    int candTot = cand.getTotalBenefit();
+                    int bestTot = best.getTotalBenefit();
+
+                    if ((candOwned && !bestOwned)
+                            || (candOwned == bestOwned && candReq < bestReq)
+                            || (candOwned == bestOwned && candReq == bestReq && candTot > bestTot)) {
+                        best = cand;
+                    }
                 }
             }
 
-            if (best == null) break;
+            // 더 고를 카드가 없거나 증가 혜택이 0 이하면 종료
+            if (best == null || bestGain <= 0) break;
 
             picks.add(best);
             pickedIds.add(best.getCardProductId());
             remainingRequiredBudget -= Math.max(0, best.getRequiredMonthlySpent());
-            coveredStores.addAll(best.getBenefitByStore().map().keySet());
-        }
 
+            // 선택 카드 반영: 매장 최대 혜택 업데이트
+            if (best.getBenefitByStore() != null && best.getBenefitByStore().map() != null) {
+                for (var e : best.getBenefitByStore().map().entrySet()) {
+                    String store = e.getKey();
+                    if ("total".equals(store)) continue;
+                    int val = e.getValue() == null ? 0 : e.getValue();
+                    currentBestByStore.merge(store, val, Math::max);
+                }
+            }
+        }
         return picks;
+    }
+
+    /**
+     * 여러 카드의 혜택 맵을 합치되,
+     * 같은 가맹점은 '한 번만', 그리고 '최대 혜택'만 반영해서 총합을 구함.
+     */
+    private int aggregateUniqueBenefit(List<CardBenefitDTO> cards) {
+        Map<String, Integer> storeMax = new HashMap<>();
+        for (CardBenefitDTO c : cards) {
+            if (c.getBenefitByStore() == null || c.getBenefitByStore().map() == null) continue;
+            for (Map.Entry<String, Integer> e : c.getBenefitByStore().map().entrySet()) {
+                String store = e.getKey();
+                if ("total".equals(store)) continue;
+                int val = e.getValue() == null ? 0 : e.getValue();
+                storeMax.merge(store, val, Math::max);
+            }
+        }
+        return storeMax.values().stream().mapToInt(Integer::intValue).sum();
     }
 }
