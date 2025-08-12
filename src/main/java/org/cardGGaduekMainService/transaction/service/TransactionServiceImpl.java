@@ -54,9 +54,15 @@ public class TransactionServiceImpl implements TransactionService {
         return grouped.entrySet().stream()
                 .map(entry -> {
                     Long cardId        = entry.getKey();
-                    List<CTransactionDTO> txList = entry.getValue();
-                    Long cardProductId = txList.get(0).getCardProductId();
-                    String cardName    = txList.get(0).getCardName();
+                    List<CTransactionDTO> list = entry.getValue();
+
+                    CTransactionDTO head = list.get(0);
+                    Long cardProductId = head.getCardProductId();
+                    String cardName = head.getCardName();
+
+                    List<CTransactionDTO> txList = list.stream()
+                            .filter(r -> r.getId() != null)
+                            .collect(Collectors.toList());
 
                     return CardTransactionsDTO.builder()
                             .cardId(cardId)

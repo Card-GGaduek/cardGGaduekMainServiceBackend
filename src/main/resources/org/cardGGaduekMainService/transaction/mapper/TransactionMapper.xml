@@ -25,26 +25,30 @@
         <result property="storeName"  column="store_name"/>
         <result property="amount"     column="amount" />
         <result property="transDate"  column="date" />
-        <result property="cardName" column="cardName" />
+        <result property="cardName" column="card_name" />
 
     </resultMap>
 
     <select id="selectTransactionsWithCardInfoByMemberId"
             resultMap="TransactionMap">
         SELECT
-            t.id,
-            t.card_id,
-            c.card_product_id,
-            t.store_name,
-            t.amount,
-            t.date,
-            cp.card_product_name as cardName
-        FROM transaction t
-                 JOIN card c ON t.card_id = c.id
-                 JOIN card_product cp ON c.card_product_id = cp.id
-        WHERE c.member_id = #{memberId}
-        ORDER BY t.card_id, t.date DESC
+            c.`id`                  AS card_id,
+            c.`card_product_id`     AS card_product_id,
+            cp.`card_product_name`  AS card_name,
+
+            t.`id`                  AS id,
+            t.`store_name`          AS store_name,
+            t.`amount`              AS amount,
+            t.`date`                AS date
+        FROM `card` c
+                 JOIN `card_product` cp
+                      ON cp.`id` = c.`card_product_id`
+                 LEFT JOIN `transaction` t
+                           ON t.`card_id` = c.`id`
+        WHERE c.`member_id` = #{memberId}
+        ORDER BY c.`id` ASC, t.`date` DESC
     </select>
+
 
 </mapper>
 

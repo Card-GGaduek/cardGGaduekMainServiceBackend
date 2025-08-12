@@ -2,6 +2,7 @@ package org.cardGGaduekMainService.product.booking.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+import org.cardGGaduekMainService.product.booking.dto.BookingCapacityDTO;
 import org.cardGGaduekMainService.product.booking.dto.BookingDetailDTO;
 import org.cardGGaduekMainService.product.booking.dto.BookingRequestDTO;
 
@@ -30,5 +31,5 @@ public interface BookingMapper {
     );
 
     void cancelOldPendingBookings();
-    List<BookingDetailDTO> getBookingsByAccommodationId(Long accommodationId);
+    List<BookingCapacityDTO> getBookingsByAccommodationId(Long accommodationId);
 }
