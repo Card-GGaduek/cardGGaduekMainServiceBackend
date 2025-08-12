@@ -36,5 +36,4 @@ public class TransactionController {
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.MEMBER_TRANSACTION_FETCH_SUCCESS, result));
     }
 
-
 }

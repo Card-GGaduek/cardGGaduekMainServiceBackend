@@ -110,4 +110,10 @@
         WHERE
             id = #{id}
     </update>
+    <select id="findAllMemberIds" resultType="long">
+            select id
+            from member
+            where is_active = true
+            order by id
+    </select>
 </mapper>

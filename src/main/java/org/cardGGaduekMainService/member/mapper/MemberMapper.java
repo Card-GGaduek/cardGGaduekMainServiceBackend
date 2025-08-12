@@ -19,4 +19,5 @@ public interface MemberMapper {
     int updateMember(MemberUpdateDTO memberUpdateDTO);
     List<MyBookingDTO> getBookingsByMemberId(Long memberId);
     MyPageDTO getMyPageInfo(Long memberId);
+    List<Long> findAllMemberIds();
 }
