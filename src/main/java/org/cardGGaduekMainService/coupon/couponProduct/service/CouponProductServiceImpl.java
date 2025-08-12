@@ -18,17 +18,6 @@ public class CouponProductServiceImpl implements CouponProductService {
     private final CouponProductMapper couponProductMapper;
 
     @Override
-    public CouponProductVO findCouponProductById(Long id) {
-        return couponProductMapper.getCouponProductById(id);
-    }
-
-    @Override
-    public List<CouponProductVO> findAllCouponProducts() {
-        return couponProductMapper.getAllCouponProducts();
-    }
-
-    //
-    @Override
     @Transactional
     public void issueCouponByMissionReward(Long memberId, String missionReward) {
         try {
@@ -57,8 +46,7 @@ public class CouponProductServiceImpl implements CouponProductService {
 
     @Override
     public boolean hasCouponForMission(Long memberId, Long missionId) {
-        // 해당 미션으로 이미 쿠폰을 발급받았는지 확인하는 로직
-        // (추후 중복 발급 방지용)
+        // 해당 미션으로 이미 쿠폰을 발급받았는지 확인하는 로직 (추후 중복 발급 방지용)
         return couponProductMapper.existsCouponByMemberIdAndMissionId(memberId, missionId) > 0;
     }
 }

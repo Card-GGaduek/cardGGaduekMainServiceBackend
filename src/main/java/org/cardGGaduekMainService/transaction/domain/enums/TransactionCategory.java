@@ -7,6 +7,7 @@ import java.util.Arrays;
 
 @Getter
 public enum TransactionCategory {
+    UNKNOWN("그 외"),
     FOOD("식비"),
     SHOPPING("쇼핑"),
     MEDICAL("의료비"),

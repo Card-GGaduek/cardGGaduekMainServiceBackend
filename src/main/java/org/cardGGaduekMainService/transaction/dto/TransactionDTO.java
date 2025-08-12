@@ -31,9 +31,6 @@ public class TransactionDTO {
 
     // 거래 생성용 추가 필드
     private Long memberId;
-    private Long storeId;
-    private Long productId;
-    private Long couponId;
     private TransactionCategory transactionCategory;
     private TransactionStatus transactionStatus;
     private TransactionMethod transactionMethod;
@@ -49,8 +46,6 @@ public class TransactionDTO {
                 .memberId(memberId)
                 .cardId(cardId)
                 .storeName(storeName)
-                .productId(productId)
-                .couponId(couponId)
                 .amount(amount)
                 .transactionCategory(transactionCategory)
                 .transactionStatus(transactionStatus)

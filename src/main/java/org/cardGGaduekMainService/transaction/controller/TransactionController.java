@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.auth.dto.LoginMember;
 import org.cardGGaduekMainService.response.ApiResponse;
 import org.cardGGaduekMainService.response.SuccessCode;
-import org.cardGGaduekMainService.transaction.domain.TransactionVO;
 import org.cardGGaduekMainService.transaction.dto.CardTransactionsDTO;
 import org.cardGGaduekMainService.transaction.dto.TransactionDTO;
 import org.cardGGaduekMainService.transaction.service.TransactionService;
@@ -27,10 +26,6 @@ public class TransactionController {
         transactionService.createTransaction(transactionDTO);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.TRANSACTION_CREATE_SUCCESS));
     }
-//    public ResponseEntity<ApiResponse<Void>> insertTransaction(@RequestBody TransactionVO vo) {
-//        transactionService.insertTransaction(vo);
-//        return ResponseEntity.ok(ApiResponse.success(SuccessCode.TRANSACTION_INSERT_SUCCESS));
-//    }
 
     @GetMapping("/api/members/cards/transactions")
     public ResponseEntity<ApiResponse<List<CardTransactionsDTO>>> getCardTransactions(

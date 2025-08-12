@@ -1,6 +1,5 @@
 package org.cardGGaduekMainService.coupon.memberCoupon.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,7 +7,6 @@ import lombok.NoArgsConstructor;
 import org.cardGGaduekMainService.coupon.couponProduct.domain.CouponProductVO;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.time.LocalDateTime;
 
 @Data
@@ -22,7 +20,6 @@ public class MemberCouponVO {
     private String couponName;
     private String couponCategory;
     private BigDecimal discountValue;
-
     private String couponStatus;     // 사용 가능, 사용 완료
     private LocalDateTime expiredAt;
     private CouponProductVO couponProduct;

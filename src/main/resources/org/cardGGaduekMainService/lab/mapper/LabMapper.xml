@@ -4,8 +4,8 @@
 
 <mapper namespace="org.cardGGaduekMainService.lab.mapper.LabMapper">
 
-    <!-- 1. 미션 진행 목록 -->
-
+    <!-- 1. 시즌별 미션 -->
+    <!-- 현재 진행 중인 미션 목록과 사용자 진행현황 조회 (Controller에서 미션 목록 표시용) -->
     <select id="selectAllMissionsWithProgress" parameterType="long" resultType="org.cardGGaduekMainService.lab.domain.MissionProgressVO">
         SELECT
         m.id AS missionId,
@@ -23,26 +23,7 @@
         WHERE m.start_at &lt;= NOW() AND m.end_at &gt;= NOW()
     </select>
 
-
-    <select id="selectMissionProgressByMemberId" parameterType="long" resultType="org.cardGGaduekMainService.lab.domain.MissionProgressVO">
-        SELECT
-            mp.mission_id AS missionId,
-            m.title AS missionTitle,
-            m.description,
-            m.reward,
-            m.category AS category,
-            m.start_at AS startAt,
-            m.end_at AS endAt,
-            mp.progress_value AS progressValue,
-            m.goal_value AS goalValue,
-            sc.display_name AS progressStatus
-        FROM mission_progress mp
-                 JOIN mission m ON mp.mission_id = m.id
-                 JOIN mission_status_code sc ON mp.mission_status_code_id = sc.id
-        WHERE mp.member_id = #{memberId}
-    </select>
-
-    <!-- 🔥 핵심: 실제 거래 건수를 카운트하여 미션 진행률 업데이트 -->
+    <!-- 실제 거래 건수를 카운트하여 미션 진행률 업데이트 -->
     <update id="updateMissionProgressByActualTransactionCount">
         UPDATE mission_progress mp
             JOIN mission m ON mp.mission_id = m.id
@@ -59,15 +40,6 @@
           AND mp.mission_id = #{missionId}
     </update>
 
-    <!-- 거래 내역에서 카테고리 추출 -->
-    <select id="selectTransactionCategoriesThisMonth" parameterType="long" resultType="string">
-        SELECT DISTINCT transaction_category_code
-        FROM transaction
-        WHERE member_id = #{memberId}
-          AND transaction_status = 'APPROVED'
-          AND DATE_FORMAT(date, '%Y-%m') = DATE_FORMAT(NOW(), '%Y-%m')
-    </select>
-
     <!-- 현재 진행 중인 미션 ID -->
     <select id="selectCurrentMissionIds" resultType="long">
         SELECT id
@@ -75,14 +47,14 @@
         WHERE start_at &lt;= NOW() AND end_at &gt;= NOW()
     </select>
 
-    <!-- 해당 회원의 미션 진행 중인 항목 -->
+    <!-- 회원의 미션 진행 중인 항목 -->
     <select id="selectMissionIdsInProgressByMember" resultType="long" parameterType="long">
         SELECT mission_id
         FROM mission_progress
         WHERE member_id = #{memberId}
     </select>
 
-    <!-- 미션 진행 현황 삽입 -->
+    <!-- 사용자의 미션 진행 현황 데이터 삽입 -->
     <insert id="insertMissionProgress">
         INSERT INTO mission_progress (member_id, mission_id, mission_status_code_id, progress_value, goal_value)
         SELECT
@@ -97,9 +69,8 @@
 
 
 
-
-
     <!-- 2. 오늘의 소비 운세 -->
+    <!-- 오늘자 운세 조회 (Controller에서 운세 표시용) -->
     <select id="selectTodayFortuneByMemberId" parameterType="long" resultType="org.cardGGaduekMainService.lab.domain.FortuneVO">
         SELECT
             f.fortune_index,
@@ -123,7 +94,7 @@
         LIMIT 1
     </select>
 
-    <!-- 행운 넣기 -->
+    <!-- 새로운 운세 데이터 넣기 -->
     <insert id="insertFortune">
         INSERT INTO fortune (member_id, fortune_index, lucky_item_id, created_at)
         VALUES (#{memberId}, #{fortuneIndex}, #{itemId}, CONVERT_TZ(NOW(), '+00:00', '+09:00'))
@@ -132,6 +103,7 @@
 
 
     <!-- 3. 소비 성향 분석 -->
+    <!-- 이번 달 소비 분석 결과 조회 (Controller에서 분석 결과 표시용) -->
     <select id="selectSpendingAnalysisResultByMemberId" parameterType="long" resultType="org.cardGGaduekMainService.lab.domain.SpendingAnalysisResultVO">
         SELECT
             analysis_category AS category,
@@ -143,7 +115,7 @@
         LIMIT 1
     </select>
 
-    <!-- 4. 소비가 가장 많은 카테고리 구하기 -->
+    <!-- 이번 달 가장 많이 소비한 카테고리 조회 -->
     <select id="selectMostSpentCategory" parameterType="long" resultType="string">
         SELECT transaction_category_code
         FROM transaction
@@ -155,6 +127,7 @@
         LIMIT 1
     </select>
 
+    <!-- 기존 소비 분석 결과 업데이트 (분석 결과 갱신용) -->
     <update id="updateSpendingAnalysisResult">
         UPDATE spending_analysis_result
         SET analysis_category = #{category}, updated_at = NOW()
@@ -162,17 +135,21 @@
           AND analysis_month = DATE_FORMAT(NOW(), '%Y-%m')
     </update>
 
+    <!-- 새로운 소비 분석 결과 생성 (최초 분석 결과 생성용) -->
     <insert id="insertSpendingAnalysisResult">
         INSERT INTO spending_analysis_result (member_id, analysis_category, analysis_month)
         VALUES (#{memberId}, #{category}, DATE_FORMAT(NOW(), '%Y-%m'))
     </insert>
 
-    <!-- 전체 회원 조회 -->
+
+
+    <!-- 4. 스케줄러 배치 작업용 쿼리 -->
+    <!-- 전체 회원 ID 목록 조회 -->
     <select id="selectAllMemberIds" resultType="long">
         SELECT id FROM member
     </select>
 
-    <!-- 해당 월 거래 유무 확인 -->
+    <!-- 이번 달 거래 내역 존재 여부 확인 -->
     <select id="existsTransactionThisMonth" parameterType="long" resultType="boolean">
         SELECT EXISTS (
             SELECT 1
