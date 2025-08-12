@@ -1,9 +1,7 @@
 package org.cardGGaduekMainService.card.controller;
 
-import com.google.protobuf.Api;
 import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.auth.dto.LoginMember;
-import org.cardGGaduekMainService.card.domain.CardVO;
 import org.cardGGaduekMainService.card.dto.*;
 import org.cardGGaduekMainService.common.s3.S3Uploader;
 import org.cardGGaduekMainService.exception.ErrorCode;
@@ -35,14 +33,14 @@ public class CardController {
     public ResponseEntity<ApiResponse<CardImageDTO>> updateCardImage(@PathVariable Long cardId,
                                                                      @RequestParam(value = "image", required = false) MultipartFile imageFile) {
         try {   
-            // ✅ 이미지가 없으면 기본 이미지로 변경
+            // 이미지가 없으면 기본 이미지로 변경
             if (imageFile == null || imageFile.isEmpty()) {
                 cardService.updateCardImage(cardId, null); // custom_image_url 초기화
                 return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_IMAGE_UPDATE, new CardImageDTO(null)));
             }
 
-            // ✅ 이미지가 있으면 S3에 업로드
-            String imageUrl = s3Uploader.upload(imageFile, "image/cardImage"); // 🔥 이 경로로 저장
+            // 이미지가 있으면 S3에 업로드
+            String imageUrl = s3Uploader.upload(imageFile, "image/cardImage");
             cardService.updateCardImage(cardId, imageUrl);
             return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_IMAGE_UPDATE, new CardImageDTO(imageUrl)));
         } catch (Exception e) {
@@ -68,11 +66,6 @@ public class CardController {
         List<CardDTO> cards = cardService.findCardByMember(loginMember.getId());
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARDPRODUCT_FETCH_SUCCESS, cards));
     }
-//    @GetMapping("/{memberId}")
-//    public ResponseEntity<List<CardVO>> getCardsByMember(@PathVariable Long memberId) {
-//        List<CardVO> cards = cardService.findCardsByMember(memberId);
-//        return ResponseEntity.ok(ApiResponse.success(SuccessCode.CARD_SUMMARY_FETCH_SUCCESS, cards));
-//    }
 
     @GetMapping("/my")
     public ResponseEntity<ApiResponse<List<MyCardDTO>>> getMyCards(@AuthenticationPrincipal LoginMember loginMember){

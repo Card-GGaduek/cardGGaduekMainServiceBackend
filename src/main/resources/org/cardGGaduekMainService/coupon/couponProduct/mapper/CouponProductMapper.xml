@@ -10,7 +10,6 @@
         SELECT * FROM coupon_product ORDER BY id DESC
     </select>
 
-    <!--    -->
     <!-- 쿠폰 상품명으로 ID 조회 -->
     <select id="selectCouponProductIdByName" parameterType="string" resultType="long">
         SELECT id
@@ -44,7 +43,7 @@
           AND cp.expired_at > NOW()
     </insert>
 
-    <!-- 중복 발급 확인 (선택사항) -->
+    <!-- 중복 발급 확인 -->
     <select id="existsCouponByMemberIdAndMissionId" resultType="int">
         SELECT COUNT(*)
         FROM member_coupon mc

@@ -29,11 +29,11 @@ public class TransactionDTO {
     @JsonIgnore
     private String transDate;
 
+    //결제를 위한 추가
+    private String storeCategory;
+
     // 거래 생성용 추가 필드
     private Long memberId;
-    private Long storeId;
-    private Long productId;
-    private Long couponId;
     private TransactionCategory transactionCategory;
     private TransactionStatus transactionStatus;
     private TransactionMethod transactionMethod;
@@ -49,8 +49,7 @@ public class TransactionDTO {
                 .memberId(memberId)
                 .cardId(cardId)
                 .storeName(storeName)
-                .productId(productId)
-                .couponId(couponId)
+                .storeCategory(storeCategory)   // ✅ 결제를 위한 추가
                 .amount(amount)
                 .transactionCategory(transactionCategory)
                 .transactionStatus(transactionStatus)

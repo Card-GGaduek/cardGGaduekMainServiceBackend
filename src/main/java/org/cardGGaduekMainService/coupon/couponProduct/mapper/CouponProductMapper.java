@@ -21,7 +21,7 @@ public interface CouponProductMapper {
      */
     List<CouponProductVO> getAllCouponProducts();
 
-    //
+
     // 쿠폰 상품명으로 ID 조회
     Long selectCouponProductIdByName(@Param("couponName") String couponName);
 
@@ -29,7 +29,7 @@ public interface CouponProductMapper {
     int issueCouponFromProduct(@Param("memberId") Long memberId,
                                @Param("couponProductId") Long couponProductId);
 
-    // 중복 발급 확인 (선택사항)
+    // 중복 발급 확인
     int existsCouponByMemberIdAndMissionId(@Param("memberId") Long memberId,
                                            @Param("missionId") Long missionId);
 }

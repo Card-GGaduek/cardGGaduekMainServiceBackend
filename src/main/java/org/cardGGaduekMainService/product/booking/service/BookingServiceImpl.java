@@ -181,7 +181,7 @@ public class BookingServiceImpl implements BookingService{
 
     @Override
     @Transactional(readOnly = true)
-    public List<BookingDetailDTO> findBookingsByAccommodationId(Long accommodationId){
+    public List<BookingCapacityDTO> findBookingsByAccommodationId(Long accommodationId){
         return bookingMapper.getBookingsByAccommodationId(accommodationId);
     }
 }

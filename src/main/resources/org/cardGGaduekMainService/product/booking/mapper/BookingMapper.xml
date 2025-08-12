@@ -135,11 +135,12 @@
     LIMIT 1
     </select>
     <select id="getBookingsByAccommodationId" parameterType="long"
-            resultType="org.cardGGaduekMainService.product.booking.dto.BookingDetailDTO">
+            resultType="org.cardGGaduekMainService.product.booking.dto.BookingCapacityDTO">
         SELECT
             b.id              AS bookingId,
             b.check_in_date   AS checkInDate,
             b.check_out_date  AS checkOutDate,
+            b.room_id,
             b.status
         FROM
             bookings b

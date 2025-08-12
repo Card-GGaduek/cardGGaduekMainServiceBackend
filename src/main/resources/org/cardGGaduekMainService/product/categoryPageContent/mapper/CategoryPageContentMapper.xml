@@ -4,44 +4,40 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.cardGGaduekMainService.product.categoryPageContent.mapper.CategoryPageContentMapper">
-
-    <select id="findBenefitContentForMember" resultType="org.cardGGaduekMainService.product.categoryPageContent.dto.CategoryPageContentDTO">
+    <select id="findAllApplicableBenefitsForMember" parameterType="map" resultType="org.cardGGaduekMainService.product.categoryPageContent.dto.BenefitDetailDTO">
         SELECT
-        cpc.id,
-        cpc.category_name AS categoryName,
-        cpc.title,
-        cpc.description,
+        sb.id,
+        sb.card_product_id AS cardProductId,
+        cp.card_product_name AS cardName,
+        sb.store_name AS storeName,
+        sb.description,
+        sb.value_type AS valueType,
+        sb.rate_value AS rateValue,
+        sb.amount_value AS amountValue,
+        cpc.id as contentId,
         cpc.image_url AS imageUrl,
-        cpc.link_url AS linkUrl
+        cpc.link_url AS linkUrl,
+        cpc.price
         FROM
-        category_page_content cpc
+        store_benefit sb
+        JOIN
+        card_product cp ON sb.card_product_id = cp.id
+        LEFT JOIN
+        category_page_content cpc ON sb.store_name = cpc.title AND sb.store_category = cpc.category_name
         WHERE
-        cpc.category_name = #{categoryName}
-        AND EXISTS (
-        -- 사용자가 가진 카드 중, 이 카테고리 혜택이 하나라도 있는지 확인
-        SELECT *
-        FROM store_benefit cb
-        WHERE
-        cb.store_category = #{categoryName} -- 💡 카테고리 이름으로 직접 비교
-        AND cb.card_product_id IN
+        sb.store_category = #{categoryName}
+        AND sb.card_product_id IN
         <foreach item="cardId" collection="userCardProductIds" open="(" separator="," close=")">
             #{cardId}
         </foreach>
-        )
-    </select>
-
-    <select id="findByCategoryName" parameterType="string" resultType="org.cardGGaduekMainService.product.categoryPageContent.dto.CategoryPageContentDTO">
-        SELECT
-            id,
-            category_name AS categoryName,
-            title,
-            description,
-            image_url AS imageUrl,
-            link_url AS linkUrl,
-            price
-        FROM
-            category_page_content
-        WHERE
-            category_name = #{categoryName}
+        ORDER BY
+        -- 1. 가맹점 이름으로 먼저 정렬하여 그룹핑 효과를 줌
+        sb.store_name ASC,
+        -- 2. RATE 타입을 AMOUNT 타입보다 우선순위를 높게 설정 (1순위)
+        CASE WHEN sb.value_type = 'PERCENT' THEN 1 ELSE 2 END ASC,
+        -- 3. 같은 RATE 타입 내에서는 할인율이 높은 순으로 정렬
+        sb.rate_value DESC,
+        -- 4. 같은 AMOUNT 타입 내에서는 할인 금액이 높은 순으로 정렬
+        sb.amount_value DESC
     </select>
 </mapper>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="org.cardGGaduekMainService.cardRecommend.mapper.SpendPredictMapper">
+
+    <insert id="updateSpendPreidct">
+        INSERT INTO spend_prediction (member_id, month, payload)
+        VALUES (#{memberId}, #{yearMonth}, CAST(#{json} AS JSON))
+        ON DUPLICATE KEY UPDATE
+                             payload    = CAST(#{json} AS JSON),
+                             updated_at = CURRENT_TIMESTAMP
+    </insert>
+
+    <select id="findSpendPredict" resultType="string">
+        SELECT payload
+        FROM spend_prediction
+        WHERE member_id = #{memberId}
+          AND month = #{yearMonth}
+    </select>
+
+</mapper>
