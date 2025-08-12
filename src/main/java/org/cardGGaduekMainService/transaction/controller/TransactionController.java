@@ -27,10 +27,6 @@ public class TransactionController {
         transactionService.createTransaction(transactionDTO);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.TRANSACTION_CREATE_SUCCESS));
     }
-//    public ResponseEntity<ApiResponse<Void>> insertTransaction(@RequestBody TransactionVO vo) {
-//        transactionService.insertTransaction(vo);
-//        return ResponseEntity.ok(ApiResponse.success(SuccessCode.TRANSACTION_INSERT_SUCCESS));
-//    }
 
     @GetMapping("/api/members/cards/transactions")
     public ResponseEntity<ApiResponse<List<CardTransactionsDTO>>> getCardTransactions(
@@ -40,6 +36,5 @@ public class TransactionController {
         List<CardTransactionsDTO> result = transactionService.getTransactionsGroupedByCard(memberId);
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.MEMBER_TRANSACTION_FETCH_SUCCESS, result));
     }
-
 
 }
