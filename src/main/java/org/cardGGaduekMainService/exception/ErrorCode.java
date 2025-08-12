@@ -22,11 +22,22 @@ public enum ErrorCode {
     IMAGE_UPLOAD_FAILED(3002, "이미지 업로드에 실패했습니다.", HttpStatus.INTERNAL_SERVER_ERROR),
     NAVER_LOGIN_FAILED(1003, "네이버 로그인 실패", HttpStatus.CONFLICT),
     CARD_NOT_FOUND(3001, "카드 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
+    CODEF_ORGANIZATION_NOT_CONNECTED(1234, "해당 기관에 연결되어 있지 않습니다.", HttpStatus.NOT_FOUND),
+
+    CODEF_ORGANIZATION_ALREADY_CONNECTED(1234, "이미 연결된 기관입니다.", HttpStatus.CONFLICT),
+    CODEF_MEMBER_NOT_REGISTERED(1235, "CODEF에 연결되어 있지 않습니다.", HttpStatus.NOT_FOUND),
+
+
+
+
+    API_REQUEST_FAILED(4123, "Api요청 실패", HttpStatus.BAD_REQUEST),
     
     
     BOOKING_NOT_FOUND(6001, "예약 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     ACCOMMODATION_NOT_FOUND(7001, "숙소를 찾을 수 없습니다.", HttpStatus.NOT_FOUND),
     ROOM_NOT_AVAILABLE(8001, "이미 예약중이거나 신청할 수 없는 숙소입니다.", HttpStatus.UNAUTHORIZED),
+
+    CODEF_BAD_REQUEST(4555, "CODEF API 호출 실패", HttpStatus.BAD_REQUEST),
 
 
     TOTAL_BENEFIT_NOT_FOUND(9001, "총 혜택 정보를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);

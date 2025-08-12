@@ -16,6 +16,8 @@ public class MyCardDTO {
     private Long cardId;
     private String cardNumber;
     private Long cardProductId;
+    private String organizationCode;
+    private String organizationName;
     private String cardProductName;
     private String cardImageUrl;
     private int requiredMonthlySpent;

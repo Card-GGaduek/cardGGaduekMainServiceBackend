@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+
+
+<mapper namespace="org.cardGGaduekMainService.codef.mapper.CodefMapper">
+
+
+    <insert id="createConnectedId">
+        INSERT INTO member_connected_id (member_id, connected_id)
+        VALUES (#{memberId}, #{connectedId})
+    </insert>
+
+    <insert id="addAccount">
+        INSERT INTO connected_account (connected_id, organization_code)
+        VALUES (#{connectedId}, #{organizationCode})
+    </insert>
+
+    <select id="getConnectedId" resultType="java.lang.String">
+        SELECT ca.connected_id FROM member_connected_id ca
+        WHERE ca.member_id = #{memberId}
+    </select>
+
+
+    <select id="getConnectedIdByMemberId" resultType="java.lang.String">
+        SELECT mci.connected_id FROM member_connected_id mci
+        WHERE mci.member_id = #{memberId}
+    </select>
+    <select id="getOrganizationCodeByConnectedId" resultType="java.lang.String">
+        SELECT ca.organization_code FROM connected_account ca
+        WHERE ca.connected_id = #{connectedId}
+    </select>
+</mapper>
