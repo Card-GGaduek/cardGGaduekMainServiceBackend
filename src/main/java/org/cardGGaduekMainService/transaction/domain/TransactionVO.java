@@ -21,9 +21,7 @@ public class TransactionVO {
     private Long memberId;
     private Long cardId;
     private String storeName;
-    private Long productId;
-    private Long couponId;
-    private Long storeId;
+    private String storeCategory;
     private BigDecimal  amount;
     private TransactionCategory transactionCategory;
     private TransactionStatus transactionStatus;
