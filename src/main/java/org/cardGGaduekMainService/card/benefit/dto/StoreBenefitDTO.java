@@ -15,6 +15,7 @@ public class StoreBenefitDTO {
     private Long id;
     private Long cardProductId;
     private String storeCategory;
+    private String storeName;
     private String valueType;
     private BigDecimal rateValue;
     private Long amountValue;
