@@ -34,4 +34,7 @@ public interface CardMapper {
 
 
     List<MyCardDTO> findMyCards(Long memberId);
+
+    void createCard(CardVO cardVO);
+    CardVO findCardByCardNumber(@Param("cardNumber") String cardNumber);
 }
