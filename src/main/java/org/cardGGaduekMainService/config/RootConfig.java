@@ -50,6 +50,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.member.service",
         "org.cardGGaduekMainService.common.util",
         "org.cardGGaduekMainService.auth",
+        "org.cardGGaduekMainService.payment.config",
         "org.cardGGaduekMainService.payment.service",
         "org.cardGGaduekMainService.common.mail.service",
         "org.cardGGaduekMainService.lab.service",
@@ -116,5 +117,11 @@ public class RootConfig {
     public DataSourceTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource());
     }
+
+    @Bean
+    public static org.springframework.context.support.PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new org.springframework.context.support.PropertySourcesPlaceholderConfigurer();
+    }
+
 }
 
