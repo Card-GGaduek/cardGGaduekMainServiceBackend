@@ -1,95 +1,97 @@
 package org.cardGGaduekMainService.product.categoryPageContent.service;
 
-import lombok.extern.java.Log;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.cardGGaduekMainService.card.benefit.domain.CardBenefitVO;
-import org.cardGGaduekMainService.card.benefit.dto.CardBenefitDTO;
-import org.cardGGaduekMainService.card.benefit.dto.StoreBenefitDTO;
-import org.cardGGaduekMainService.card.benefit.mapper.CardBenefitMapper;
 import org.cardGGaduekMainService.card.mapper.CardMapper;
-import org.cardGGaduekMainService.cardProduct.mapper.CardProductMapper;
-import org.cardGGaduekMainService.product.categoryPageContent.domain.CategoryPageContentVO;
-import org.cardGGaduekMainService.product.categoryPageContent.dto.CategoryPageContentDTO;
+import org.cardGGaduekMainService.product.categoryPageContent.dto.BenefitDetailDTO;
+import org.cardGGaduekMainService.product.categoryPageContent.dto.FinalBenefitResponseDTO;
 import org.cardGGaduekMainService.product.categoryPageContent.mapper.CategoryPageContentMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.math.RoundingMode;
+import java.util.*;
+import java.util.stream.Collectors;
+
 @Log4j2
 @Service
-public class CategoryPageContentServiceImpl implements CategoryPageContentService{
+@RequiredArgsConstructor
+public class CategoryPageContentServiceImpl implements CategoryPageContentService {
+
     private final CategoryPageContentMapper categoryPageContentMapper;
     private final CardMapper cardMapper;
-    private final CardBenefitMapper cardBenefitMapper;
-    private final CardProductMapper cardProductMapper;
-
-    @Autowired
-    public CategoryPageContentServiceImpl(CategoryPageContentMapper categoryPageContentMapper, CardMapper cardMapper, CardBenefitMapper cardBenefitMapper, CardProductMapper cardProductMapper){
-        this.categoryPageContentMapper = categoryPageContentMapper;
-        this.cardMapper = cardMapper;
-        this.cardBenefitMapper = cardBenefitMapper;
-        this.cardProductMapper = cardProductMapper;
-    }
-
-
+    private static final BigDecimal ONE_HUNDRED = new BigDecimal("100");
 
     @Override
-    public List<CategoryPageContentDTO> getBenefitContentForMember(String categoryName, Long memberId){
-        log.info(">>>>> 1. 서비스 시작: categoryName='{}', memberId={}", categoryName, memberId);
-        CategoryPageContentVO categoryPageContentVO = new CategoryPageContentVO();
-
+    public List<FinalBenefitResponseDTO> getBenefitContentForMember(String categoryName, Long memberId) {
+        // ... 1, 2단계는 동일 (사용자 카드 조회, DB에서 모든 혜택 조회)
         List<Long> userCardProductIds = cardMapper.findAllCardProductIdsByMemberId(memberId);
-        log.info(">>>>> 2. 조회된 사용자 카드 상품 ID 목록: {}", userCardProductIds);
-        if(userCardProductIds == null || userCardProductIds.isEmpty()){
-            log.warn(">>>>> 사용자가 카드를 보유하고 있지 않아 빈 목록을 반환합니다.");
+        if (userCardProductIds == null || userCardProductIds.isEmpty()) {
             return Collections.emptyList();
         }
-        List<CategoryPageContentDTO> allContents = categoryPageContentMapper.findByCategoryName(categoryName);
-        List<CategoryPageContentDTO> resultList = new ArrayList<>();
+        Map<String, Object> params = new HashMap<>();
+        params.put("categoryName", categoryName);
+        params.put("userCardProductIds", userCardProductIds);
+        List<BenefitDetailDTO> allBenefits = categoryPageContentMapper.findAllApplicableBenefitsForMember(params);
 
-        for(CategoryPageContentDTO content: allContents){
-            List<StoreBenefitDTO> benefitsForStore = cardBenefitMapper.findBenefitsByStoreName(content.getTitle(), userCardProductIds);
+        // 3. 가맹점(storeName)별로 그룹핑
+        Map<String, List<BenefitDetailDTO>> benefitsByStore = allBenefits.stream()
+                .collect(Collectors.groupingBy(BenefitDetailDTO::getStoreName));
 
-            StoreBenefitDTO bestBenefit = findBestBenefit(benefitsForStore);
+        List<FinalBenefitResponseDTO> finalResultList = new ArrayList<>();
 
-            if(bestBenefit != null){
-                String cardName = cardProductMapper.findNameById(bestBenefit.getCardProductId());
-                content.setCardName(cardName);
-                if("PERCENT".equalsIgnoreCase(bestBenefit.getValueType())){
-                    content.setDiscountRate(bestBenefit.getRateValue());
-                } else if("AMOUNT".equalsIgnoreCase(bestBenefit.getValueType())){
-                    content.setDiscountRate(BigDecimal.valueOf(bestBenefit.getAmountValue()));
+        // 4. 각 가맹점별로 최고의 혜택을 계산
+        for (Map.Entry<String, List<BenefitDetailDTO>> entry : benefitsByStore.entrySet()) {
+            List<BenefitDetailDTO> benefitsForOneStore = entry.getValue();
+
+            BenefitDetailDTO bestBenefitForStore = null;
+            // [수정] 최대 할인액을 BigDecimal.ZERO로 초기화
+            BigDecimal maxDiscountAmount = BigDecimal.ZERO;
+
+            for (BenefitDetailDTO currentBenefit : benefitsForOneStore) {
+                BigDecimal currentCalculatedDiscount = BigDecimal.ZERO;
+                // [수정] 기준 가격도 BigDecimal로 처리 (null 체크 포함)
+                BigDecimal basePrice = Optional.ofNullable(currentBenefit.getPrice()).orElse(BigDecimal.ZERO);
+
+                // 기준 가격이 0이면 계산할 필요 없음
+                if (basePrice.compareTo(BigDecimal.ZERO) == 0) continue;
+
+                // [수정] 혜택 타입에 따라 BigDecimal로 실제 할인액 계산
+                if ("PERCENT".equals(currentBenefit.getValueType()) && currentBenefit.getRateValue() != null) {
+                    // 퍼센트 할인 계산: price * (rate / 100)
+                    BigDecimal rateAsFraction = currentBenefit.getRateValue().divide(ONE_HUNDRED);
+                    currentCalculatedDiscount = basePrice.multiply(rateAsFraction)
+                            .setScale(0, RoundingMode.DOWN); // 소수점 이하 버림
+                } else if ("AMOUNT".equals(currentBenefit.getValueType()) && currentBenefit.getAmountValue() != null) {
+                    // 금액 할인
+                    currentCalculatedDiscount = currentBenefit.getAmountValue();
                 }
-                resultList.add(content);
+
+                // [수정] compareTo를 사용하여 더 좋은 혜택(할인액이 더 큰)을 찾으면 교체
+                if (currentCalculatedDiscount.compareTo(maxDiscountAmount) > 0) {
+                    maxDiscountAmount = currentCalculatedDiscount;
+                    bestBenefitForStore = currentBenefit;
+                }
+            }
+
+            // 찾은 최고의 혜택을 최종 DTO로 변환
+            if (bestBenefitForStore != null) {
+                FinalBenefitResponseDTO dto = new FinalBenefitResponseDTO();
+                dto.setId(bestBenefitForStore.getContentId());
+                dto.setTitle(bestBenefitForStore.getStoreName());
+                dto.setImageUrl(bestBenefitForStore.getImageUrl());
+                dto.setLinkUrl(bestBenefitForStore.getLinkUrl());
+                dto.setPrice(bestBenefitForStore.getPrice());
+                dto.setCardName(bestBenefitForStore.getCardName());
+                dto.setBenefitDescription(bestBenefitForStore.getDescription());
+                dto.setValueType(bestBenefitForStore.getValueType());
+                dto.setRateValue(bestBenefitForStore.getRateValue());
+                dto.setAmountValue(bestBenefitForStore.getAmountValue());
+                dto.setCalculatedDiscountAmount(maxDiscountAmount); // 최종 계산된 할인액 추가
+                finalResultList.add(dto);
             }
         }
-//        for(CategoryPageContentDTO content : allContents){
-//            log.info(">>>>> 3. 혜택 조회 시작 (Mapper 호출 직전)");
-//            CardBenefitVO bestBenefit = cardBenefitMapper.findBestBenefitForStore(content.getCategoryName(), userCardProductIds);
 
-//            if(bestBenefit != null) {
-//                CategoryPageContentDTO dto = new CategoryPageContentDTO();
-//                dto.setCategoryName(content.getCategoryName());
-//                dto.setDescription(content.getDescription());
-//                dto.setImageUrl(content.getImageUrl());
-//                dto.setLinkUrl(content.getLinkUrl());
-//                dto.setId(content.getId());
-//                dto.setTitle(content.getTitle());
-//                if("RATE".equalsIgnoreCase(bestBenefit.getValueType())){
-//                    dto.setDiscountRate(bestBenefit.getRateValue());
-//                }
-//                resultList.add(dto);
-//            }
-        return resultList;
-        }
-
-    public StoreBenefitDTO findBestBenefit(List<StoreBenefitDTO> benefits){
-        if(benefits == null || benefits.isEmpty()) {
-            return null;
-        }
-        return benefits.get(0);
+        return finalResultList;
     }
 }

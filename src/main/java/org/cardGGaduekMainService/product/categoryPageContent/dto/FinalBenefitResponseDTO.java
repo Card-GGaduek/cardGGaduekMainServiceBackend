@@ -8,22 +8,20 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
-public class CategoryPageContentDTO {
+public class FinalBenefitResponseDTO {
     private Long id;
-    private String categoryName;
-    private Long cardProductId;
     private String title;
-    private String description;
     private String imageUrl;
     private String linkUrl;
+
     private String cardName;
-    private BigDecimal discountRate;
-    private BigDecimal price;
-    private int expectedBenefitAmount;
+    private String benefitDescription;
     private String valueType;
     private BigDecimal rateValue;
-    private Long amountValue;
+    private BigDecimal amountValue;
+    private BigDecimal price;
+    private BigDecimal calculatedDiscountAmount;
 }
