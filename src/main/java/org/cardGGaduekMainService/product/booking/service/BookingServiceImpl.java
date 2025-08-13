@@ -141,7 +141,7 @@ public class BookingServiceImpl implements BookingService{
         }
 
         bookingRequest.setTotalPrice(finalPrice);
-        bookingRequest.setStatus("PENDING");
+        bookingRequest.setStatus("CONFIRMED");
         bookingMapper.createBooking(bookingRequest);
 
 
@@ -191,5 +191,4 @@ public class BookingServiceImpl implements BookingService{
     public void updateBookingStatus(Long bookingId, String status) {
         bookingMapper.updateBookingStatus(bookingId, status);
     }
-
 }
