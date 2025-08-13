@@ -19,6 +19,16 @@
             <result property="description" column="description"/>
         </collection>
     </resultMap>
+
+    <insert id="createCardProduct">
+        INSERT INTO card_product (card_product_name, card_type, organization_code, annual_fee, required_monthly_spent, issued_date, card_image_url)
+        VALUES (#{cardProductName}, #{cardType}, #{organizationCode}, #{annualFee}, #{requiredMonthlySpent}, #{issuedDate}, #{cardImageUrl});
+
+        <selectKey resultType="Long" keyProperty="id" keyColumn="id" order="AFTER">
+            SELECT LAST_INSERT_ID()
+        </selectKey>
+    </insert>
+
     <select id="getTop5CardProductsByBenefitCount"
             resultType="org.cardGGaduekMainService.cardProduct.domain.CardProductVO">
         SELECT
@@ -97,5 +107,10 @@
             store_benefit sb ON cp.id = sb.card_product_id
         WHERE
             cp.id = #{id}
+    </select>
+    <select id="findCardProductByName"
+            resultType="org.cardGGaduekMainService.cardProduct.domain.CardProductVO">
+        SELECT * FROM card_product cp
+        WHERE cp.card_product_name = #{name}
     </select>
 </mapper>

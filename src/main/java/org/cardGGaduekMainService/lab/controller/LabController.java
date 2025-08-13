@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,6 +27,9 @@ public class LabController {
     // 1. 미션 진행 현황
     @GetMapping("/missions")
     public ResponseEntity<ApiResponse<List<MissionProgressDTO>>> getAllMissionsWithProgress(@AuthenticationPrincipal LoginMember loginMember) {
+
+        labService.syncMissionProgressWithTransactions(loginMember.getId());
+
         List<MissionProgressDTO> missions = labService.getAllMissionsWithProgress(loginMember.getId());
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.MISSION_PROGRESS_FETCH_SUCCESS, missions));
     }
@@ -45,6 +47,9 @@ public class LabController {
     // 3. 소비 성향 분석 결과
     @GetMapping("/analysis")
     public ResponseEntity<ApiResponse<SpendingAnalysisResultDTO>> getSpendingAnalysis(@AuthenticationPrincipal LoginMember loginMember) {
+
+        labService.updateSpendingAnalysis(loginMember.getId());
+
         SpendingAnalysisResultDTO analysis = labService.getSpendingAnalysis(loginMember.getId());
         if (analysis == null) {
             return ResponseEntity.noContent().build();
@@ -56,8 +61,13 @@ public class LabController {
     @GetMapping
     public ResponseEntity<ApiResponse<Map<String, Object>>> getLabData(@AuthenticationPrincipal LoginMember loginMember) {
         Map<String, Object> result = new HashMap<>();
+
+        labService.syncMissionProgressWithTransactions(loginMember.getId());
         result.put("missions", labService.getAllMissionsWithProgress(loginMember.getId()));
+
         result.put("fortune", labService.getTodayFortune(loginMember.getId()));
+
+        labService.updateSpendingAnalysis(loginMember.getId());
         result.put("analysis", labService.getSpendingAnalysis(loginMember.getId()));
 
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.LAB_OVERVIEW_FETCH_SUCCESS, result));

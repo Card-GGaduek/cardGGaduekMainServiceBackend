@@ -15,7 +15,7 @@ import java.time.LocalDateTime;
 public class CardProductVO {
     private Long id;                        // 카드상품 ID (PK)
     private String cardType;                // 카드타입
-    private Long bankId;                    // 은행 ID (FK)
+    private String organizationCode;                    // 은행 ID (FK)
     private String cardProductName;         // 카드 상품 이름
     private String cardImageUrl;            // 카드 이미지 URL
     private Long annualFee;// 연회비

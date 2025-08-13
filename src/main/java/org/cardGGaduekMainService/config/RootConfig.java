@@ -45,11 +45,13 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.main.mapper",
         "org.cardGGaduekMainService.totalbenefit.mapper",
         "org.cardGGaduekMainService.cardRecommend.mapper",
+        "org.cardGGaduekMainService.codef.mapper",
 })
 @ComponentScan(basePackages = {
         "org.cardGGaduekMainService.member.service",
         "org.cardGGaduekMainService.common.util",
         "org.cardGGaduekMainService.auth",
+        "org.cardGGaduekMainService.payment.config",
         "org.cardGGaduekMainService.payment.service",
         "org.cardGGaduekMainService.common.mail.service",
         "org.cardGGaduekMainService.lab.service",
@@ -74,6 +76,7 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.main.service",
         "org.cardGGaduekMainService.totalbenefit.service",
         "org.cardGGaduekMainService.cardRecommend.service",
+        "org.cardGGaduekMainService.codef.service",
         
 })
 public class RootConfig {
@@ -115,5 +118,11 @@ public class RootConfig {
     public DataSourceTransactionManager transactionManager() {
         return new DataSourceTransactionManager(dataSource());
     }
+
+    @Bean
+    public static org.springframework.context.support.PropertySourcesPlaceholderConfigurer propertySourcesPlaceholderConfigurer() {
+        return new org.springframework.context.support.PropertySourcesPlaceholderConfigurer();
+    }
+
 }
 

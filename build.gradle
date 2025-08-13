@@ -8,6 +8,7 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+    maven { url 'https://jitpack.io' } // ← JitPack 저장소 추가
 }
 
 ext {
@@ -112,10 +113,14 @@ dependencies {
 
     implementation 'com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.13.4'
 
-    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
-    testImplementation "org.springframework:spring-test:${springVersion}"
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+    testImplementation "org.junit.jupiter:junit-jupiter-api:${junitVersion}"
+    testRuntimeOnly   "org.junit.jupiter:junit-jupiter-engine:${junitVersion}"
+    testImplementation 'junit:junit:4.13.2'
+    testRuntimeOnly   "org.junit.vintage:junit-vintage-engine:${junitVersion}"
 
+
+    // 결제하기 (PortOne / 아임포트)
+    implementation 'com.github.iamport:iamport-rest-client-java:0.2.21'
 }
 
 test {

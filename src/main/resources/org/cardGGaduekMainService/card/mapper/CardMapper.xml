@@ -4,6 +4,10 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="org.cardGGaduekMainService.card.mapper.CardMapper">
+    <insert id="createCard">
+        INSERT INTO card (card_number, expiration_date, cvc, card_password, created_at, card_product_id, member_id, is_valid)
+        VALUES (#{cardNumber}, #{expirationDate}, #{cvc}, #{cardPassword}, #{createdAt}, #{cardProductId}, #{memberId}, #{isValid})
+    </insert>
 
     <select id="getCardFrontInfo" parameterType="long" resultType="org.cardGGaduekMainService.card.dto.CardFrontDTO">
         SELECT
@@ -116,7 +120,7 @@
 
     <select id="findMyCards" resultMap="myCardMap">
         SELECT
-            c.id, c.card_number, cp.id AS card_product_id, cp.card_product_name, cp.card_image_url, cp.required_monthly_spent,
+            c.id, c.card_number, cp.id AS card_product_id, o.organization_code, o.organization_name, cp.card_product_name, cp.card_image_url, cp.required_monthly_spent,
             sb.store_name, sb.store_category, sb.benefit_type, sb.value_type, sb.rate_value, sb.amount_value, sb.description
         FROM member m
                  LEFT JOIN card c
@@ -125,14 +129,22 @@
                            ON c.card_product_id = cp.id
                  LEFT JOIN store_benefit sb
                            ON cp.id = sb.card_product_id
+                LEFT JOIN organization o
+                        ON o.organization_code = cp.organization_code
         WHERE m.id = #{memberId}
 
+    </select>
+    <select id="findCardByCardNumber" resultType="org.cardGGaduekMainService.card.domain.CardVO">
+        SELECT * FROM card
+        WHERE card.card_number = #{cardNumber}
     </select>
 
     <resultMap id="myCardMap" type="org.cardGGaduekMainService.card.dto.MyCardDTO">
         <id column="id" property="cardId" />
         <result column="card_number" property="cardNumber" />
         <result column="card_product_id" property="cardProductId" />
+        <result column="organization_code" property="organizationCode" />
+        <result column="organization_name" property="organizationName" />
         <result column="card_product_name" property="cardProductName" />
         <result column="card_image_url" property="cardImageUrl" />
         <result column="required_monthly_spent" property="requiredMonthlySpent" />

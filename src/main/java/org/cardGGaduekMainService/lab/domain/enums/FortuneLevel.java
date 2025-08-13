@@ -32,10 +32,4 @@ public enum FortuneLevel {
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 운세 index입니다: " + index));
     }
-
-    public static FortuneLevel getRandom() {
-        FortuneLevel[] values = FortuneLevel.values();
-        return values[(int) (Math.random() * values.length)];
-    }
-
 }

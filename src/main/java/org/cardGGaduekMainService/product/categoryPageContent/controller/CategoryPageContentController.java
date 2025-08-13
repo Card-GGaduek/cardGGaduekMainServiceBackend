@@ -4,6 +4,7 @@ import lombok.extern.log4j.Log4j2;
 import org.cardGGaduekMainService.auth.dto.LoginMember;
 import org.cardGGaduekMainService.product.categoryPageContent.domain.CategoryPageContentVO;
 import org.cardGGaduekMainService.product.categoryPageContent.dto.CategoryPageContentDTO;
+import org.cardGGaduekMainService.product.categoryPageContent.dto.FinalBenefitResponseDTO;
 import org.cardGGaduekMainService.product.categoryPageContent.service.CategoryPageContentService;
 import org.cardGGaduekMainService.response.ApiResponse;
 import org.cardGGaduekMainService.response.SuccessCode;
@@ -30,10 +31,10 @@ public class CategoryPageContentController {
     }
 
     @GetMapping("/{categoryName}")
-    public ResponseEntity<ApiResponse<List<CategoryPageContentDTO>>> getCategoryContents(
+    public ResponseEntity<ApiResponse<List<FinalBenefitResponseDTO>>> getCategoryContents(
             @PathVariable String categoryName,
             @AuthenticationPrincipal LoginMember loginMember) {
-        List<CategoryPageContentDTO> contentVOList = categoryPageContentService.getBenefitContentForMember(categoryName, loginMember.getId());
+        List<FinalBenefitResponseDTO> contentVOList = categoryPageContentService.getBenefitContentForMember(categoryName, loginMember.getId());
         return ResponseEntity.ok(ApiResponse.success(SuccessCode.CATEGORY_FETCH_SUCCESS, contentVOList));
     }
 }

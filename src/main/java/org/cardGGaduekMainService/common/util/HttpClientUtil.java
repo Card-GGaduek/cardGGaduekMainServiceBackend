@@ -48,6 +48,8 @@ public class HttpClientUtil {
     public static Object post(String apiUrl, Map<String, String> requestHeaders, String requestBody) {
         HttpClient client = HttpClient.newHttpClient();
 
+        System.out.println(requestBody);
+
         HttpRequest.Builder requestBuilder = HttpRequest.newBuilder()
                 .uri(URI.create(apiUrl))
                 .POST(HttpRequest.BodyPublishers.ofString(requestBody));

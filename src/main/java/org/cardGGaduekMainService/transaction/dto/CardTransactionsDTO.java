@@ -13,9 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 @Builder
 public class CardTransactionsDTO {
-    //카드아이디
-    private Long cardId;
-    private Long cardProductId;
+    private Long cardId;        // 사용자 보유 카드 ID
+    private Long cardProductId; // 전체 카드 상품의 카드 ID
     private String cardName;
     private List<CTransactionDTO> transactions;
 }

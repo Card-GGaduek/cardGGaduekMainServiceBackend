@@ -14,6 +14,7 @@ import java.math.BigDecimal;
 public class CategoryPageContentDTO {
     private Long id;
     private String categoryName;
+    private Long cardProductId;
     private String title;
     private String description;
     private String imageUrl;
@@ -22,4 +23,7 @@ public class CategoryPageContentDTO {
     private BigDecimal discountRate;
     private BigDecimal price;
     private int expectedBenefitAmount;
+    private String valueType;
+    private BigDecimal rateValue;
+    private Long amountValue;
 }

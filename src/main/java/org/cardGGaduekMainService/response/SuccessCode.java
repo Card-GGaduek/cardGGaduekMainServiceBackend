@@ -63,6 +63,10 @@ public enum SuccessCode {
     // TOTAL_BENEFIT
     TOTAL_BENEFIT_FETCH_SUCCESS(901, "총 혜택 정보 조회 성공"),
 
+    CODEF_TOKEN_FETCH_SUCCESS(123, "CODEF 액세스 토큰 발급 성공"),
+
+    CODEF_ACCOUNT_ADD_SUCCESS(124, "CODEF 기관 연결 성공"),
+
     CATEGORY_FETCH_SUCCESS(803, "카테고리 혜택 조회 성공");
 
     private final int code;
