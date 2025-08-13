@@ -43,20 +43,13 @@ public class PaymentServiceImpl implements PaymentService {
                 ? payment.getPaidAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
                 : LocalDateTime.now();
 
-        // 카테고리(열거형) — form.category가 enum에 없으면 UNKNOWN 유지
-        TransactionCategory category = TransactionCategory.UNKNOWN;
-        if (form.getCategory() != null && !form.getCategory().isBlank()) {
-            try {
-                category = TransactionCategory.fromName(form.getCategory());
-            } catch (Exception ignored) { /* UNKNOWN 유지 */ }
-        }
+        // 요구사항에 맞춰 고정
+        TransactionCategory category = TransactionCategory.ACCOMODATION; // ← transaction_category_code 에 들어감
+        String storeCategory = "HOTEL";                                  // ← store_category 에 들어감
 
         // ✅ DB not null 컬럼용 storeCategory 값 지정
         //    - 프론트 form.category가 오면 그걸 사용
         //    - 없으면 'ACCOMMODATION' 같은 기본값으로
-        String storeCategory = (form.getCategory() == null || form.getCategory().isBlank())
-                ? "ACCOMMODATION"
-                : form.getCategory().toUpperCase();
 
         TransactionDTO dto = TransactionDTO.builder()
                 .memberId(firstNonNull(loginMemberId, form.getMemberId()))

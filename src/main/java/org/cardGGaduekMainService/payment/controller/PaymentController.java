@@ -9,11 +9,13 @@ import org.cardGGaduekMainService.response.SuccessCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/api/payment")
 @CrossOrigin(origins = {
         "http://localhost:5173", "http://localhost:3000", "http://localhost:8081" // 개발 프론트 도메인
 })
@@ -22,7 +24,7 @@ public class PaymentController {
     private final PaymentService paymentService;
 
     @PostMapping(
-            value = "/payment/complete",
+            value = "/complete",
             consumes = "application/x-www-form-urlencoded",
             produces = "application/json"
     )
