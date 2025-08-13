@@ -22,4 +22,8 @@ public interface BookingService {
 
     List<BookingCapacityDTO> findBookingsByAccommodationId(Long accommodationId);
     //    void completePayment(Long bookingId);
+
+    // BookingService.java
+    void updateBookingStatus(Long bookingId, String status);
+
 }

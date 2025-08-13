@@ -6,6 +6,7 @@ import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.payment.dto.PaymentCompleteForm;
+import org.cardGGaduekMainService.product.booking.service.BookingService;
 import org.cardGGaduekMainService.transaction.dto.TransactionDTO;
 import org.cardGGaduekMainService.transaction.domain.enums.TransactionCategory;
 import org.cardGGaduekMainService.transaction.domain.enums.TransactionMethod;
@@ -24,6 +25,7 @@ import java.time.ZoneId;
 public class PaymentServiceImpl implements PaymentService {
 
     private final IamportClient iamportClient;
+    private final BookingService bookingService;
     private final TransactionService transactionService;
 
     @Override
@@ -66,6 +68,10 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
 
         transactionService.createTransaction(dto);
+
+        if (form.getBookingId() != null) {
+            bookingService.updateBookingStatus(form.getBookingId(), "CONFIRMED");
+        }
     }
 
 
@@ -83,4 +89,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     private static <T> T firstNonNull(T a, T b) { return a != null ? a : b; }
     private static String nvl(String v, String d) { return (v == null || v.isBlank()) ? d : v; }
+
+
 }

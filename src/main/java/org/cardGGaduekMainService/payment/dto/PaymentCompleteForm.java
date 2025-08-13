@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 
 @Data
 public class PaymentCompleteForm {
+    private Long bookingId;
     private String imp_uid;        // PortOne 결제 고유ID
     private String merchant_uid;   // 상점 주문번호(로그용)
     private BigDecimal amount;     // 최종 결제금액
