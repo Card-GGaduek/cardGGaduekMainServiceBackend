@@ -184,4 +184,12 @@ public class BookingServiceImpl implements BookingService{
     public List<BookingCapacityDTO> findBookingsByAccommodationId(Long accommodationId){
         return bookingMapper.getBookingsByAccommodationId(accommodationId);
     }
+
+    // BookingServiceImpl.java
+    @Override
+    @Transactional
+    public void updateBookingStatus(Long bookingId, String status) {
+        bookingMapper.updateBookingStatus(bookingId, status);
+    }
+
 }

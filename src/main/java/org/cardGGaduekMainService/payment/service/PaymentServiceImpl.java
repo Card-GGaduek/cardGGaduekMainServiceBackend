@@ -6,6 +6,7 @@ import com.siot.IamportRestClient.response.IamportResponse;
 import com.siot.IamportRestClient.response.Payment;
 import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.payment.dto.PaymentCompleteForm;
+import org.cardGGaduekMainService.product.booking.service.BookingService;
 import org.cardGGaduekMainService.transaction.dto.TransactionDTO;
 import org.cardGGaduekMainService.transaction.domain.enums.TransactionCategory;
 import org.cardGGaduekMainService.transaction.domain.enums.TransactionMethod;
@@ -24,6 +25,7 @@ import java.time.ZoneId;
 public class PaymentServiceImpl implements PaymentService {
 
     private final IamportClient iamportClient;
+    private final BookingService bookingService;
     private final TransactionService transactionService;
 
     @Override
@@ -43,20 +45,13 @@ public class PaymentServiceImpl implements PaymentService {
                 ? payment.getPaidAt().toInstant().atZone(ZoneId.systemDefault()).toLocalDateTime()
                 : LocalDateTime.now();
 
-        // 카테고리(열거형) — form.category가 enum에 없으면 UNKNOWN 유지
-        TransactionCategory category = TransactionCategory.UNKNOWN;
-        if (form.getCategory() != null && !form.getCategory().isBlank()) {
-            try {
-                category = TransactionCategory.fromName(form.getCategory());
-            } catch (Exception ignored) { /* UNKNOWN 유지 */ }
-        }
+        // 요구사항에 맞춰 고정
+        TransactionCategory category = TransactionCategory.ACCOMODATION; // ← transaction_category_code 에 들어감
+        String storeCategory = "HOTEL";                                  // ← store_category 에 들어감
 
         // ✅ DB not null 컬럼용 storeCategory 값 지정
         //    - 프론트 form.category가 오면 그걸 사용
         //    - 없으면 'ACCOMMODATION' 같은 기본값으로
-        String storeCategory = (form.getCategory() == null || form.getCategory().isBlank())
-                ? "ACCOMMODATION"
-                : form.getCategory().toUpperCase();
 
         TransactionDTO dto = TransactionDTO.builder()
                 .memberId(firstNonNull(loginMemberId, form.getMemberId()))
@@ -73,6 +68,10 @@ public class PaymentServiceImpl implements PaymentService {
                 .build();
 
         transactionService.createTransaction(dto);
+
+        if (form.getBookingId() != null) {
+            bookingService.updateBookingStatus(form.getBookingId(), "CONFIRMED");
+        }
     }
 
 
@@ -90,4 +89,6 @@ public class PaymentServiceImpl implements PaymentService {
 
     private static <T> T firstNonNull(T a, T b) { return a != null ? a : b; }
     private static String nvl(String v, String d) { return (v == null || v.isBlank()) ? d : v; }
+
+
 }
