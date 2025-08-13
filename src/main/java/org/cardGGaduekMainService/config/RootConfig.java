@@ -54,7 +54,6 @@ import javax.sql.DataSource;
         "org.cardGGaduekMainService.common.mail.service",
         "org.cardGGaduekMainService.lab.service",
         "org.cardGGaduekMainService.transaction.service",
-        "org.cardGGaduekMainService.store.service",
         "org.cardGGaduekMainService.common.mail.service",
         "org.cardGGaduekMainService.coupon.couponProduct.service",
         "org.cardGGaduekMainService.coupon.memberCoupon.service",
