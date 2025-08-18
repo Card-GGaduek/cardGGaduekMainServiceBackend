@@ -36,6 +36,16 @@ public class CardController {
         return ResponseEntity.noContent().build(); // 204 No Content
     }
 
+    @ApiOperation(value = "내 카드 조회(결제용)", notes = "로그인된 사용자의 결제할 카드를 조회하는 API")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "내 카드 조회 성공", response = CardDTO.class, responseContainer = "List" )
+    )
+    @GetMapping
+    public ResponseEntity<CustomApiResponse<List<CardDTO>>> getCardsByMember(@AuthenticationPrincipal LoginMember loginMember){
+        List<CardDTO> cards = cardService.findCardByMember(loginMember.getId());
+        return ResponseEntity.ok(CustomApiResponse.success(SuccessCode.CARDPRODUCT_FETCH_SUCCESS, cards));
+    }
+
     @ApiOperation(value = "카드 이미지 업데이트", notes = "카드 커스텀 이미지 업데이트 API")
     @ApiResponses(
             @ApiResponse(code = 200, message = "OK")
