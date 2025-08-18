@@ -12,7 +12,8 @@ public enum TransactionCategory {
     SHOPPING("쇼핑"),
     MEDICAL("의료비"),
     TRANSPORT("교통비"),
-    CULTURE("문화");
+    CULTURE("문화"),
+    ACCOMODATION("숙박");
 
     private final String displayName;
 
