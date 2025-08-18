@@ -1,14 +1,19 @@
 package org.cardGGaduekMainService.place.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.place.dto.PlaceResponse;
 import org.cardGGaduekMainService.place.dto.PlaceSearchRequest;
 import org.cardGGaduekMainService.place.service.PlaceService;
-import org.cardGGaduekMainService.response.ApiResponse;
+import org.cardGGaduekMainService.response.CustomApiResponse;
 import org.cardGGaduekMainService.response.SuccessCode;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+@Api(tags = "가맹점")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/place")
@@ -17,8 +22,12 @@ public class PlaceController {
 
     private final PlaceService placeService;
 
+    @ApiOperation(value = "가맹점 조회", notes = "검색어를 통해 가맹점을 조회하는 API")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "가맹점 조회 성공", response = PlaceResponse.class)
+    )
     @PostMapping
-    public ResponseEntity<ApiResponse<PlaceResponse>> findPlaceByName(@RequestBody PlaceSearchRequest request) {
+    public ResponseEntity<CustomApiResponse<PlaceResponse>> findPlaceByName(@RequestBody PlaceSearchRequest request) {
         String textQuery = request.getTextQuery();
         String languageCode = request.getLanguageCode();
         Double minLat = request.getLocationRestriction().getRectangle().getLow().getLatitude();
@@ -28,7 +37,7 @@ public class PlaceController {
         String category = request.getCategory();
 
         PlaceResponse response = placeService.findPlaceByName(textQuery, minLat, minLon,maxLat,maxLon);
-        return ResponseEntity.ok(ApiResponse.success(SuccessCode.PLACE_FETCH_SUCCESS, response));
+        return ResponseEntity.ok(CustomApiResponse.success(SuccessCode.PLACE_FETCH_SUCCESS, response));
 
     }
 

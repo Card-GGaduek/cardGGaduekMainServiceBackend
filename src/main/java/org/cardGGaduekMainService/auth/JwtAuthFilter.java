@@ -7,7 +7,7 @@ import org.cardGGaduekMainService.auth.dto.LoginMember;
 import org.cardGGaduekMainService.exception.ErrorCode;
 import org.cardGGaduekMainService.member.dto.MemberFindDTO;
 import org.cardGGaduekMainService.member.service.MemberService;
-import org.cardGGaduekMainService.response.ApiResponse;
+import org.cardGGaduekMainService.response.CustomApiResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -77,7 +77,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
             response.setContentType("application/json;charset=UTF-8");
 
-            ApiResponse<Void> errorResponse = ApiResponse.error(ErrorCode.INVALID_TOKEN);
+            CustomApiResponse<Void> errorResponse = CustomApiResponse.error(ErrorCode.INVALID_TOKEN);
 
             ObjectMapper objectMapper = new ObjectMapper();
             String json = objectMapper.writeValueAsString(errorResponse);
