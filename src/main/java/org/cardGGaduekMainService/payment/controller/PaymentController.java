@@ -20,7 +20,6 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/payment")
-@CrossOrigin(origins = {"http://localhost:5173","http://localhost:3000","http://localhost:8081"})
 public class PaymentController {
 
     private final PaymentService paymentService;
