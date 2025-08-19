@@ -10,6 +10,6 @@ public interface SpendPredictMapper {
                         @Param("yearMonth") String yearMonth,
                         @Param("json") String json);
 
-    //String findSpendPredict(@Param("memberId") Long memberId,
-    //                        @Param("yearMonth") String yearMonth);
+    String findSpendPredict(@Param("memberId") Long memberId,
+                            @Param("yearMonth") String yearMonth);
 }
