@@ -14,16 +14,16 @@ public class AccountRequest {
     private String countryCode = "KR";
 
     @JsonProperty("businessType")
-    private String businessType;
+    private String businessType = "CD";
 
     @JsonProperty("organization")
     private String organization;
 
     @JsonProperty("clientType")
-    private String clientType;
+    private String clientType = "P";
 
     @JsonProperty("loginType")
-    private String loginType;
+    private String loginType = "1";
 
     @JsonProperty("id")
     private String id;

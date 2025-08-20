@@ -371,6 +371,7 @@ public class CodefService {
 
         String cardProductName = myCardResponse.getResCardName();
         String cardImageUrl = myCardResponse.getResImageLink();
+        if (cardImageUrl.isEmpty()) cardImageUrl = "https://vertical.pstatic.net/vertical-cardad/creatives/KB/1692/KB_1692_20230125-142003_hor.png";
         String cardType = myCardResponse.getResCardType();
         String organizationCode = myCardResponse.getOrganizationCode();
 
@@ -444,6 +445,10 @@ public class CodefService {
 
             }
             // yyyyMMdd 포맷 정의
+            if (createdAt.isEmpty()) {
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+
+            }
 
 
             if (cardMapper.findCardByCardNumber(cardNumber) == null) {
@@ -453,6 +458,7 @@ public class CodefService {
                         .expirationDate(expirationDate)
                         .cardProductId(cardProductId)
                         .cvc("")
+                        .createdAt(null)
                         .memberId(memberId)
                         .build();
 

@@ -46,6 +46,7 @@ public class CodefController {
         codefAccountRegisterRequest.setAccountRequestList(accountRequestList);
 
         codefService.registerAccount(loginMember.getId(), codefAccountRegisterRequest);
+        codefService.getMyCardList(loginMember.getId());
 
         return ResponseEntity.ok(CustomApiResponse.success(SuccessCode.CODEF_ACCOUNT_ADD_SUCCESS));
     }
