@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.cardGGaduekMainService.storeBenefit.dto.StoreBenefitDTO;
+import org.springframework.lang.Nullable;
 
 import java.util.List;
 
@@ -20,6 +21,8 @@ public class MyCardDTO {
     private String organizationName;
     private String cardProductName;
     private String cardImageUrl;
+    @Nullable
+    private String customCardImageUrl;
     private int requiredMonthlySpent;
     private List<StoreBenefitDTO> storeBenefitList;
 }

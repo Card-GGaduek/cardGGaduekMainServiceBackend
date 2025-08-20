@@ -120,7 +120,7 @@
 
     <select id="findMyCards" resultMap="myCardMap">
         SELECT
-            c.id, c.card_number, cp.id AS card_product_id, o.organization_code, o.organization_name, cp.card_product_name, cp.card_image_url, cp.required_monthly_spent,
+            c.id, c.card_number, c.custom_image_url, cp.id AS card_product_id, o.organization_code, o.organization_name, cp.card_product_name, cp.card_image_url, cp.required_monthly_spent,
             sb.store_name, sb.store_category, sb.benefit_type, sb.value_type, sb.rate_value, sb.amount_value, sb.description
         FROM member m
                  LEFT JOIN card c
@@ -147,6 +147,7 @@
         <result column="organization_name" property="organizationName" />
         <result column="card_product_name" property="cardProductName" />
         <result column="card_image_url" property="cardImageUrl" />
+        <result column="custom_image_url" property="customCardImageUrl" />
         <result column="required_monthly_spent" property="requiredMonthlySpent" />
         <collection property="storeBenefitList" resultMap="storeBenefitMap" />
     </resultMap>
