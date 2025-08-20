@@ -15,5 +15,5 @@ public class CardFrontDTO {
     private String cardProductName;  // 카드 이름
     private String bankName;         // 발급사
     private String memberName;       // 사용자 이름
-private int isValid;                // 0: 사용 불가능, 1: 사용 가능 상태를 나타냄
+    private int isValid;                // 0: 사용 불가능, 1: 사용 가능 상태를 나타냄
 }

@@ -92,4 +92,11 @@ public class CardController {
         List<MyCardDTO> myCards = cardService.findMyCards(memberId);
         return ResponseEntity.ok(CustomApiResponse.success(SuccessCode.CARD_SUMMARY_FETCH_SUCCESS, myCards));
     }
+
+    @GetMapping("/front")
+    public ResponseEntity<CustomApiResponse<List<CardFrontDTO>>> getCardFrontInfo(@AuthenticationPrincipal LoginMember loginMember) {
+        Long memberId = loginMember.getId();
+        List<CardFrontDTO> cards = cardService.getCardFrontInfo(memberId);
+        return ResponseEntity.ok(CustomApiResponse.success(SuccessCode.CARD_FRONT_FETCH_SUCCESS, cards));
+    }
 }
