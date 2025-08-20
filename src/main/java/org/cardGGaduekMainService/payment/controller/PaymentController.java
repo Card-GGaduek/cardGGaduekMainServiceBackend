@@ -1,10 +1,15 @@
 package org.cardGGaduekMainService.payment.controller;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import lombok.RequiredArgsConstructor;
 import org.cardGGaduekMainService.auth.dto.LoginMember;
+import org.cardGGaduekMainService.notification.domain.NotificationVO;
 import org.cardGGaduekMainService.payment.dto.PaymentCompleteForm;
 import org.cardGGaduekMainService.payment.service.PaymentService;
-import org.cardGGaduekMainService.response.ApiResponse;
+import org.cardGGaduekMainService.response.CustomApiResponse;
 import org.cardGGaduekMainService.response.SuccessCode;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -17,10 +22,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.Map;
 
+@Api(tags = "결제 관리")
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/payment")
-@CrossOrigin(origins = {"http://localhost:5173","http://localhost:3000","http://localhost:8081"})
 public class PaymentController {
 
     private final PaymentService paymentService;
@@ -37,6 +42,10 @@ public class PaymentController {
      * 1) x-www-form-urlencoded 로 들어오는 요청 처리
      *   - 바인딩 에러를 잡아 400 원인 파악 가능
      */
+    @ApiOperation(value = "", notes = "")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "")
+    )
     @PostMapping(
             value = "/complete",
             consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
@@ -56,24 +65,28 @@ public class PaymentController {
 
         Long loginMemberId = (loginMember != null) ? loginMember.getId() : null;
         paymentService.confirmAndRecord(form, loginMemberId);
-        return ResponseEntity.ok(ApiResponse.success(SuccessCode.TRANSACTION_CREATE_SUCCESS));
+        return ResponseEntity.ok(CustomApiResponse.success(SuccessCode.TRANSACTION_CREATE_SUCCESS));
     }
 
     /**
      * 2) application/json 으로 들어오는 요청 처리
      *   - 프론트에서 JSON 전송 시 타입 변환 이슈가 훨씬 줄어듭니다.
      */
+    @ApiOperation(value = "", notes = "")
+    @ApiResponses(
+            @ApiResponse(code = 200, message = "")
+    )
     @PostMapping(
             value = "/complete",
             consumes = MediaType.APPLICATION_JSON_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE
     )
-    public ResponseEntity<ApiResponse<Void>> completeJson(
+    public ResponseEntity<CustomApiResponse<Void>> completeJson(
             @RequestBody PaymentCompleteForm form,
             @AuthenticationPrincipal LoginMember loginMember
     ) {
         Long loginMemberId = (loginMember != null) ? loginMember.getId() : null;
         paymentService.confirmAndRecord(form, loginMemberId);
-        return ResponseEntity.ok(ApiResponse.success(SuccessCode.TRANSACTION_CREATE_SUCCESS));
+        return ResponseEntity.ok(CustomApiResponse.success(SuccessCode.TRANSACTION_CREATE_SUCCESS));
     }
 }

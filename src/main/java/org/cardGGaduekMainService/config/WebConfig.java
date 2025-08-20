@@ -32,12 +32,19 @@ public class WebConfig extends AbstractAnnotationConfigDispatcherServletInitiali
 
     @Override
     protected Class<?>[] getServletConfigClasses() {
-        return new Class[] { ServletConfig.class }; // MVC, ViewResolver 설정
+        return new Class[] { ServletConfig.class, SwaggerConfig.class }; // MVC, ViewResolver 설정
     }
+
 
     @Override
     protected String[] getServletMappings() {
-        return new String[] { "/" }; // 모든 요청을 DispatcherServlet에서 처리
+        return new String[] {
+                "/",
+                "/swagger-ui.html",
+                "/swagger-resources/**",
+                "/v2/api-docs",
+                "/webjars/**"
+        }; // 모든 요청을 DispatcherServlet에서 처리
     }
 
     @Override

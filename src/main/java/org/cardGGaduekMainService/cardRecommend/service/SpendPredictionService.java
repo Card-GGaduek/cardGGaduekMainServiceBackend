@@ -3,13 +3,18 @@ package org.cardGGaduekMainService.cardRecommend.service;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+import org.cardGGaduekMainService.cardRecommend.mapper.SpendPredictMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 import java.time.Duration;
 import java.time.YearMonth;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -18,74 +23,74 @@ import java.util.Map;
 public class SpendPredictionService {
 
     private final TestFlaskService testFlaskService;
-    private final StringRedisTemplate stringRedisTemplate;
     private final ObjectMapper objectMapper;
+    private final SpendPredictMapper spendPredictMapper;
+
+    // Redis가 없으면 null로 두고 동작 (선택 주입)
+    @Autowired(required = false)
+    private StringRedisTemplate stringRedisTemplate;
 
     private static final ZoneId KST = ZoneId.of("Asia/Seoul");
     private static final DateTimeFormatter YM = DateTimeFormatter.ofPattern("yyyyMM");
-    private static final Duration TTL = Duration.ofHours(24);
 
     public Map<String,Integer> predict(Long memberId) {
         String yearMonth = YearMonth.now(KST).format(YM);
         String key  = "pred:%d:%s".formatted(memberId, yearMonth);
-        String lkey = "lock:" + key;
 
-        try {
-            String cached = stringRedisTemplate.opsForValue().get(key);
-            if (cached != null) {
-                return objectMapper.readValue(cached, new TypeReference<Map<String,Integer>>() {});
-            }
-
-        } catch (Exception e) {
-            stringRedisTemplate.delete(key);
-        }
-
-        // 2) 스탬피드 방지용 락 (5초)
-        boolean gotLock = Boolean.TRUE.equals(
-                stringRedisTemplate.opsForValue().setIfAbsent(lkey, "1", Duration.ofSeconds(5))
-        );
-
-        if (gotLock) {
+        // 1) Redis
+        if (stringRedisTemplate != null) {
             try {
-                //모델접근
-                Map<String,Integer> data = toIntMap(testFlaskService.getSpend(memberId));
-                // 캐시 저장
-                stringRedisTemplate.opsForValue().set(key, objectMapper.writeValueAsString(data), TTL);
-                return data;
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            } finally {
-                stringRedisTemplate.delete(lkey);
-            }
+                String cached = stringRedisTemplate.opsForValue().get(key);
+                if (StringUtils.hasText(cached)) {
+                    return objectMapper.readValue(cached, new TypeReference<Map<String,Integer>>() {});
+                }
+            } catch (Exception ignore) {}
         }
 
-        // 3) 누가 계산중이면 0.8초까지 재시도
+        // 2) DB
         try {
-            for (int i = 0; i < 8; i++) {
-                Thread.sleep(100);
-                String again = stringRedisTemplate.opsForValue().get(key);
-                if (again != null) {
-                    return objectMapper.readValue(again, new TypeReference<Map<String,Integer>>() {});
+            String fromDb = spendPredictMapper.findSpendPredict(memberId, yearMonth);
+            if (StringUtils.hasText(fromDb)) {
+                if (stringRedisTemplate != null) {
+                    try { stringRedisTemplate.opsForValue().set(key, fromDb, ttlToNextMonthKst()); } catch (Exception ignore) {}
                 }
+                return objectMapper.readValue(fromDb, new TypeReference<Map<String,Integer>>() {});
             }
         } catch (Exception ignore) {}
 
-        // 4) 최후의 수단: 직접 호출 후 캐시
+        // 3) Flask (최후)
         try {
             Map<String,Integer> data = toIntMap(testFlaskService.getSpend(memberId));
-            stringRedisTemplate.opsForValue().set(key, objectMapper.writeValueAsString(data), TTL);
+            String json = objectMapper.writeValueAsString(data);
+
+            // DB upsert
+            try { spendPredictMapper.updateSpendPreidct(memberId, yearMonth, json); } catch (Exception ignore) {}
+            // Redis 백필
+            if (stringRedisTemplate != null) {
+                try { stringRedisTemplate.opsForValue().set(key, json, ttlToNextMonthKst()); } catch (Exception ignore) {}
+            }
             return data;
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new RuntimeException("Spend prediction failed (Redis miss, DB miss, Flask error). memberId=" + memberId, e);
         }
+    }
+
+    private static Duration ttlToNextMonthKst() {
+        ZonedDateTime now = ZonedDateTime.now(KST);
+        ZonedDateTime next = now.withDayOfMonth(1).plusMonths(1).truncatedTo(ChronoUnit.DAYS);
+        return Duration.between(now, next);
     }
 
     private Map<String,Integer> toIntMap(Map<String,Object> raw) {
         Map<String,Integer> m = new HashMap<>();
         for (var e : raw.entrySet()) {
             Object v = e.getValue();
-            int iv = (v instanceof Number) ? ((Number) v).intValue()
-                    : Integer.parseInt(String.valueOf(v));
+            int iv;
+            if (v instanceof Number n) iv = n.intValue();
+            else {
+                try { iv = Integer.parseInt(String.valueOf(v)); }
+                catch (Exception ex) { iv = 0; }
+            }
             m.put(e.getKey(), iv);
         }
         return m;
